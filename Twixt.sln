@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34031.279
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Twixt", "Twixt.vcxproj", "{8529735F-B56A-41E8-BDCD-2A93958C9940}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8529735F-B56A-41E8-BDCD-2A93958C9940}.Debug|x64.ActiveCfg = Debug|x64
+		{8529735F-B56A-41E8-BDCD-2A93958C9940}.Debug|x64.Build.0 = Debug|x64
+		{8529735F-B56A-41E8-BDCD-2A93958C9940}.Debug|x86.ActiveCfg = Debug|Win32
+		{8529735F-B56A-41E8-BDCD-2A93958C9940}.Debug|x86.Build.0 = Debug|Win32
+		{8529735F-B56A-41E8-BDCD-2A93958C9940}.Release|x64.ActiveCfg = Release|x64
+		{8529735F-B56A-41E8-BDCD-2A93958C9940}.Release|x64.Build.0 = Release|x64
+		{8529735F-B56A-41E8-BDCD-2A93958C9940}.Release|x86.ActiveCfg = Release|Win32
+		{8529735F-B56A-41E8-BDCD-2A93958C9940}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {625376B0-ECA9-4107-9F48-3A658B1133FF}
+	EndGlobalSection
+EndGlobal
