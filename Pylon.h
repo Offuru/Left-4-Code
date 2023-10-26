@@ -24,5 +24,15 @@ public:
 	Pylon(const Pylon&);
 	Pylon& operator=(const Pylon&);
 	virtual ~Pylon();
+
+	Foundation* getPosition() const;
+	std::vector<Bridge*> getConnections() const;
+	std::vector<std::pair<int8_t, int8_t>> getConnectionPoints() const;
+	Color getColor() const;
+
+	void setFoundation(Foundation*);
+	void setConnections(const std::vector<Bridge*>&);
+	void setConnectionPoints(const std::vector<std::pair<int8_t, int8_t>>&);
+	void setColor(const Color&);
 };
 
