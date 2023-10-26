@@ -17,5 +17,15 @@ public:
 	Bridge(const Bridge&);
 	Bridge& operator=(const Bridge&);
 	~Bridge() = default;
+
+	Pylon* getPylonStart() const;
+	Pylon* getPylonEnd() const;
+	std::pair<uint8_t, uint8_t> getPosStart() const;
+	std::pair<uint8_t, uint8_t> getPosEnd() const;
+
+	void setPylonStart(Pylon*);
+	void setPylonEnd(Pylon*);
+	void setPosStart(const std::pair<uint8_t, uint8_t>&);
+	void setPosEnd(const std::pair<uint8_t, uint8_t>&);
 };
 

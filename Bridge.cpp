@@ -23,3 +23,43 @@ Bridge& Bridge::operator=(const Bridge& other)
 
 	return *this;
 }
+
+Pylon* Bridge::getPylonStart() const
+{
+	return m_pylonStart;
+}
+
+Pylon* Bridge::getPylonEnd() const
+{
+	return m_pylonEnd;
+}
+
+std::pair<uint8_t, uint8_t> Bridge::getPosStart() const
+{
+	return m_posStart;
+}
+
+std::pair<uint8_t, uint8_t> Bridge::getPosEnd() const
+{
+	return m_posEnd;
+}
+
+void Bridge::setPylonStart(Pylon* other)
+{
+	m_pylonStart = other;
+}
+
+void Bridge::setPylonEnd(Pylon* other)
+{
+	m_pylonEnd = other;
+}
+
+void Bridge::setPosStart(const std::pair<uint8_t, uint8_t>& other)
+{
+	m_posStart = other;
+}
+
+void Bridge::setPosEnd(const std::pair<uint8_t, uint8_t>& other)
+{
+	m_posEnd = other;
+}
