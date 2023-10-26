@@ -16,5 +16,12 @@ public:
 	Foundation& operator=(const Foundation&);
 	~Foundation();
 
+	std::pair<uint8_t, uint8_t> getPosition() const;
+	bool getMined() const;
+	Pylon* getPylon() const;
+
+	void setPosition(const std::pair<uint8_t, uint8_t>&);
+	void setMined(bool);
+	void setPylon(Pylon*);
 };
 
