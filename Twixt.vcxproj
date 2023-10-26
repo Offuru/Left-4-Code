@@ -132,9 +132,11 @@
   <ItemGroup>
     <ClCompile Include="Foundation.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Pylon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Foundation.h" />
+    <ClInclude Include="Pylon.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
