@@ -2,11 +2,11 @@
 
 Pylon::Pylon() :
 	m_position{ nullptr }, m_color{ Color::Red }, m_connections{ std::vector<Bridge*>() },
-	m_connectionPoints{ std::vector<std::pair<int8_t,int8_t>>() } {};
+	m_connectionPoints{ std::vector<std::pair<uint8_t,uint8_t>>() } {};
 
 Pylon::Pylon(Foundation* foundation, Color color) :
 	m_position{ foundation }, m_color{ color }, m_connections{ std::vector<Bridge*>() },
-	m_connectionPoints{ std::vector<std::pair<int8_t,int8_t>>() } {};
+	m_connectionPoints{ std::vector<std::pair<uint8_t,uint8_t>>() } {};
 
 
 Pylon::Pylon(const Pylon& other)
@@ -54,7 +54,7 @@ std::vector<Bridge*> Pylon::getConnections() const
 	return m_connections;
 }
 
-std::vector<std::pair<int8_t, int8_t>> Pylon::getConnectionPoints() const
+std::vector<std::pair<uint8_t, uint8_t>> Pylon::getConnectionPoints() const
 {
 	return m_connectionPoints;
 }
@@ -79,7 +79,7 @@ void Pylon::setConnections(const std::vector<Bridge*>& other)
 	}
 }
 
-void Pylon::setConnectionPoints(const std::vector<std::pair<int8_t, int8_t>>& other)
+void Pylon::setConnectionPoints(const std::vector<std::pair<uint8_t, uint8_t>>& other)
 {
 	m_connectionPoints = other;
 }

@@ -15,7 +15,7 @@ public:
 private:
 	Foundation* m_position;
 	std::vector<Bridge*> m_connections;
-	std::vector<std::pair<int8_t, int8_t>> m_connectionPoints;
+	std::vector<std::pair<uint8_t, uint8_t>> m_connectionPoints;
 	Color m_color;
 
 public:
@@ -27,12 +27,12 @@ public:
 
 	Foundation* getPosition() const;
 	std::vector<Bridge*> getConnections() const;
-	std::vector<std::pair<int8_t, int8_t>> getConnectionPoints() const;
+	std::vector<std::pair<uint8_t, uint8_t>> getConnectionPoints() const;
 	Color getColor() const;
 
 	void setFoundation(Foundation*);
 	void setConnections(const std::vector<Bridge*>&);
-	void setConnectionPoints(const std::vector<std::pair<int8_t, int8_t>>&);
+	void setConnectionPoints(const std::vector<std::pair<uint8_t, uint8_t>>&);
 	void setColor(const Color&);
 };
 
