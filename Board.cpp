@@ -34,3 +34,35 @@ Board::~Board()
 		for (auto& foundation : line)
 			delete foundation.getPylon();
 }
+
+std::vector<std::vector<Foundation>> Board::getBoard() const
+{
+	return m_board;
+}
+
+std::map<std::pair<uint8_t, uint8_t>, Pylon*> Board::getPylons() const
+{
+	return m_pylons;
+}
+
+std::multimap<Pylon*, Bridge*> Board::getBridges() const
+{
+	return m_bridges;
+}
+
+void Board::setBoard(const std::vector<std::vector<Foundation>>& other)
+{
+	m_board = other;
+}
+
+void Board::setPylons(const std::map<std::pair<uint8_t, uint8_t>, Pylon*>& other)
+{
+	m_pylons = other;
+}
+
+void Board::setBridges(const std::multimap<Pylon*, Bridge*>& other)
+{
+	m_bridges = other;
+}
+
+
