@@ -24,6 +24,8 @@ Board& Board::operator=(const Board& other)
 	m_board = other.m_board;
 	m_pylons = other.m_pylons;
 	m_bridges = other.m_bridges;
+
+	return *this;
 }
 
 Board::~Board()

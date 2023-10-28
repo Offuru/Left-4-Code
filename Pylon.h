@@ -4,6 +4,9 @@
 #include "Bridge.h"
 #include "Foundation.h"
 
+class Bridge;
+class Foundation;
+
 class Pylon
 {
 public:

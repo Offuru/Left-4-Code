@@ -3,6 +3,8 @@
 #include <utility>
 #include "Pylon.h"
 
+class Pylon;
+
 class Bridge
 {
 private:
