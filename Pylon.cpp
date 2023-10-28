@@ -40,7 +40,8 @@ Pylon::~Pylon()
 {
 	for(auto& it : m_connections)
 	{
-		delete it;
+		if(it != nullptr)
+			delete it;
 	}
 }
 

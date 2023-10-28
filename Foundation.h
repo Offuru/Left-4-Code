@@ -12,7 +12,7 @@ private:
 
 public:
 	Foundation();
-	Foundation(std::pair<uint8_t, uint8_t>, bool, Pylon*);
+	Foundation(std::pair<uint8_t, uint8_t>, bool = false, Pylon* = nullptr);
 	Foundation(const Foundation&);
 	Foundation& operator=(const Foundation&);
 	~Foundation();

@@ -130,12 +130,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Board.cpp" />
     <ClCompile Include="Bridge.cpp" />
     <ClCompile Include="Foundation.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Pylon.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Board.h" />
     <ClInclude Include="Bridge.h" />
     <ClInclude Include="Foundation.h" />
     <ClInclude Include="Pylon.h" />
