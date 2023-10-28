@@ -133,6 +133,7 @@
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="Bridge.cpp" />
     <ClCompile Include="Foundation.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Pylon.cpp" />
@@ -141,6 +142,7 @@
     <ClInclude Include="Board.h" />
     <ClInclude Include="Bridge.h" />
     <ClInclude Include="Foundation.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Pylon.h" />
   </ItemGroup>
