@@ -12,12 +12,8 @@ Board::Board()
 	}
 }
 
-Board::Board(const Board& other)
-{
-	m_board = other.m_board;
-	m_pylons = other.m_pylons;
-	m_bridges = other.m_bridges;
-}
+Board::Board(const Board& other) :
+	m_board{ other.m_board }, m_pylons{ other.m_pylons }, m_bridges{ other.m_bridges } {}
 
 Board& Board::operator=(const Board& other)
 {
@@ -50,19 +46,19 @@ std::multimap<Pylon*, Bridge*> Board::getBridges() const
 	return m_bridges;
 }
 
-void Board::setBoard(const std::vector<std::vector<Foundation>>& other)
+void Board::setBoard(const std::vector<std::vector<Foundation>>& board)
 {
-	m_board = other;
+	m_board = board;
 }
 
-void Board::setPylons(const std::map<std::pair<uint8_t, uint8_t>, Pylon*>& other)
+void Board::setPylons(const std::map<std::pair<uint8_t, uint8_t>, Pylon*>& pylons)
 {
-	m_pylons = other;
+	m_pylons = pylons;
 }
 
-void Board::setBridges(const std::multimap<Pylon*, Bridge*>& other)
+void Board::setBridges(const std::multimap<Pylon*, Bridge*>& bridges)
 {
-	m_bridges = other;
+	m_bridges = bridges;
 }
 
 

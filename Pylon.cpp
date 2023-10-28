@@ -65,27 +65,27 @@ Pylon::Color Pylon::getColor() const
 	return m_color;
 }
 
-void Pylon::setFoundation(Foundation* other)
+void Pylon::setFoundation(Foundation* position)
 {
-	m_position = other;
+	m_position = position;
 }
 
-void Pylon::setConnections(const std::vector<Bridge*>& other)
+void Pylon::setConnections(const std::vector<Bridge*>& connections)
 {
-	m_connections.resize(other.size(), nullptr);
+	m_connections.resize(connections.size(), nullptr);
 
-	for (int i = 0; i < other.size(); ++i)
+	for (int i = 0; i < connections.size(); ++i)
 	{
-		m_connections[i] = new Bridge(*other[i]);
+		m_connections[i] = new Bridge(*connections[i]);
 	}
 }
 
-void Pylon::setConnectionPoints(const std::vector<std::pair<uint8_t, uint8_t>>& other)
+void Pylon::setConnectionPoints(const std::vector<std::pair<uint8_t, uint8_t>>& connectionPoints)
 {
-	m_connectionPoints = other;
+	m_connectionPoints = connectionPoints;
 }
 
-void Pylon::setColor(const Color& other)
+void Pylon::setColor(const Color& color)
 {
-	m_color = other;
+	m_color = color;
 }
