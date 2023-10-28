@@ -28,3 +28,53 @@ Player& Player::operator=(const Player& other)
 
 	return *this;
 }
+
+void Player::setColor(Pylon::Color color)
+{
+	m_color = color;
+}
+
+void Player::setNoBridges(uint8_t noBridges)
+{
+	m_noBridges = noBridges;
+}
+
+void Player::setNoPylons1x1(uint8_t noPylons1x1)
+{
+	m_noPylons1x1 = noPylons1x1;
+}
+
+void Player::setNoPylons2x2(uint8_t noPylons2x2)
+{
+	m_noPylons2x2 = noPylons2x2;
+}
+
+void Player::setNoPylonsCross(uint8_t noPylonsCross)
+{
+	m_noPylonsCross = noPylonsCross;
+}
+
+Pylon::Color Player::getColor() const
+{
+	return m_color;
+}
+
+uint8_t Player::getNoBridges() const
+{
+	return m_noBridges;
+}
+
+uint8_t Player::getNoPylons1x1() const
+{
+	return m_noPylons1x1;
+}
+
+uint8_t Player::getNoPylons2x2() const
+{
+	return m_noPylons2x2;
+}
+
+uint8_t Player::getNoPylonsCross() const
+{
+	return m_noPylonsCross;
+}
