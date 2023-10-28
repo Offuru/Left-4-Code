@@ -134,12 +134,14 @@
     <ClCompile Include="Bridge.cpp" />
     <ClCompile Include="Foundation.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Pylon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h" />
     <ClInclude Include="Bridge.h" />
     <ClInclude Include="Foundation.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="Pylon.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
