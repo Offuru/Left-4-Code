@@ -10,7 +10,7 @@ class Foundation;
 class Pylon
 {
 public:
-	static enum class Color
+	enum class Color
 	{
 		Red,
 		Black
