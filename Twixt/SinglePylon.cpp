@@ -1,9 +1,16 @@
 #include "SinglePylon.h"
 
 SinglePylon::SinglePylon(const Foundation& foundation, Color color):
-Pylon(foundation,color){}
+	Pylon{ foundation,color }
+{
+	m_connectionPoints.emplace_back(foundation.getPosition());
+}
 
-SinglePylon::SinglePylon(const SinglePylon& singlePylon):
-Pylon(singlePylon){}
+
+void SinglePylon::addBridge(Bridge* bridge)
+{
+	m_connections.emplace_back(bridge);
+}
+
 
 
