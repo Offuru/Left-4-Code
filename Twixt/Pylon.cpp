@@ -1,56 +1,28 @@
 #include "Pylon.h"
 
-Pylon::Pylon() :
-	m_position{ nullptr }, m_color{ Color::Red }, m_connections{ std::vector<Bridge*>() },
+Pylon::Pylon(const Foundation& foundation, Color color) :
+	m_position{ foundation }, m_color{ color }, m_connections{ std::vector<std::reference_wrapper<const Bridge>>() },
 	m_connectionPoints{ std::vector<std::pair<uint8_t,uint8_t>>() } {};
 
-Pylon::Pylon(Foundation* foundation, Color color) :
-	m_position{ foundation }, m_color{ color }, m_connections{ std::vector<Bridge*>() },
-	m_connectionPoints{ std::vector<std::pair<uint8_t,uint8_t>>() } {};
-
-
-Pylon::Pylon(const Pylon& other)
-{
-	m_position = other.m_position;
-	m_color = other.m_color;
-	m_connections.resize(other.m_connections.size(), nullptr);
-	
-	for (int i = 0; i < other.m_connections.size(); ++i)
-	{
-		m_connections[i] = new Bridge(*other.m_connections[i]);
-	}
-	m_connectionPoints = other.m_connectionPoints;
-}
+Pylon::Pylon(const Pylon& other) :
+	m_position{ other.m_position }, m_color{ other.m_color }, m_connections{ other.m_connections }, m_connectionPoints{ other.m_connectionPoints } {};
 
 Pylon& Pylon::operator=(const Pylon& other)
 {
 	m_position = other.m_position;
 	m_color = other.m_color;
-	m_connections.resize(other.m_connections.size(), nullptr);
+	m_connections = other.m_connections;
 
-	for (int i = 0; i < other.m_connections.size(); ++i)
-	{
-		m_connections[i] = new Bridge(*other.m_connections[i]);
-	}
 	m_connectionPoints = other.m_connectionPoints;
 	return *this;
 }
 
-Pylon::~Pylon()
-{
-	for(auto& it : m_connections)
-	{
-		if(it != nullptr)
-			delete it;
-	}
-}
-
-Foundation* Pylon::getPosition() const
+const Foundation& Pylon::getPosition() const
 {
 	return m_position;
 }
 
-std::vector<Bridge*> Pylon::getConnections() const
+std::vector<std::reference_wrapper<const Bridge>> Pylon::getConnections() const
 {
 	return m_connections;
 }
@@ -65,19 +37,14 @@ Pylon::Color Pylon::getColor() const
 	return m_color;
 }
 
-void Pylon::setFoundation(Foundation* position)
+void Pylon::setFoundation(const Foundation& position)
 {
 	m_position = position;
 }
 
-void Pylon::setConnections(const std::vector<Bridge*>& connections)
+void Pylon::setConnections(const std::vector<std::reference_wrapper<const Bridge>>& connections)
 {
-	m_connections.resize(connections.size(), nullptr);
-
-	for (int i = 0; i < connections.size(); ++i)
-	{
-		m_connections[i] = new Bridge(*connections[i]);
-	}
+	m_connections = connections;
 }
 
 void Pylon::setConnectionPoints(const std::vector<std::pair<uint8_t, uint8_t>>& connectionPoints)
