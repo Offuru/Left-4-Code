@@ -1,28 +1,16 @@
 #include "Pylon.h"
 
 Pylon::Pylon(const Foundation& foundation, Color color) :
-	m_position{ foundation }, m_color{ color }, m_connections{ std::vector<std::reference_wrapper<const Bridge>>() },
-	m_connectionPoints{ std::vector<std::pair<uint8_t,uint8_t>>() } {};
-
-Pylon::Pylon(const Pylon& other) :
-	m_position{ other.m_position }, m_color{ other.m_color }, m_connections{ other.m_connections }, m_connectionPoints{ other.m_connectionPoints } {};
-
-Pylon& Pylon::operator=(const Pylon& other)
-{
-	m_position = other.m_position;
-	m_color = other.m_color;
-	m_connections = other.m_connections;
-
-	m_connectionPoints = other.m_connectionPoints;
-	return *this;
-}
+	m_position{ foundation }, m_color{ color }, m_connections{ std::vector<Bridge*>() },
+	m_connectionPoints{ std::vector<std::pair<uint8_t,uint8_t>>() } 
+{}
 
 const Foundation& Pylon::getPosition() const
 {
 	return m_position;
 }
 
-std::vector<std::reference_wrapper<const Bridge>> Pylon::getConnections() const
+std::vector<Bridge*> Pylon::getConnections() const
 {
 	return m_connections;
 }
@@ -42,7 +30,7 @@ void Pylon::setFoundation(const Foundation& position)
 	m_position = position;
 }
 
-void Pylon::setConnections(const std::vector<std::reference_wrapper<const Bridge>>& connections)
+void Pylon::setConnections(const std::vector<Bridge*>& connections)
 {
 	m_connections = connections;
 }
