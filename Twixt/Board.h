@@ -1,8 +1,13 @@
 #pragma once
 
+#include "SinglePylon.h"
+#include "CrossPylon.h"
+#include "SquarePylon.h"
 #include "Foundation.h"
+#include "Player.h"
 #include <map>
-
+#include <unordered_set>
+#include <queue>
 
 class Board
 {
@@ -26,5 +31,9 @@ private:
 	std::vector<std::vector<Foundation>> m_board;
 	std::map<std::pair<uint8_t, uint8_t>, Pylon*> m_pylons;
 	std::multimap<Pylon*, Bridge*> m_bridges;
+
+	bool winnerFoundation(const Foundation&, uint8_t, Pylon::Color) const;
+	bool checkWinningRoute(std::queue<Pylon*>&, bool);
+	bool verifyWinner(const Player&);
 };
 
