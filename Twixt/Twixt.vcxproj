@@ -138,6 +138,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Pylon.cpp" />
     <ClCompile Include="SinglePylon.cpp" />
+    <ClCompile Include="SquarePylon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h" />
@@ -147,6 +148,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Pylon.h" />
     <ClInclude Include="SinglePylon.h" />
+    <ClInclude Include="SquarePylon.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
