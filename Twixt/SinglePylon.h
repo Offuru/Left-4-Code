@@ -12,6 +12,6 @@ public:
 	SinglePylon(const SinglePylon&) = delete;
 	~SinglePylon() = default;
 
-	void addBridge(Bridge*);
+	bool addBridge(Bridge*, const Foundation&);
 };
 
