@@ -9,6 +9,7 @@ public:
 	~CrossPylon() = default;
 
 	bool canAddBridge(const Foundation&) const;
+	bool addBridge(Bridge*, const Foundation&);
 private:
 
 };
