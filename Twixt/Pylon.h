@@ -17,6 +17,13 @@ public:
 		Black
 	};
 
+	enum class Type
+	{
+		Single,
+		Square,
+		Cross
+	};
+
 protected:
 	std::vector<std::reference_wrapper<const Foundation>> m_foundations;
 	std::vector<Bridge*> m_connections; //shared_ptr
