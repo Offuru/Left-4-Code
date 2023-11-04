@@ -61,11 +61,35 @@ void Board::setBridges(const std::multimap<Pylon*, Bridge*>& bridges)
 	m_bridges = bridges;
 }
 
+void Board::addPylon(const Foundation& foundation, Pylon::Color color, Pylon::Type type)
+{
+	Pylon* pylon;
+	switch (type)
+	{
+	case Pylon::Type::Single:
+		pylon = new SinglePylon(foundation, color);
+		break;
+	case Pylon::Type::Square:
+		// need addBridge function
+		// pylon = new SquarePylon(foundation, color);
+		break;
+	case Pylon::Type::Cross:
+		//need addBridge function
+		// pylon = new CrossPylon(foundation, color);
+		break;
+	default:
+		break;
+	}
+
+	m_pylons.insert(std::make_pair(foundation.getPosition(), pylon));
+}
+
 void Board::addBridge(const Foundation& foundation1, const Foundation& foundation2, Pylon::Color color)
 {
 	Bridge* bridge = new Bridge(foundation1.getPylon(), foundation2.getPylon(), foundation1.getPosition(), foundation2.getPosition());
-	foundation1.getPylon()->addBridge(bridge);
-	foundation2.getPylon()->addBridge(bridge);
+
+	foundation1.getPylon()->addBridge(bridge, foundation1);
+	foundation2.getPylon()->addBridge(bridge, foundation2);
 	//check pylons(existance,color)
 	m_bridges.insert(std::make_pair(foundation1.getPylon(), bridge));
 }

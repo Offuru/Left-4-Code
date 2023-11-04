@@ -25,6 +25,7 @@ public:
 	void setPylons(const std::map<std::pair<uint8_t, uint8_t>, Pylon*>&);
 	void setBridges(const std::multimap<Pylon*, Bridge*>&);
 	
+	void addPylon(const Foundation&, Pylon::Color, Pylon::Type);
 	void addBridge(const Foundation&, const Foundation&, Pylon::Color);
 
 private:

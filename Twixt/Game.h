@@ -5,6 +5,7 @@
 class Game
 {
 public:
+
 	Game();
 	Game(const Game&);
 	Game& operator=(const Game&);
