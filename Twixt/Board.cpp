@@ -68,14 +68,17 @@ void Board::addPylon(const Foundation& foundation, Pylon::Color color, Pylon::Ty
 	{
 	case Pylon::Type::Single:
 		pylon = new SinglePylon(foundation, color);
+		//set foundation.pylon = pylon
 		break;
 	case Pylon::Type::Square:
 		// need addBridge function
-		// pylon = new SquarePylon(foundation, color);
+		pylon = new SquarePylon(foundation, color);
+		//set foundation.pylon = pylon
 		break;
 	case Pylon::Type::Cross:
 		//need addBridge function
-		// pylon = new CrossPylon(foundation, color);
+		pylon = new CrossPylon(foundation, color);
+		//set foundation.pylon = pylon
 		break;
 	default:
 		break;
@@ -86,12 +89,14 @@ void Board::addPylon(const Foundation& foundation, Pylon::Color color, Pylon::Ty
 
 void Board::addBridge(const Foundation& foundation1, const Foundation& foundation2, Pylon::Color color)
 {
-	Bridge* bridge = new Bridge(foundation1.getPylon(), foundation2.getPylon(), foundation1.getPosition(), foundation2.getPosition());
+	if (foundation1.getPylon()->canAddBridge(foundation1) && foundation2.getPylon()->canAddBridge(foundation2))
+	{
+		Bridge* bridge = new Bridge(foundation1.getPylon(), foundation2.getPylon(), foundation1.getPosition(), foundation2.getPosition());
 
-	foundation1.getPylon()->addBridge(bridge, foundation1);
-	foundation2.getPylon()->addBridge(bridge, foundation2);
-	//check pylons(existance,color)
-	m_bridges.insert(std::make_pair(foundation1.getPylon(), bridge));
+		foundation1.getPylon()->addBridge(bridge, foundation1);
+		foundation2.getPylon()->addBridge(bridge, foundation2);
+		m_bridges.insert(std::make_pair(foundation1.getPylon(), bridge));
+	}
 }
 
 bool Board::winnerFoundation(const Foundation& foundation, uint8_t rule, Pylon::Color color) const
