@@ -24,6 +24,8 @@ public:
 	void setBoard(const std::vector<std::vector<Foundation>>&);
 	void setPylons(const std::map<std::pair<uint8_t, uint8_t>, Pylon*>&);
 	void setBridges(const std::multimap<Pylon*, Bridge*>&);
+	
+	void addBridge(const Foundation&, const Foundation&, Pylon::Color);
 
 private:
 	const uint8_t m_size = 24;
@@ -33,7 +35,7 @@ private:
 	std::multimap<Pylon*, Bridge*> m_bridges;
 
 	bool winnerFoundation(const Foundation&, uint8_t, Pylon::Color) const;
-	bool checkWinningRoute(std::queue<Pylon*>&, bool);
+	bool checkWinningRoute(std::queue<Pylon*>&, std::unordered_set<Pylon*>&, bool);
 	bool verifyWinner(const Player&);
 };
 

@@ -61,6 +61,15 @@ void Board::setBridges(const std::multimap<Pylon*, Bridge*>& bridges)
 	m_bridges = bridges;
 }
 
+void Board::addBridge(const Foundation& foundation1, const Foundation& foundation2, Pylon::Color color)
+{
+	Bridge* bridge = new Bridge(foundation1.getPylon(), foundation2.getPylon(), foundation1.getPosition(), foundation2.getPosition());
+	foundation1.getPylon()->addBridge(bridge);
+	foundation2.getPylon()->addBridge(bridge);
+	//check pylons(existance,color)
+	m_bridges.insert(std::make_pair(foundation1.getPylon(), bridge));
+}
+
 bool Board::winnerFoundation(const Foundation& foundation, uint8_t rule, Pylon::Color color) const
 {
 	//verify if the current Pylon occupies foundations near/on end line of board
@@ -76,15 +85,13 @@ bool Board::winnerFoundation(const Foundation& foundation, uint8_t rule, Pylon::
 	return false;
 }
 
-bool Board::checkWinningRoute(std::queue<Pylon*>& nextVisit, bool firstRun = true)
+bool Board::checkWinningRoute(std::queue<Pylon*>& nextVisit, std::unordered_set<Pylon*>& visited, bool firstRun = true)
 {
 	//firstRun == true means that the current route starts from the left side (for red) or
 	//from the above (for black)
 	uint8_t currRuleForWinning = 0;
 	if (firstRun)
 		currRuleForWinning = m_size - 2;
-
-	std::unordered_set<Pylon*> visited;
 
 	while (!nextVisit.empty())
 	{
@@ -107,7 +114,7 @@ bool Board::checkWinningRoute(std::queue<Pylon*>& nextVisit, bool firstRun = tru
 		}
 
 		//verify if currPylon stands on winning pos
-		
+
 
 		SinglePylon* single = dynamic_cast<SinglePylon*>(currPylon);
 		if (single)
@@ -141,67 +148,46 @@ bool Board::checkWinningRoute(std::queue<Pylon*>& nextVisit, bool firstRun = tru
 bool Board::verifyWinner(const Player& player)
 {
 	std::queue<Pylon*> nextVisit;
-	
-	if (player.getColor() == Pylon::Color::Red)
+	std::unordered_set<Pylon*> visited;
+
+	for (int i = 0; i < m_board.size(); ++i)
 	{
-		for (int i = 0; i < m_board.size(); ++i)
-		{
-			Pylon* currPylon = m_board[0][i].getPylon();
-			if (currPylon != nullptr)
-			{
-				nextVisit.emplace(currPylon);
-			}
-		}
-		
-		if (checkWinningRoute(nextVisit, true)) 
-		{
-			return true;
-		}
+		Pylon* currPylon;
+		if (player.getColor() == Pylon::Color::Red)
+			currPylon = m_board[0][i].getPylon();
+		else
+			currPylon = m_board[i][0].getPylon();
 
-		for (int i = 0; i < m_board.size(); ++i)
+		if (currPylon != nullptr)
 		{
-			Pylon* currPylon = m_board[m_size - 1][i].getPylon();
-			if (currPylon != nullptr)
-			{
-				nextVisit.emplace(currPylon);
-			}
-		}
-
-		if (checkWinningRoute(nextVisit, false))
-		{
-			return true;
+			nextVisit.emplace(currPylon);
 		}
 	}
-	else
+
+	if (checkWinningRoute(nextVisit, visited, true))
 	{
-		for (int i = 0; i < m_board.size(); ++i)
-		{
-			Pylon* currPylon = m_board[i][0].getPylon();
-			if (currPylon != nullptr)
-			{
-				nextVisit.emplace(currPylon);
-			}
-		}
+		return true;
+	}
 
-		if (checkWinningRoute(nextVisit, true))
-		{
-			return true;
-		}
+	for (int i = 0; i < m_board.size(); ++i)
+	{
+		Pylon* currPylon;
+		if (player.getColor() == Pylon::Color::Red)
+			currPylon = m_board[m_size - 1][i].getPylon();
+		else
+			currPylon = m_board[i][m_size - 1].getPylon();
 
-		for (int i = 0; i < m_board.size(); ++i)
+		if (currPylon != nullptr)
 		{
-			Pylon* currPylon = m_board[i][m_size - 1].getPylon();
-			if (currPylon != nullptr)
-			{
-				nextVisit.emplace(currPylon);
-			}
-		}
-
-		if (checkWinningRoute(nextVisit, false))
-		{
-			return true;
+			nextVisit.emplace(currPylon);
 		}
 	}
+
+	if (checkWinningRoute(nextVisit, visited, false))
+	{
+		return true;
+	}
+
 
 	return false;
 }
