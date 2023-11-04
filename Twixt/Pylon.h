@@ -42,6 +42,6 @@ public:
 
 	void addFoundation(const Foundation&);
 
-	virtual void addBridge(Bridge*) = 0;
+	virtual bool addBridge(Bridge*, const Foundation&) = 0;
 };
 

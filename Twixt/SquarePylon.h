@@ -10,6 +10,7 @@ public:
 	SquarePylon(const SquarePylon&) = delete;
 	~SquarePylon() = default;
 
+	bool addBridge(Bridge*, const Foundation&);
 private:
 
 };
