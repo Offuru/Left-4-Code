@@ -6,6 +6,10 @@ SinglePylon::SinglePylon(const Foundation& foundation, Color color):
 	m_connectionPoints.emplace_back(foundation.getPosition());
 }
 
+bool SinglePylon::canAddBridge(const Foundation& foundation) const
+{
+	return true;
+}
 
 bool SinglePylon::addBridge(Bridge* bridge, const Foundation& foundation)
 {

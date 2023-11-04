@@ -8,6 +8,7 @@ public:
 	CrossPylon(const CrossPylon&) = delete;
 	~CrossPylon() = default;
 
+	bool canAddBridge(const Foundation&) const;
 private:
 
 };
