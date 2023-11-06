@@ -9,6 +9,8 @@
 #include <unordered_set>
 #include <queue>
 
+using Position = std::pair<uint8_t, uint8_t>;
+
 class Board
 {
 public:
@@ -18,21 +20,22 @@ public:
 	~Board();
 
 	std::vector<std::vector<Foundation>> getBoard() const;
-	std::map<std::pair<uint8_t, uint8_t>, Pylon*> getPylons() const;
+	std::map<Position, Pylon*> getPylons() const;
 	std::multimap<Pylon*, Bridge*> getBridges() const;
 
 	void setBoard(const std::vector<std::vector<Foundation>>&);
-	void setPylons(const std::map<std::pair<uint8_t, uint8_t>, Pylon*>&);
+	void setPylons(const std::map<Position, Pylon*>&);
 	void setBridges(const std::multimap<Pylon*, Bridge*>&);
 	
 	void addPylon(Foundation&, Pylon::Color, Pylon::Type);
 	void addBridge(const Foundation&, const Foundation&, Pylon::Color);
 
+	Foundation& getFoundation(const Position&);
 private:
-	const uint8_t m_size = 24;
+	uint8_t m_size = 24;
 
 	std::vector<std::vector<Foundation>> m_board;
-	std::map<std::pair<uint8_t, uint8_t>, Pylon*> m_pylons;
+	std::map<Position, Pylon*> m_pylons;
 	std::multimap<Pylon*, Bridge*> m_bridges;
 
 	bool winnerFoundation(const Foundation&, uint8_t, Pylon::Color) const;

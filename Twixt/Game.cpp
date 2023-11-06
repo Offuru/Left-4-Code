@@ -2,7 +2,7 @@
 
 Game::Game()
 {
-	m_bigPylons = m_minedFundations 
+	m_bigPylons = m_minedFundations
 		= m_debuilderBob = m_cards = false;
 	m_player1 = Player();
 	m_player2 = Player();
@@ -58,7 +58,7 @@ void Game::setPlayer2(const Player& player)
 	m_player2 = player;
 }
 
-void Game::setBoard(const Board& board) 
+void Game::setBoard(const Board& board)
 {
 	m_board = board;
 }
@@ -91,6 +91,62 @@ Player Game::getPlayer2() const
 Board Game::getBoard() const
 {
 	return m_board;
+}
+
+bool Game::addPylon(const Position& pos, Pylon::Type type, Pylon::Color color)
+{
+	switch (type)
+	{
+	case Pylon::Type::Single:
+		if (validFoundation(pos, color))
+		{
+			m_board.addPylon(m_board.getFoundation(pos), color, type);
+				return true;
+		}
+		break;
+	case Pylon::Type::Square:
+		if (validFoundation(pos, color) &&
+		    validFoundation(std::make_pair(pos.first,pos.second+1),color) &&
+			validFoundation(std::make_pair(pos.first + 1, pos.second), color) &&
+			validFoundation(std::make_pair(pos.first + 1, pos.second + 1), color))
+		{
+			m_board.addPylon(m_board.getFoundation(pos), color, type);
+			return true;
+		}
+		break;
+	case Pylon::Type::Cross:
+		if (validFoundation(pos, color) &&
+			validFoundation(std::make_pair(pos.first + 1, pos.second), color) &&
+			validFoundation(std::make_pair(pos.first - 1, pos.second), color) &&
+			validFoundation(std::make_pair(pos.first, pos.second + 1), color) &&
+			validFoundation(std::make_pair(pos.first, pos.second - 1), color))
+		{
+			m_board.addPylon(m_board.getFoundation(pos), color, type);
+			return true;
+		}
+		break;
+	default:
+		break;
+	}
+
+	return false;
+}
+
+bool Game::validFoundation(const Position& pos, Pylon::Color color) const
+{
+	switch (color)
+	{
+	case Pylon::Color::Red:
+		return (0 <= pos.first && pos.first < m_board.getBoard().size() &&
+			1 <= pos.second && pos.second < m_board.getBoard().size() - 1 &&
+			m_board.getBoard()[pos.first][pos.second].getPylon() == nullptr);
+	case Pylon::Color::Black:
+		return (1 <= pos.first && pos.first < m_board.getBoard().size() - 1 &&
+			0 <= pos.second && pos.second < m_board.getBoard().size() &&
+			m_board.getBoard()[pos.first][pos.second].getPylon() == nullptr);
+	default:
+		return false;
+	}
 }
 
 bool Game::getCards() const

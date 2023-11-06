@@ -36,7 +36,7 @@ std::vector<std::vector<Foundation>> Board::getBoard() const
 	return m_board;
 }
 
-std::map<std::pair<uint8_t, uint8_t>, Pylon*> Board::getPylons() const
+std::map<Position, Pylon*> Board::getPylons() const
 {
 	return m_pylons;
 }
@@ -51,7 +51,7 @@ void Board::setBoard(const std::vector<std::vector<Foundation>>& board)
 	m_board = board;
 }
 
-void Board::setPylons(const std::map<std::pair<uint8_t, uint8_t>, Pylon*>& pylons)
+void Board::setPylons(const std::map<Position, Pylon*>& pylons)
 {
 	m_pylons = pylons;
 }
@@ -105,6 +105,11 @@ void Board::addBridge(const Foundation& foundation1, const Foundation& foundatio
 		foundation2.getPylon()->addBridge(bridge, foundation2);
 		m_bridges.insert(std::make_pair(foundation1.getPylon(), bridge));
 	}
+}
+
+Foundation& Board::getFoundation(const Position& pos)
+{
+	return m_board[pos.first][pos.second];
 }
 
 bool Board::winnerFoundation(const Foundation& foundation, uint8_t rule, Pylon::Color color) const

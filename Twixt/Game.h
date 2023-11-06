@@ -27,6 +27,8 @@ public:
 	Player getPlayer2() const;
 	Board getBoard() const;
 
+	bool addPylon(const Position&, Pylon::Type, Pylon::Color);
+
 private:
 	bool m_bigPylons;
 	bool m_minedFundations;
@@ -36,5 +38,6 @@ private:
 	Player m_player2;
 	Board m_board;
 
+	bool validFoundation(const Position&, Pylon::Color) const;
 };
 
