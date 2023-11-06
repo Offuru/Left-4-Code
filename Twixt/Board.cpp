@@ -61,25 +61,33 @@ void Board::setBridges(const std::multimap<Pylon*, Bridge*>& bridges)
 	m_bridges = bridges;
 }
 
-void Board::addPylon(const Foundation& foundation, Pylon::Color color, Pylon::Type type)
+void Board::addPylon(Foundation& foundation, Pylon::Color color, Pylon::Type type)
 {
 	Pylon* pylon;
 	switch (type)
 	{
 	case Pylon::Type::Single:
 		pylon = new SinglePylon(foundation, color);
-		//set foundation.pylon = pylon
+		foundation.setPylon(pylon);
 		break;
+
 	case Pylon::Type::Square:
-		// need addBridge function
 		pylon = new SquarePylon(foundation, color);
-		//set foundation.pylon = pylon
+		foundation.setPylon(pylon);
+		m_board[foundation.getPosition().first + 1][foundation.getPosition().second].setPylon(pylon);
+		m_board[foundation.getPosition().first + 1][foundation.getPosition().second + 1].setPylon(pylon);
+		m_board[foundation.getPosition().first][foundation.getPosition().second + 1].setPylon(pylon);
 		break;
+		
 	case Pylon::Type::Cross:
-		//need addBridge function
 		pylon = new CrossPylon(foundation, color);
-		//set foundation.pylon = pylon
+		foundation.setPylon(pylon);
+		m_board[foundation.getPosition().first + 1][foundation.getPosition().second].setPylon(pylon);
+		m_board[foundation.getPosition().first - 1][foundation.getPosition().second].setPylon(pylon);
+		m_board[foundation.getPosition().first][foundation.getPosition().second + 1].setPylon(pylon);
+		m_board[foundation.getPosition().first][foundation.getPosition().second - 1].setPylon(pylon);
 		break;
+
 	default:
 		break;
 	}
