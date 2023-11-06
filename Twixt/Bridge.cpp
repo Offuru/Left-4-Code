@@ -3,7 +3,7 @@
 Bridge::Bridge() :
 	m_pylonStart{ nullptr }, m_pylonEnd{ nullptr }, m_posStart{ std::make_pair(0,0) }, m_posEnd{ std::make_pair(0,0) } {};
 
-Bridge::Bridge(Pylon* pylonStart, Pylon* pylonEnd, const std::pair<uint8_t, uint8_t>& posStart, const std::pair<uint8_t, uint8_t>& posEnd) :
+Bridge::Bridge(Pylon* pylonStart, Pylon* pylonEnd, const Position& posStart, const Position& posEnd) :
 	m_pylonStart{ pylonStart }, m_pylonEnd{ pylonEnd}, m_posStart{ posStart }, m_posEnd{ posEnd } {};
 
 Bridge::Bridge(const Bridge& other)
@@ -34,12 +34,12 @@ Pylon* Bridge::getPylonEnd() const
 	return m_pylonEnd;
 }
 
-std::pair<uint8_t, uint8_t> Bridge::getPosStart() const
+Position Bridge::getPosStart() const
 {
 	return m_posStart;
 }
 
-std::pair<uint8_t, uint8_t> Bridge::getPosEnd() const
+Position Bridge::getPosEnd() const
 {
 	return m_posEnd;
 }
@@ -54,12 +54,12 @@ void Bridge::setPylonEnd(Pylon* pylonEnd)
 	m_pylonEnd = pylonEnd;
 }
 
-void Bridge::setPosStart(const std::pair<uint8_t, uint8_t>& posStart)
+void Bridge::setPosStart(const Position& posStart)
 {
 	m_posStart = posStart;
 }
 
-void Bridge::setPosEnd(const std::pair<uint8_t, uint8_t>& posEnd)
+void Bridge::setPosEnd(const Position& posEnd)
 {
 	m_posEnd = posEnd;
 }

@@ -17,7 +17,7 @@ std::vector<Bridge*> Pylon::getConnections() const
 	return m_connections;
 }
 
-std::vector<std::pair<uint8_t, uint8_t>> Pylon::getConnectionPoints() const
+std::vector<Position> Pylon::getConnectionPoints() const
 {
 	return m_connectionPoints;
 }
@@ -37,7 +37,7 @@ void Pylon::setConnections(const std::vector<Bridge*>& connections)
 	m_connections = connections;
 }
 
-void Pylon::setConnectionPoints(const std::vector<std::pair<uint8_t, uint8_t>>& connectionPoints)
+void Pylon::setConnectionPoints(const std::vector<Position>& connectionPoints)
 {
 	m_connectionPoints = connectionPoints;
 }

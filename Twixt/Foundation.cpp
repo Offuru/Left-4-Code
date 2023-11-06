@@ -3,7 +3,7 @@
 Foundation::Foundation() :
 	m_position{ std::make_pair(0,0) }, m_mined{ false }, m_pylon{ nullptr } {};
 
-Foundation::Foundation(std::pair<uint8_t, uint8_t> position, bool mined, Pylon* pylon) :
+Foundation::Foundation(Position position, bool mined, Pylon* pylon) :
 	m_position{ position }, m_mined{ mined }, m_pylon{ pylon } {};
 
 Foundation::Foundation(const Foundation& other)
@@ -28,7 +28,7 @@ Foundation::~Foundation()
 		delete m_pylon;
 }
 
-std::pair<uint8_t, uint8_t> Foundation::getPosition() const
+Position Foundation::getPosition() const
 {
 	return m_position;
 }
@@ -43,7 +43,7 @@ Pylon* Foundation::getPylon() const
 	return m_pylon;
 }
 
-void Foundation::setPosition(const std::pair<uint8_t, uint8_t>& position)
+void Foundation::setPosition(const Position& position)
 {
 	m_position = position;
 }
