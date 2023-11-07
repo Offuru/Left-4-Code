@@ -1,6 +1,8 @@
 #pragma once
-#include "Player.h"
 #include "Board.h"
+#include "Player.h"
+
+#include <iostream>
 
 class Game
 {
@@ -28,7 +30,7 @@ public:
 	Board getBoard() const;
 
 	bool addPylon(const Position&, Pylon::Type, Pylon::Color);
-
+	void printBoard();
 private:
 	bool m_bigPylons;
 	bool m_minedFundations;
@@ -38,6 +40,6 @@ private:
 	Player m_player2;
 	Board m_board;
 
-	bool validFoundation(const Position&, Pylon::Color) const;
+	bool validFoundation(const Position&, Pylon::Color);
 };
 

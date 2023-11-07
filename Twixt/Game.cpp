@@ -132,7 +132,24 @@ bool Game::addPylon(const Position& pos, Pylon::Type type, Pylon::Color color)
 	return false;
 }
 
-bool Game::validFoundation(const Position& pos, Pylon::Color color) const
+void Game::printBoard()
+{
+	for (auto& line : m_board.getBoard())
+	{
+		for (auto& element : line)
+		{
+			if (element.getPylon() == nullptr)
+				std::cout << "o ";
+			else if (element.getPylon()->getColor() == Pylon::Color::Black)
+				std::cout << "B ";
+			else
+				std::cout << "R ";
+		}
+		std::cout << '\n';
+	}
+}
+
+bool Game::validFoundation(const Position& pos, Pylon::Color color)
 {
 	switch (color)
 	{
