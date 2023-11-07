@@ -3,10 +3,8 @@
 Pylon::Pylon(const Position& foundation, Color color, Type type) :
 	m_color{ color }, m_connections{ std::vector<Bridge*>() },
 	m_connectionPoints{ std::vector<Position>() },
-	m_type{ type }
-{
-	m_foundations.emplace_back(foundation);
-}
+	m_type{ type } 
+{}
 
 Pylon::Pylon(const Pylon& other) :
 	m_color{ other.m_color }, m_connectionPoints{ other.m_connectionPoints },

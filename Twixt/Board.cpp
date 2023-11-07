@@ -144,28 +144,42 @@ void Board::setBridges(const std::multimap<Pylon*, Bridge*>& bridges)
 void Board::addPylon(Foundation& foundation, Pylon::Color color, Pylon::Type type)
 {
 	Pylon* pylon;
+	const auto& [x, y] = foundation.getPosition();
 	switch (type)
 	{
 	case Pylon::Type::Single:
 		pylon = new SinglePylon(foundation.getPosition(), color, type);
+		pylon->addFoundation({x, y});
+
 		foundation.setPylon(pylon);
 		break;
 
 	case Pylon::Type::Square:
 		pylon = new SquarePylon(foundation.getPosition(), color, type);
+		pylon->addFoundation({ x, y });
+		pylon->addFoundation({ x + 1, y });
+		pylon->addFoundation({ x + 1, y + 1 });
+		pylon->addFoundation({ x, y + 1 });
+
 		foundation.setPylon(pylon);
-		m_board[foundation.getPosition().first + 1][foundation.getPosition().second].setPylon(pylon);
-		m_board[foundation.getPosition().first + 1][foundation.getPosition().second + 1].setPylon(pylon);
-		m_board[foundation.getPosition().first][foundation.getPosition().second + 1].setPylon(pylon);
+		m_board[x + 1][y].setPylon(pylon);
+		m_board[x + 1][y + 1].setPylon(pylon);
+		m_board[x][y + 1].setPylon(pylon);
 		break;
 		
 	case Pylon::Type::Cross:
 		pylon = new CrossPylon(foundation.getPosition(), color, type);
+		pylon->addFoundation({ x, y });
+		pylon->addFoundation({ x + 1, y });
+		pylon->addFoundation({ x - 1, y });
+		pylon->addFoundation({ x, y + 1 });
+		pylon->addFoundation({ x, y - 1 });
+
 		foundation.setPylon(pylon);
-		m_board[foundation.getPosition().first + 1][foundation.getPosition().second].setPylon(pylon);
-		m_board[foundation.getPosition().first - 1][foundation.getPosition().second].setPylon(pylon);
-		m_board[foundation.getPosition().first][foundation.getPosition().second + 1].setPylon(pylon);
-		m_board[foundation.getPosition().first][foundation.getPosition().second - 1].setPylon(pylon);
+		m_board[x + 1][y].setPylon(pylon);
+		m_board[x - 1][y].setPylon(pylon);
+		m_board[x][y + 1].setPylon(pylon);
+		m_board[x][y - 1].setPylon(pylon);
 		break;
 
 	default:
