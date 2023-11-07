@@ -1,31 +1,71 @@
 #include "Foundation.h"
 
+
 Foundation::Foundation() :
 	m_position{ std::make_pair(0,0) }, m_mined{ false }, m_pylon{ nullptr } {};
 
 Foundation::Foundation(Position position, bool mined, Pylon* pylon) :
 	m_position{ position }, m_mined{ mined }, m_pylon{ pylon } {};
 
+
 Foundation::Foundation(const Foundation& other)
 {
 	m_position = other.m_position;
 	m_mined = other.m_mined;
-	m_pylon = other.m_pylon;//Multiple foundations ca point to the same pylon (2x2 & cross pylons)
+	Pylon* pylon;
+	if (other.getPylon() != nullptr)
+	{
+		SinglePylon* single = dynamic_cast<SinglePylon*>(other.getPylon());
+		if (single)
+		{
+			m_pylon = new SinglePylon(*single);
+			return;
+		}
+		SquarePylon* square = dynamic_cast<SquarePylon*>(other.getPylon());
+		if (square)
+		{
+			m_pylon = new SquarePylon(*square);
+			return;
+		}
+		CrossPylon* cross = dynamic_cast<CrossPylon*>(other.getPylon());
+		if (cross)
+		{
+			m_pylon = new CrossPylon(*cross);
+			return;
+		}
+	}
+
 }
 
-Foundation& Foundation::operator=(const Foundation& other)
+Foundation& Foundation::operator=(Foundation& other)
 {
 	m_position = other.m_position;
 	m_mined = other.m_mined;
-	m_pylon = other.m_pylon;
+	
+	if (m_pylon)
+		delete m_pylon;
+
+	Pylon* pylon;
+	SinglePylon* single = dynamic_cast<SinglePylon*>(other.getPylon());
+	if (single)
+	{
+		m_pylon = new SinglePylon(*single);
+		return *this;
+	}
+	SquarePylon* square = dynamic_cast<SquarePylon*>(other.getPylon());
+	if (square)
+	{
+		m_pylon = new SquarePylon(*square);
+		return *this;
+	}
+	CrossPylon* cross = dynamic_cast<CrossPylon*>(other.getPylon());
+	if (cross)
+	{
+		m_pylon = new CrossPylon(*cross);
+		return *this;
+	}
 
 	return *this;
-}
-
-Foundation::~Foundation()
-{
-	if(m_pylon)
-		delete m_pylon;
 }
 
 Position Foundation::getPosition() const

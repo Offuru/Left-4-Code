@@ -2,6 +2,9 @@
 
 #include <utility>
 #include "Pylon.h"
+#include "CrossPylon.h"
+#include "SinglePylon.h"
+#include "SquarePylon.h"
 
 using Position = std::pair<uint8_t, uint8_t>;
 
@@ -18,8 +21,8 @@ public:
 	Foundation();
 	Foundation(Position, bool = false, Pylon* = nullptr);
 	Foundation(const Foundation&);
-	Foundation& operator=(const Foundation&);
-	~Foundation();
+	Foundation& operator=(Foundation&);
+	~Foundation() = default; // pilonii se distrug din board!!
 
 	Position getPosition() const;
 	bool getMined() const;
