@@ -1,17 +1,21 @@
 #include "SinglePylon.h"
 
-SinglePylon::SinglePylon(const Foundation& foundation, Color color):
-	Pylon{ foundation,color }
+SinglePylon::SinglePylon(const Position& foundation, Color color, Type type):
+	Pylon{ foundation, color, type }
 {
-	m_connectionPoints.emplace_back(foundation.getPosition());
+	m_connectionPoints.emplace_back(foundation);
 }
 
-bool SinglePylon::canAddBridge(const Foundation& foundation) const
+SinglePylon::SinglePylon(const SinglePylon& other) :
+	Pylon{ other }
+{}
+
+bool SinglePylon::canAddBridge(const Position& foundation) const
 {
 	return true;
 }
 
-bool SinglePylon::addBridge(Bridge* bridge, const Foundation& foundation)
+bool SinglePylon::addBridge(Bridge* bridge, const Position& foundation)
 {
 	m_connections.emplace_back(bridge);
 	return true;

@@ -8,11 +8,11 @@ private:
 
 public:
 	SinglePylon() = delete;
-	SinglePylon(const Foundation&, Color);
-	SinglePylon(const SinglePylon&) = delete;
+	SinglePylon(const Position&, Color, Type);
+	SinglePylon(const SinglePylon&);
 	~SinglePylon() = default;
 
-	bool canAddBridge(const Foundation&) const;
-	bool addBridge(Bridge*, const Foundation&);
+	bool canAddBridge(const Position&) const;
+	bool addBridge(Bridge*, const Position&);
 };
 

@@ -3,12 +3,11 @@
 #include <vector>
 #include <functional>
 #include "Bridge.h"
-#include "Foundation.h"
+//#include "Foundation.h"
 
 using Position = std::pair<uint8_t, uint8_t>;
 
 class Bridge;
-class Foundation;
 
 class Pylon
 {
@@ -27,31 +26,33 @@ public:
 	};
 
 protected:
-	std::vector<std::reference_wrapper<const Foundation>> m_foundations;
+	std::vector<Position> m_foundations;
 	std::vector<Bridge*> m_connections; //shared_ptr
 	std::vector<Position> m_connectionPoints;
 	Color m_color;
+	Type m_type;
 
 public:
 	Pylon() = delete;
-	Pylon(const Foundation&, Color);
-	Pylon(const Pylon&) = delete;
-	Pylon& operator=(const Pylon&) = delete;
+	Pylon(const Position&, Color, Type);
+	Pylon(const Pylon&);
+	Pylon& operator=(const Pylon&);
 	virtual ~Pylon() = default;
 
-	std::vector<std::reference_wrapper<const Foundation>> getFoundations() const;
+	std::vector<Position> getFoundations() const;
 	std::vector<Bridge*> getConnections() const;
 	std::vector<Position> getConnectionPoints() const;
 	Color getColor() const;
+	Type getType() const;
 
-	void setFoundations(const std::vector<std::reference_wrapper<const Foundation>>&);
+	void setFoundations(const std::vector<Position>&);
 	void setConnections(const std::vector<Bridge*>&);
 	void setConnectionPoints(const std::vector<Position>&);
 	void setColor(const Color&);
+	
+	void addFoundation(const Position&);
 
-	void addFoundation(const Foundation&);
-
-	virtual bool canAddBridge(const Foundation&) const = 0;
-	virtual bool addBridge(Bridge*, const Foundation&) = 0;
+	virtual bool canAddBridge(const Position&) const = 0;
+	virtual bool addBridge(Bridge*, const Position&) = 0;
 };
 

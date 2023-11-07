@@ -1,13 +1,31 @@
 #include "Pylon.h"
 
-Pylon::Pylon(const Foundation& foundation, Color color) :
+Pylon::Pylon(const Position& foundation, Color color, Type type) :
 	m_color{ color }, m_connections{ std::vector<Bridge*>() },
-	m_connectionPoints{ std::vector<std::pair<uint8_t,uint8_t>>() } 
+	m_connectionPoints{ std::vector<Position>() },
+	m_type{ type }
 {
 	m_foundations.emplace_back(foundation);
 }
 
-std::vector<std::reference_wrapper<const Foundation>> Pylon::getFoundations() const
+Pylon::Pylon(const Pylon& other) :
+	m_color{ other.m_color }, m_connectionPoints{ other.m_connectionPoints },
+	m_foundations{ other.m_foundations }, m_connections{ other.m_connections },
+	m_type{ other.m_type }
+{}
+
+Pylon& Pylon::operator=(const Pylon& other)
+{
+	m_type = other.m_type;
+	m_color = other.m_color;
+	m_connectionPoints = other.m_connectionPoints;
+	m_foundations = other.m_foundations;
+	m_connections = other.m_connections;
+
+	return *this;
+}
+
+std::vector<Position> Pylon::getFoundations() const
 {
 	return m_foundations;
 }
@@ -27,7 +45,12 @@ Pylon::Color Pylon::getColor() const
 	return m_color;
 }
 
-void Pylon::setFoundations(const std::vector<std::reference_wrapper<const Foundation>>& foundations)
+Pylon::Type Pylon::getType() const
+{
+	return m_type;
+}
+
+void Pylon::setFoundations(const std::vector<Position>& foundations)
 {
 	m_foundations = foundations;
 }
@@ -47,7 +70,7 @@ void Pylon::setColor(const Color& color)
 	m_color = color;
 }
 
-void Pylon::addFoundation(const Foundation& foundation)
+void Pylon::addFoundation(const Position& foundation)
 {
 	m_foundations.emplace_back(foundation);
 }

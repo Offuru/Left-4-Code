@@ -1,15 +1,20 @@
 #pragma once
+
 #include "Pylon.h"
+
+
+class Pylon;
+
 class CrossPylon : public Pylon
 {
 public:
 	CrossPylon() = delete;
-	CrossPylon(const Foundation&, Color);
-	CrossPylon(const CrossPylon&) = delete;
+	CrossPylon(const Position&, Color, Type);
+	CrossPylon(const CrossPylon&);
 	~CrossPylon() = default;
 
-	bool canAddBridge(const Foundation&) const;
-	bool addBridge(Bridge*, const Foundation&);
+	bool canAddBridge(const Position&) const;
+	bool addBridge(Bridge*, const Position&);
 private:
 
 };
