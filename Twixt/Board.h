@@ -1,8 +1,8 @@
 #pragma once
 
-#include "SinglePylon.h"
-#include "CrossPylon.h"
-#include "SquarePylon.h"
+//#include "SinglePylon.h"
+//#include "CrossPylon.h"
+//#include "SquarePylon.h"
 #include "Foundation.h"
 #include "Player.h"
 #include <map>
@@ -19,7 +19,7 @@ public:
 	Board& operator=(const Board&);
 	~Board();
 
-	std::vector<std::vector<Foundation>> getBoard() const;
+	std::vector<std::vector<Foundation>>& getBoard();
 	std::map<Position, Pylon*> getPylons() const;
 	std::multimap<Pylon*, Bridge*> getBridges() const;
 
@@ -28,7 +28,7 @@ public:
 	void setBridges(const std::multimap<Pylon*, Bridge*>&);
 	
 	void addPylon(Foundation&, Pylon::Color, Pylon::Type);
-	void addBridge(const Foundation&, const Foundation&, Pylon::Color);
+	void addBridge(Foundation&, Foundation&, Pylon::Color);
 
 	Foundation& getFoundation(const Position&);
 private:

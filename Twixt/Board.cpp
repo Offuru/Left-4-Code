@@ -1,19 +1,24 @@
 #include "Board.h"
-
+#include <iostream>
 Board::Board()
 {
+	Foundation p;
 	m_board.resize(m_size);
 	for (int i = 0; i < m_size; ++i)
 	{
+		m_board[i].resize(m_size);
 		for (int j = 0; j < m_size; ++j)
 		{
-			m_board[i].emplace_back(Foundation(std::make_pair(i, j)));
+			Foundation p = Foundation(std::make_pair(i, j), false, nullptr);
+			m_board[i][j] = p;
 		}
 	}
 }
 
 Board::Board(const Board& other) :
 	m_board{ other.m_board }, m_pylons{ other.m_pylons }, m_bridges{ other.m_bridges } {}
+
+//tre schimbati astia 2 constructori ca sa se faca piloni noi pointeri
 
 Board& Board::operator=(const Board& other)
 {
@@ -26,12 +31,14 @@ Board& Board::operator=(const Board& other)
 
 Board::~Board()
 {
-	for (auto& line : m_board)
-		for (auto& foundation : line)
-			delete foundation.getPylon();
+	for (auto& it : m_pylons)
+		delete it.second;
+
+	for (auto& it : m_bridges)
+		delete it.second;
 }
 
-std::vector<std::vector<Foundation>> Board::getBoard() const
+std::vector<std::vector<Foundation>>& Board::getBoard()
 {
 	return m_board;
 }
@@ -67,12 +74,12 @@ void Board::addPylon(Foundation& foundation, Pylon::Color color, Pylon::Type typ
 	switch (type)
 	{
 	case Pylon::Type::Single:
-		pylon = new SinglePylon(foundation, color);
+		pylon = new SinglePylon(foundation.getPosition(), color, type);
 		foundation.setPylon(pylon);
 		break;
 
 	case Pylon::Type::Square:
-		pylon = new SquarePylon(foundation, color);
+		pylon = new SquarePylon(foundation.getPosition(), color, type);
 		foundation.setPylon(pylon);
 		m_board[foundation.getPosition().first + 1][foundation.getPosition().second].setPylon(pylon);
 		m_board[foundation.getPosition().first + 1][foundation.getPosition().second + 1].setPylon(pylon);
@@ -80,7 +87,7 @@ void Board::addPylon(Foundation& foundation, Pylon::Color color, Pylon::Type typ
 		break;
 		
 	case Pylon::Type::Cross:
-		pylon = new CrossPylon(foundation, color);
+		pylon = new CrossPylon(foundation.getPosition(), color, type);
 		foundation.setPylon(pylon);
 		m_board[foundation.getPosition().first + 1][foundation.getPosition().second].setPylon(pylon);
 		m_board[foundation.getPosition().first - 1][foundation.getPosition().second].setPylon(pylon);
@@ -95,14 +102,14 @@ void Board::addPylon(Foundation& foundation, Pylon::Color color, Pylon::Type typ
 	m_pylons.insert(std::make_pair(foundation.getPosition(), pylon));
 }
 
-void Board::addBridge(const Foundation& foundation1, const Foundation& foundation2, Pylon::Color color)
+void Board::addBridge(Foundation& foundation1, Foundation& foundation2, Pylon::Color color)
 {
-	if (foundation1.getPylon()->canAddBridge(foundation1) && foundation2.getPylon()->canAddBridge(foundation2))
+	if (foundation1.getPylon()->canAddBridge(foundation1.getPosition()) && foundation2.getPylon()->canAddBridge(foundation2.getPosition()))
 	{
 		Bridge* bridge = new Bridge(foundation1.getPylon(), foundation2.getPylon(), foundation1.getPosition(), foundation2.getPosition());
 
-		foundation1.getPylon()->addBridge(bridge, foundation1);
-		foundation2.getPylon()->addBridge(bridge, foundation2);
+		foundation1.getPylon()->addBridge(bridge, foundation1.getPosition());
+		foundation2.getPylon()->addBridge(bridge, foundation2.getPosition());
 		m_bridges.insert(std::make_pair(foundation1.getPylon(), bridge));
 	}
 }
