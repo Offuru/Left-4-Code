@@ -12,7 +12,6 @@ Foundation::Foundation(const Foundation& other)
 {
 	m_position = other.m_position;
 	m_mined = other.m_mined;
-	Pylon* pylon;
 	if (other.getPylon() != nullptr)
 	{
 		SinglePylon* single = dynamic_cast<SinglePylon*>(other.getPylon());
@@ -34,7 +33,7 @@ Foundation::Foundation(const Foundation& other)
 			return;
 		}
 	}
-
+	m_pylon = nullptr;
 }
 
 Foundation& Foundation::operator=(Foundation& other)
@@ -45,7 +44,6 @@ Foundation& Foundation::operator=(Foundation& other)
 	if (m_pylon)
 		delete m_pylon;
 
-	Pylon* pylon;
 	SinglePylon* single = dynamic_cast<SinglePylon*>(other.getPylon());
 	if (single)
 	{
@@ -65,6 +63,7 @@ Foundation& Foundation::operator=(Foundation& other)
 		return *this;
 	}
 
+	m_pylon = nullptr;
 	return *this;
 }
 

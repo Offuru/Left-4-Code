@@ -16,25 +16,98 @@ Board::Board()
 }
 
 Board::Board(const Board& other) :
-	m_board{ other.m_board }, m_pylons{ other.m_pylons }, m_bridges{ other.m_bridges } {}
+	m_board{ other.m_board }
+{
+	for (const auto& pylon : other.m_pylons)
+	{
+		SinglePylon* single = dynamic_cast<SinglePylon*>(pylon.second);
+		if (single) 
+		{
+			Pylon* p = new SinglePylon(*single);
+			m_pylons.insert({pylon.first, p});
+			continue;
+		}
+		SquarePylon* square = dynamic_cast<SquarePylon*>(pylon.second);
+		if (square)
+		{
+			Pylon* p = new SquarePylon(*square);
+			m_pylons.insert({ pylon.first, p });
+			continue;
+		}
+		CrossPylon* cross = dynamic_cast<CrossPylon*>(pylon.second);
+		if (cross)
+		{
+			Pylon* p = new CrossPylon(*cross);
+			m_pylons.insert({ pylon.first, p });
+			continue;
+		}
+	}
 
-//tre schimbati astia 2 constructori ca sa se faca piloni noi pointeri
+	for (auto& bridge : other.m_bridges)
+	{
+		auto whichPylon = m_pylons.find(bridge.first->getFoundations()[0]);
+		
+		if (whichPylon != m_pylons.end())
+		{
+			Bridge* newBridge = new Bridge(*bridge.second);
+			m_bridges.insert({whichPylon->second, newBridge});
+			//pylon* from bridge shouldn't get modified
+		}
+	}
+}
 
 Board& Board::operator=(const Board& other)
 {
+	if (this == &other)
+		return *this;
+
 	m_board = other.m_board;
-	m_pylons = other.m_pylons;
-	m_bridges = other.m_bridges;
+	
+	for (const auto& pylon : other.m_pylons)
+	{
+		SinglePylon* single = dynamic_cast<SinglePylon*>(pylon.second);
+		if (single)
+		{
+			Pylon* p = new SinglePylon(*single);
+			m_pylons.insert({ pylon.first, p });
+			continue;
+		}
+		SquarePylon* square = dynamic_cast<SquarePylon*>(pylon.second);
+		if (square)
+		{
+			Pylon* p = new SquarePylon(*square);
+			m_pylons.insert({ pylon.first, p });
+			continue;
+		}
+		CrossPylon* cross = dynamic_cast<CrossPylon*>(pylon.second);
+		if (cross)
+		{
+			Pylon* p = new CrossPylon(*cross);
+			m_pylons.insert({ pylon.first, p });
+			continue;
+		}
+	}
+
+	for (auto& bridge : other.m_bridges)
+	{
+		auto whichPylon = m_pylons.find(bridge.first->getFoundations()[0]);
+
+		if (whichPylon != m_pylons.end())
+		{
+			Bridge* newBridge = new Bridge(*bridge.second);
+			m_bridges.insert({ whichPylon->second, newBridge });
+			//pylon* from bridge shouldn't get modified
+		}
+	}
 
 	return *this;
 }
 
 Board::~Board()
-{
-	for (auto& it : m_pylons)
-		delete it.second;
-
+{	
 	for (auto& it : m_bridges)
+		delete it.second;
+	for (auto& it : m_pylons)
 		delete it.second;
 }
 

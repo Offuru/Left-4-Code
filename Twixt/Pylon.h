@@ -39,7 +39,7 @@ public:
 	Pylon& operator=(const Pylon&);
 	virtual ~Pylon() = default;
 
-	std::vector<Position> getFoundations() const;
+	std::vector<Position> getFoundations() const; //first foundation is always the one that "spawns" the pylon (center for cross and single, top left corner for square)
 	std::vector<Bridge*> getConnections() const;
 	std::vector<Position> getConnectionPoints() const;
 	Color getColor() const;
