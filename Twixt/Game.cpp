@@ -132,6 +132,54 @@ bool Game::addPylon(const Position& pos, Pylon::Type type, Pylon::Color color)
 	return false;
 }
 
+bool Game::addBridge(const Position& startPoint, const Position& endPoint)
+{
+	Pylon* startPylon = m_board.getFoundation(startPoint).getPylon();
+	Pylon* endPylon = m_board.getFoundation(endPoint).getPylon();
+
+	if (startPylon == nullptr || endPylon == nullptr)
+	{
+		return false;
+	}
+	
+	if (startPylon->getColor() != endPylon->getColor())
+	{
+		return false;
+	}
+
+	uint8_t dX = abs((int8_t)startPoint.first - (int8_t)endPoint.first),
+			dY = abs((int8_t)startPoint.second - (int8_t)endPoint.second);
+
+	if ((dX != 1 && dY != 2) || (dX != 2 && dY != 1))
+	{
+		if (startPylon->canAddBridge(startPoint) && endPylon->canAddBridge(endPoint))
+		{
+			for (auto& [pylon, bridge] : m_board.getBridges())
+			{
+				if (startPylon == pylon)
+				{
+					if (bridge->getPosStart() == startPoint &&
+						bridge->getPosEnd() == endPoint)
+					{
+						return false;
+					}
+				}
+				else if (endPylon == pylon)
+				{
+					if (bridge->getPosStart() == endPoint &&
+						bridge->getPosEnd() == startPoint)
+					{
+						return false;
+					}
+				}
+			}
+			m_board.addBridge(m_board.getFoundation(startPoint), m_board.getFoundation(endPoint), startPylon->getColor());
+			return true;
+		}
+	}
+	return false;
+}
+
 void Game::printBoard()
 {
 	for (auto& line : m_board.getBoard())

@@ -30,6 +30,7 @@ public:
 	Board getBoard() const;
 
 	bool addPylon(const Position&, Pylon::Type, Pylon::Color);
+	bool addBridge(const Position&, const Position&);
 	void printBoard();
 private:
 	bool m_bigPylons;

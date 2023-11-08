@@ -191,14 +191,11 @@ void Board::addPylon(Foundation& foundation, Pylon::Color color, Pylon::Type typ
 
 void Board::addBridge(Foundation& foundation1, Foundation& foundation2, Pylon::Color color)
 {
-	if (foundation1.getPylon()->canAddBridge(foundation1.getPosition()) && foundation2.getPylon()->canAddBridge(foundation2.getPosition()))
-	{
-		Bridge* bridge = new Bridge(foundation1.getPylon(), foundation2.getPylon(), foundation1.getPosition(), foundation2.getPosition());
+	Bridge* bridge = new Bridge(foundation1.getPylon(), foundation2.getPylon(), foundation1.getPosition(), foundation2.getPosition());
 
-		foundation1.getPylon()->addBridge(bridge, foundation1.getPosition());
-		foundation2.getPylon()->addBridge(bridge, foundation2.getPosition());
-		m_bridges.insert(std::make_pair(foundation1.getPylon(), bridge));
-	}
+	foundation1.getPylon()->addBridge(bridge, foundation1.getPosition());
+	foundation2.getPylon()->addBridge(bridge, foundation2.getPosition());
+	m_bridges.insert(std::make_pair(foundation1.getPylon(), bridge));
 }
 
 Foundation& Board::getFoundation(const Position& pos)
