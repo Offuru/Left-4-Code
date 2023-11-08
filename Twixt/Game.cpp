@@ -182,18 +182,47 @@ bool Game::addBridge(const Position& startPoint, const Position& endPoint)
 
 void Game::printBoard()
 {
-	for (auto& line : m_board.getBoard())
+	std::vector<std::vector<std::string>> boardMatrix(24, std::vector<std::string>(24));
+
+	for (uint8_t i = 0; i < boardMatrix.size(); ++i)
+	{
+		for (uint8_t j = 0; j < boardMatrix[0].size(); ++j)
+		{
+			Pylon* element = m_board.getBoard()[i][j].getPylon();
+			if (element == nullptr)
+			{
+				boardMatrix[i][j] = "o";
+			} else if (element->getColor() == Pylon::Color::Black)
+			{
+				boardMatrix[i][j] = "B";
+			} else
+			{
+				boardMatrix[i][j] = "R";
+			}
+		}
+	}
+
+	for (auto& [pylon, bridge] : m_board.getBridges())
+	{
+		Position positionStart = bridge->getPosStart(), positionEnd = bridge->getPosEnd();
+		if (pylon->getColor() == Pylon::Color::Red)
+		{
+			boardMatrix[positionStart.first][positionStart.second] = "r";
+			boardMatrix[positionEnd.first][positionEnd.second] = "r";
+		} else
+		{
+			boardMatrix[positionStart.first][positionStart.second] = "b";
+			boardMatrix[positionEnd.first][positionEnd.second] = "b";
+		}
+	}
+
+	for (auto& line : boardMatrix)
 	{
 		for (auto& element : line)
 		{
-			if (element.getPylon() == nullptr)
-				std::cout << "o ";
-			else if (element.getPylon()->getColor() == Pylon::Color::Black)
-				std::cout << "B ";
-			else
-				std::cout << "R ";
+			std::cout << element << " ";
 		}
-		std::cout << '\n';
+		std::cout << std::endl;
 	}
 }
 
