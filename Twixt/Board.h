@@ -14,7 +14,7 @@ using Position = std::pair<uint8_t, uint8_t>;
 class Board
 {
 public:
-	Board();
+	Board(uint8_t = 24);
 	Board(const Board&);
 	Board& operator=(const Board&);
 	~Board();

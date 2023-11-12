@@ -1,6 +1,6 @@
 #include "Board.h"
 #include <iostream>
-Board::Board()
+Board::Board(uint8_t size)
 {
 	Foundation p;
 	m_board.resize(m_size);
@@ -13,6 +13,7 @@ Board::Board()
 			m_board[i][j] = p;
 		}
 	}
+	m_size = size;
 }
 
 Board::Board(const Board& other) :
