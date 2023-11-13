@@ -2,14 +2,15 @@
 
 
 Foundation::Foundation() :
-	m_position{ std::make_pair(0,0) }, m_mined{ false }, m_pylon{ nullptr } {};
+	m_position{ std::make_pair(0,0) }, m_mined{ false }, m_exploded{ false }, m_pylon{ nullptr } {};
 
 Foundation::Foundation(Position position, bool mined, Pylon* pylon) :
-	m_position{ position }, m_mined{ mined }, m_pylon{ pylon } {};
+	m_position{ position }, m_mined{ mined }, m_exploded{ false }, m_pylon{pylon} {};
 
 
 Foundation::Foundation(const Foundation& other)
 {
+	m_exploded = other.m_exploded;
 	m_position = other.m_position;
 	m_mined = other.m_mined;
 	if (other.getPylon() != nullptr)
@@ -38,6 +39,7 @@ Foundation::Foundation(const Foundation& other)
 
 Foundation& Foundation::operator=(Foundation& other)
 {
+	m_exploded = other.m_exploded;
 	m_position = other.m_position;
 	m_mined = other.m_mined;
 	
@@ -77,6 +79,11 @@ bool Foundation::getMined() const
 	return m_mined;
 }
 
+bool Foundation::getExploded() const
+{
+	return m_exploded;
+}
+
 Pylon* Foundation::getPylon() const
 {
 	return m_pylon;
@@ -90,6 +97,11 @@ void Foundation::setPosition(const Position& position)
 void Foundation::setMined(bool mined)
 {
 	m_mined = mined;
+}
+
+void Foundation::setExploded(bool exploded)
+{
+	m_exploded = exploded;
 }
 
 void Foundation::setPylon(Pylon* pylon)

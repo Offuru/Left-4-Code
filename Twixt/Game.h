@@ -15,6 +15,7 @@ public:
 
 	void setBigPylons(bool);
 	void setMinedFoundations(bool);
+	void setReusableMinedFoundation(bool);
 	void setDebuilderBob(bool);
 	void setCards(bool);
 	void setPlayer1(const Player&);
@@ -23,6 +24,7 @@ public:
 
 	bool getBigPylons() const;
 	bool getMinedFoundations() const;
+	bool getReusableMinedFoundation() const;
 	bool getDebuilderBob() const;
 	bool getCards() const;
 	Player getPlayer1() const;
@@ -35,6 +37,7 @@ public:
 private:
 	bool m_bigPylons;
 	bool m_minedFundations;
+	bool m_reusableMinedFoundation;
 	bool m_debuilderBob;
 	bool m_cards;
 	Player m_player1;

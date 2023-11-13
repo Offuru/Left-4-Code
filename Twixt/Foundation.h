@@ -15,6 +15,7 @@ class Foundation
 private:
 	Position m_position;
 	bool m_mined;
+	bool m_exploded;
 	Pylon* m_pylon;
 
 public:
@@ -26,6 +27,7 @@ public:
 
 	Position getPosition() const;
 	bool getMined() const;
+	bool getExploded() const;
 	Pylon* getPylon() const;
 
 	void setPosition(const Position&);

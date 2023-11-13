@@ -2,7 +2,8 @@
 
 Game::Game()
 {
-	m_bigPylons = m_minedFundations
+	m_reusableMinedFoundation 
+		= m_bigPylons = m_minedFundations
 		= m_debuilderBob = m_cards = false;
 	m_player1 = Player();
 	m_player2 = Player();
@@ -12,6 +13,7 @@ Game::Game()
 
 Game::Game(const Game& other)
 {
+	m_reusableMinedFoundation = other.m_reusableMinedFoundation;
 	m_bigPylons = other.m_bigPylons;
 	m_minedFundations = other.m_minedFundations;
 	m_debuilderBob = other.m_debuilderBob;
@@ -20,6 +22,7 @@ Game::Game(const Game& other)
 
 Game& Game::operator=(const Game& other)
 {
+	m_reusableMinedFoundation = other.m_reusableMinedFoundation;
 	m_bigPylons = other.m_bigPylons;
 	m_minedFundations = other.m_minedFundations;
 	m_debuilderBob = other.m_debuilderBob;
@@ -36,6 +39,11 @@ void Game::setBigPylons(bool bigPylons)
 void Game::setMinedFoundations(bool minedFoundations)
 {
 	m_minedFundations = minedFoundations;
+}
+
+void Game::setReusableMinedFoundation(bool reusableMinedFoundation)
+{
+	m_reusableMinedFoundation = reusableMinedFoundation;
 }
 
 void Game::setDebuilderBob(bool debuilderBob)
@@ -71,6 +79,11 @@ bool Game::getBigPylons() const
 bool Game::getMinedFoundations() const
 {
 	return m_minedFundations;
+}
+
+bool Game::getReusableMinedFoundation() const
+{
+	return m_reusableMinedFoundation;
 }
 
 bool Game::getDebuilderBob() const
