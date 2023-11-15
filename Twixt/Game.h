@@ -29,7 +29,7 @@ public:
 	bool getCards() const;
 	Player getPlayer1() const;
 	Player getPlayer2() const;
-	Board getBoard() const;
+	Board& getBoard();
 
 	bool addPylon(const Position&, Pylon::Type, Pylon::Color);
 	bool addBridge(const Position&, const Position&);

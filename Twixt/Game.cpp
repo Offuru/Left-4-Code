@@ -101,7 +101,7 @@ Player Game::getPlayer2() const
 	return m_player2;
 }
 
-Board Game::getBoard() const
+Board& Game::getBoard() 
 {
 	return m_board;
 }
@@ -202,15 +202,20 @@ void Game::printBoard()
 		for (uint8_t j = 0; j < boardMatrix[0].size(); ++j)
 		{
 			Pylon* element = m_board.getBoard()[i][j].getPylon();
+			bool elementMined = m_board.getBoard()[i][j].getMined();
 			if (element == nullptr)
 			{
-				boardMatrix[i][j] = "o";
+				boardMatrix[i][j] = ".";
 			} else if (element->getColor() == Pylon::Color::Black)
 			{
 				boardMatrix[i][j] = "B";
 			} else
 			{
 				boardMatrix[i][j] = "R";
+			}
+			if (elementMined)
+			{
+				boardMatrix[i][j] = "m";
 			}
 		}
 	}

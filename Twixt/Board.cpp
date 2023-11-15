@@ -199,6 +199,26 @@ void Board::addBridge(Foundation& foundation1, Foundation& foundation2, Pylon::C
 	m_bridges.insert(std::make_pair(foundation1.getPylon(), bridge));
 }
 
+void Board::spawnMines()
+{
+	int numMines = 0;
+	std::random_device rd;
+	std::mt19937 eng(rd());
+	while (numMines < m_totalMines)
+	{
+		std::uniform_int_distribution<> distrRow(0, m_board.size() - 1);
+		std::uniform_int_distribution<> distrCol(0, m_board.size() - 1);
+		uint8_t rowPos = distrRow(eng);
+		uint8_t colPos = distrCol(eng);
+
+		if (m_board[rowPos][colPos].getMined() == false)
+		{
+			m_board[rowPos][colPos].setMined(true);
+			++numMines;
+		}
+	}
+}
+
 Foundation& Board::getFoundation(const Position& pos)
 {
 	return m_board[pos.first][pos.second];

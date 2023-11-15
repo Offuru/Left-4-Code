@@ -6,6 +6,7 @@
 #include "Foundation.h"
 #include "Player.h"
 #include <map>
+#include <random>
 #include <unordered_set>
 #include <queue>
 
@@ -30,9 +31,12 @@ public:
 	void addPylon(Foundation&, Pylon::Color, Pylon::Type);
 	void addBridge(Foundation&, Foundation&, Pylon::Color);
 
+	void spawnMines();
+
 	Foundation& getFoundation(const Position&);
 private:
 	uint8_t m_size = 24;
+	uint8_t m_totalMines = 12;
 
 	std::vector<std::vector<Foundation>> m_board;
 	std::map<Position, Pylon*> m_pylons;

@@ -32,6 +32,7 @@ public:
 
 	void setPosition(const Position&);
 	void setMined(bool);
+	void setExploded(bool);
 	void setPylon(Pylon*);
 };
 
