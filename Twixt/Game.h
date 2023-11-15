@@ -2,6 +2,7 @@
 #include "Board.h"
 #include "Player.h"
 
+#include <array>
 #include <iostream>
 
 class Game
@@ -45,5 +46,6 @@ private:
 	Board m_board;
 
 	bool validFoundation(const Position&, Pylon::Color);
+	bool verifyMinedFoundation(const Position&);
 };
 

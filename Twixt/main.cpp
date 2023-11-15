@@ -3,7 +3,10 @@
 int main()
 {
 	Game test;
+	test.setReusableMinedFoundation(true);
 	test.getBoard().spawnMines();
+	test.getBoard().getFoundation({ 3, 3 }).setMined(true);
+	test.addPylon(std::make_pair(3, 3), Pylon::Type::Cross, Pylon::Color::Red);
 	test.addPylon(std::make_pair(3, 3), Pylon::Type::Cross, Pylon::Color::Red);
 	test.addPylon(std::make_pair(4, 5), Pylon::Type::Single, Pylon::Color::Red);
 	test.addPylon(std::make_pair(5, 5), Pylon::Type::Single, Pylon::Color::Red);

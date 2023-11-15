@@ -108,33 +108,68 @@ Board& Game::getBoard()
 
 bool Game::addPylon(const Position& pos, Pylon::Type type, Pylon::Color color)
 {
+	const auto& [row, col] = pos;
 	switch (type)
 	{
 	case Pylon::Type::Single:
 		if (validFoundation(pos, color))
 		{
-			m_board.addPylon(m_board.getFoundation(pos), color, type);
-				return true;
+			if (verifyMinedFoundation(pos))
+			{
+				m_board.addPylon(m_board.getFoundation(pos), color, type);
+			}
+			return true;
 		}
 		break;
 	case Pylon::Type::Square:
 		if (validFoundation(pos, color) &&
-		    validFoundation(std::make_pair(pos.first,pos.second+1),color) &&
-			validFoundation(std::make_pair(pos.first + 1, pos.second), color) &&
-			validFoundation(std::make_pair(pos.first + 1, pos.second + 1), color))
+			validFoundation({ row,col + 1 }, color) &&
+			validFoundation({ row + 1, col }, color) &&
+			validFoundation({ row + 1, col + 1 }, color))
 		{
+			std::array<bool, 4> foundations = {
+				verifyMinedFoundation(pos),
+				verifyMinedFoundation({ row, col + 1 }),
+				verifyMinedFoundation({ row + 1, col }),
+				verifyMinedFoundation({ row + 1, col + 1 })
+			};
+			for (auto& foundation : foundations)
+			{
+				if (!foundation)
+				{
+					return true;
+				}
+			}
+
 			m_board.addPylon(m_board.getFoundation(pos), color, type);
+			
 			return true;
 		}
 		break;
 	case Pylon::Type::Cross:
 		if (validFoundation(pos, color) &&
-			validFoundation(std::make_pair(pos.first + 1, pos.second), color) &&
-			validFoundation(std::make_pair(pos.first - 1, pos.second), color) &&
-			validFoundation(std::make_pair(pos.first, pos.second + 1), color) &&
-			validFoundation(std::make_pair(pos.first, pos.second - 1), color))
+			validFoundation({ row + 1, col }, color) &&
+			validFoundation({ row - 1, col }, color) &&
+			validFoundation({ row, col + 1 }, color) &&
+			validFoundation({ row, col - 1 }, color))
 		{
+			std::array<bool, 5> foundations = {
+				verifyMinedFoundation(pos) ,
+				verifyMinedFoundation({ row + 1, col }) ,
+				verifyMinedFoundation({ row - 1, col }) ,
+				verifyMinedFoundation({ row, col + 1 }) ,
+				verifyMinedFoundation({ row, col - 1 })
+			};
+			for (auto& foundation : foundations)
+			{
+				if (!foundation)
+				{
+					return true;
+				}
+			}
+
 			m_board.addPylon(m_board.getFoundation(pos), color, type);
+			
 			return true;
 		}
 		break;
@@ -259,6 +294,29 @@ bool Game::validFoundation(const Position& pos, Pylon::Color color)
 	default:
 		return false;
 	}
+}
+
+bool Game::verifyMinedFoundation(const Position& pos)
+{
+	Foundation& foundation = m_board.getBoard()[pos.first][pos.second];
+
+	if (!foundation.getMined() && !foundation.getExploded())
+	{
+		return true;
+	}
+
+	if (!foundation.getExploded())
+	{
+		foundation.setMined(false);
+		foundation.setExploded(true);
+		return false;
+	}
+	else if (m_reusableMinedFoundation)
+	{
+		return true;
+	}
+	 
+	return false;
 }
 
 bool Game::getCards() const
