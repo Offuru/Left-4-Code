@@ -15,5 +15,7 @@ public:
 	~DebuilderBob() = default;
 	DebuilderBob& operator=(const DebuilderBob&) = default;
 
+	Position getPosition() const;
+	void setPosition(const Position&);
 
 };
