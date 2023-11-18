@@ -1,6 +1,6 @@
 #include "Board.h"
 #include <iostream>
-Board::Board(uint8_t size)
+Board::Board(uint8_t size, uint8_t mines)
 {
 	Foundation p;
 	m_board.resize(m_size);
@@ -14,18 +14,19 @@ Board::Board(uint8_t size)
 		}
 	}
 	m_size = size;
+	m_totalMines = mines;
 }
 
 Board::Board(const Board& other) :
-	m_board{ other.m_board }
+	m_board{ other.m_board }, m_size{ other.m_size }, m_totalMines{ other.m_totalMines }
 {
 	for (const auto& pylon : other.m_pylons)
 	{
 		SinglePylon* single = dynamic_cast<SinglePylon*>(pylon.second);
-		if (single) 
+		if (single)
 		{
 			Pylon* p = new SinglePylon(*single);
-			m_pylons.insert({pylon.first, p});
+			m_pylons.insert({ pylon.first, p });
 			continue;
 		}
 		SquarePylon* square = dynamic_cast<SquarePylon*>(pylon.second);
@@ -47,11 +48,11 @@ Board::Board(const Board& other) :
 	for (auto& bridge : other.m_bridges)
 	{
 		auto whichPylon = m_pylons.find(bridge.first->getFoundations()[0]);
-		
+
 		if (whichPylon != m_pylons.end())
 		{
 			Bridge* newBridge = new Bridge(*bridge.second);
-			m_bridges.insert({whichPylon->second, newBridge});
+			m_bridges.insert({ whichPylon->second, newBridge });
 			//pylon* from bridge shouldn't get modified
 		}
 	}
@@ -63,7 +64,9 @@ Board& Board::operator=(const Board& other)
 		return *this;
 
 	m_board = other.m_board;
-	
+	m_size = other.m_size;
+	m_totalMines = other.m_totalMines;
+
 	for (const auto& pylon : other.m_pylons)
 	{
 		SinglePylon* single = dynamic_cast<SinglePylon*>(pylon.second);
@@ -105,7 +108,7 @@ Board& Board::operator=(const Board& other)
 }
 
 Board::~Board()
-{	
+{
 	for (auto& it : m_bridges)
 		delete it.second;
 	for (auto& it : m_pylons)
@@ -127,6 +130,16 @@ std::multimap<Pylon*, Bridge*> Board::getBridges() const
 	return m_bridges;
 }
 
+uint8_t Board::getSize() const
+{
+	return m_size;
+}
+
+uint8_t Board::getTotalMines() const
+{
+	return m_totalMines;
+}
+
 void Board::setBoard(const std::vector<std::vector<Foundation>>& board)
 {
 	m_board = board;
@@ -142,6 +155,16 @@ void Board::setBridges(const std::multimap<Pylon*, Bridge*>& bridges)
 	m_bridges = bridges;
 }
 
+void Board::setSize(uint8_t size)
+{
+	m_size = size;
+}
+
+void Board::setTotalMines(uint8_t totalMines)
+{
+	m_totalMines = totalMines;
+}
+
 void Board::addPylon(Foundation& foundation, Pylon::Color color, Pylon::Type type)
 {
 	Pylon* pylon;
@@ -150,7 +173,7 @@ void Board::addPylon(Foundation& foundation, Pylon::Color color, Pylon::Type typ
 	{
 	case Pylon::Type::Single:
 		pylon = new SinglePylon(foundation.getPosition(), color, type);
-		pylon->addFoundation({x, y});
+		pylon->addFoundation({ x, y });
 
 		foundation.setPylon(pylon);
 		break;
@@ -167,7 +190,7 @@ void Board::addPylon(Foundation& foundation, Pylon::Color color, Pylon::Type typ
 		m_board[x + 1][y + 1].setPylon(pylon);
 		m_board[x][y + 1].setPylon(pylon);
 		break;
-		
+
 	case Pylon::Type::Cross:
 		pylon = new CrossPylon(foundation.getPosition(), color, type);
 		pylon->addFoundation({ x, y });

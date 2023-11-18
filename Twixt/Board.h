@@ -15,7 +15,7 @@ using Position = std::pair<uint8_t, uint8_t>;
 class Board
 {
 public:
-	Board(uint8_t = 24);
+	Board(uint8_t = 24, uint8_t mines = 0);
 	Board(const Board&);
 	Board& operator=(const Board&);
 	~Board();
@@ -23,10 +23,14 @@ public:
 	std::vector<std::vector<Foundation>>& getBoard();
 	std::map<Position, Pylon*> getPylons() const;
 	std::multimap<Pylon*, Bridge*> getBridges() const;
+	uint8_t getSize() const;
+	uint8_t getTotalMines() const;
 
 	void setBoard(const std::vector<std::vector<Foundation>>&);
 	void setPylons(const std::map<Position, Pylon*>&);
 	void setBridges(const std::multimap<Pylon*, Bridge*>&);
+	void setSize(uint8_t);
+	void setTotalMines(uint8_t);
 	
 	void addPylon(Foundation&, Pylon::Color, Pylon::Type);
 	void addBridge(Foundation&, Foundation&, Pylon::Color);
@@ -35,8 +39,8 @@ public:
 
 	Foundation& getFoundation(const Position&);
 private:
-	uint8_t m_size = 24;
-	uint8_t m_totalMines = 12;
+	uint8_t m_size;
+	uint8_t m_totalMines;
 
 	std::vector<std::vector<Foundation>> m_board;
 	std::map<Position, Pylon*> m_pylons;
