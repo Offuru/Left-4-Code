@@ -2,17 +2,16 @@
 
 
 Foundation::Foundation() :
-	m_position{ std::make_pair(0,0) }, m_mined{ false }, m_exploded{ false }, m_pylon{ nullptr } {};
+	m_position{ std::make_pair(0,0) }, m_mined{ false }, m_exploded{ false }, m_pylon{ nullptr }, m_hasBob{ false } {}
 
 Foundation::Foundation(Position position, bool mined, Pylon* pylon) :
-	m_position{ position }, m_mined{ mined }, m_exploded{ false }, m_pylon{pylon} {};
+	m_position{ position }, m_mined{ mined }, m_exploded{ false }, m_pylon{ pylon }, m_hasBob{ false } {};
 
 
-Foundation::Foundation(const Foundation& other)
+Foundation::Foundation(const Foundation& other) :
+	m_exploded{ other.m_exploded }, m_position{ other.m_position }, 
+	m_hasBob{ other.m_hasBob }, m_mined{ other.m_mined }
 {
-	m_exploded = other.m_exploded;
-	m_position = other.m_position;
-	m_mined = other.m_mined;
 	if (other.getPylon() != nullptr)
 	{
 		SinglePylon* single = dynamic_cast<SinglePylon*>(other.getPylon());
@@ -42,6 +41,7 @@ Foundation& Foundation::operator=(Foundation& other)
 	m_exploded = other.m_exploded;
 	m_position = other.m_position;
 	m_mined = other.m_mined;
+	m_hasBob = other.m_hasBob;
 	
 	if (m_pylon)
 		delete m_pylon;
