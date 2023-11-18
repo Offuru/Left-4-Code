@@ -84,6 +84,11 @@ bool Foundation::getExploded() const
 	return m_exploded;
 }
 
+bool Foundation::getBob() const
+{
+	return m_hasBob;
+}
+
 Pylon* Foundation::getPylon() const
 {
 	return m_pylon;
@@ -107,4 +112,9 @@ void Foundation::setExploded(bool exploded)
 void Foundation::setPylon(Pylon* pylon)
 {
 	m_pylon = pylon;
+}
+
+void Foundation::setBob(bool hasBob)
+{
+	m_hasBob = hasBob;
 }
