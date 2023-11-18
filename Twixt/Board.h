@@ -37,6 +37,9 @@ public:
 
 	void spawnMines();
 
+	Foundation& operator[](const Position&);
+	const Foundation& operator[](const Position&) const;
+
 	Foundation& getFoundation(const Position&);
 private:
 	uint8_t m_size;

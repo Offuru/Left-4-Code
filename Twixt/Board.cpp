@@ -242,6 +242,21 @@ void Board::spawnMines()
 	}
 }
 
+Foundation& Board::operator[](const Position& position)
+{
+	return const_cast<Foundation&>(std::as_const(*this)[position]);
+}
+
+const Foundation& Board::operator[](const Position& position) const
+{
+	auto& [row, column] = position;
+
+	if (row < 0 || column < 0 || row >= m_size || column >= m_size)
+		throw std::out_of_range("Position out of bounds");
+
+	return m_board[row][column];
+}
+
 Foundation& Board::getFoundation(const Position& pos)
 {
 	return m_board[pos.first][pos.second];
