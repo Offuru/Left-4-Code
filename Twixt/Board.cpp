@@ -1,6 +1,7 @@
 #include "Board.h"
 #include <iostream>
-Board::Board(uint8_t size, uint8_t mines)
+Board::Board(uint8_t size, uint8_t mines) :
+	m_size{ size }, m_totalMines{ mines }
 {
 	Foundation p;
 	m_board.resize(m_size);
@@ -13,8 +14,6 @@ Board::Board(uint8_t size, uint8_t mines)
 			m_board[i][j] = p;
 		}
 	}
-	m_size = size;
-	m_totalMines = mines;
 }
 
 Board::Board(const Board& other) :
@@ -220,6 +219,64 @@ void Board::addBridge(Foundation& foundation1, Foundation& foundation2, Pylon::C
 	foundation1.getPylon()->addBridge(bridge, foundation1.getPosition());
 	foundation2.getPylon()->addBridge(bridge, foundation2.getPosition());
 	m_bridges.insert(std::make_pair(foundation1.getPylon(), bridge));
+}
+
+void Board::removePylon(const Position& position)
+{
+	Pylon* currPylon = m_board[position.first][position.second].getPylon();
+	if (currPylon == nullptr)
+		return;
+
+	//delete bridges
+	for (auto bridge : currPylon->getConnections())
+	{
+		if (bridge->getPylonStart() != currPylon)
+		{
+			bridge->getPylonStart()->removeBridge(bridge);
+		}
+		else
+		{
+			bridge->getPylonEnd()->removeBridge(bridge);
+		}
+		auto range = m_bridges.equal_range(bridge->getPylonStart());
+		bool removedBridge = false;
+		for (auto it = range.first; it != range.second; ++it)
+		{
+			if (it->second == bridge)
+			{
+				m_bridges.erase(it);
+				removedBridge = true;
+				break;
+			}
+		}
+		if (!removedBridge)
+		{
+			range = m_bridges.equal_range(bridge->getPylonEnd());
+			for (auto it = range.first; it != range.second; ++it)
+			{
+				if (it->second == bridge)
+				{
+					m_bridges.erase(it);
+					break;
+				}
+			}
+		}
+		delete bridge;
+	}
+	for (auto& [posX, posY] : currPylon->getFoundations())
+	{
+		m_board[posX][posY].setPylon(nullptr);
+	}
+	for (auto it : m_pylons)
+	{
+		if (it.second == currPylon)
+		{
+			m_pylons.erase(it.first);
+			break;
+		}
+	}
+	delete currPylon;
+
 }
 
 void Board::spawnMines()

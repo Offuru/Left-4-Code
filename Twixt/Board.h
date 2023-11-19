@@ -34,6 +34,8 @@ public:
 	
 	void addPylon(Foundation&, Pylon::Color, Pylon::Type);
 	void addBridge(Foundation&, Foundation&, Pylon::Color);
+	void removePylon(const Position&);
+
 
 	void spawnMines();
 
@@ -41,6 +43,7 @@ public:
 	const Foundation& operator[](const Position&) const;
 
 	Foundation& getFoundation(const Position&);
+
 private:
 	uint8_t m_size;
 	uint8_t m_totalMines;

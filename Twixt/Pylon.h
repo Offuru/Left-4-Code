@@ -2,10 +2,19 @@
 
 #include <vector>
 #include <functional>
+#include <unordered_set>
 #include "Bridge.h"
 //#include "Foundation.h"
 
 using Position = std::pair<uint8_t, uint8_t>;
+
+struct pair_hash
+{
+	const size_t operator () (Position const& p) const
+	{
+		return (std::hash<uint8_t>()(p.first) + std::hash<uint8_t>()(p.second));
+	}
+};
 
 class Bridge;
 
