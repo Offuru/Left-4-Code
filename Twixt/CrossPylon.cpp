@@ -34,3 +34,37 @@ bool CrossPylon::addBridge(Bridge* bridge, const Position& foundation)
 	}
 	return false;
 }
+
+void CrossPylon::removeBridge(Bridge* bridge)
+{
+	auto it = m_connections.begin();
+	while (it != m_connections.end())
+	{
+		if (*it == bridge)
+		{
+			m_connections.erase(it);
+			break;
+		}
+		else
+			++it;
+	}
+
+	std::unordered_set<Position, pair_hash> usedPositions;
+	for (auto bridge : m_connections)
+	{
+		usedPositions.insert(bridge->getPosStart());
+		usedPositions.insert(bridge->getPosEnd());
+	}
+
+	for (auto connectionPoint = m_connectionPoints.begin(); connectionPoint != m_connectionPoints.end();)
+	{
+		if (usedPositions.find(*connectionPoint) == usedPositions.end())
+		{
+			connectionPoint = m_connectionPoints.erase(connectionPoint);
+		}
+		else
+		{
+			++connectionPoint;
+		}
+	}
+}

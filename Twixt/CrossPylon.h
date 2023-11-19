@@ -15,7 +15,7 @@ public:
 
 	bool canAddBridge(const Position&) const;
 	bool addBridge(Bridge*, const Position&);
-private:
+	void removeBridge(Bridge*) override;
 
 };
 
