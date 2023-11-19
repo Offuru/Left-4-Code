@@ -1,6 +1,7 @@
 #pragma once
 #include "Board.h"
 #include "Player.h"
+#include "DebuilderBob.h"
 
 #include <array>
 #include <iostream>
@@ -34,8 +35,11 @@ public:
 
 	bool addPylon(const Position&, Pylon::Type, Pylon::Color);
 	bool addBridge(const Position&, const Position&);
+	void moveBob();
 	void printBoard();
 private:
+	
+	DebuilderBob m_bob;
 	bool m_bigPylons;
 	bool m_minedFundations;
 	bool m_reusableMinedFoundation;

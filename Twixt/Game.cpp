@@ -1,6 +1,6 @@
 #include "Game.h"
 
-Game::Game()
+Game::Game() 
 {
 	m_reusableMinedFoundation 
 		= m_bigPylons = m_minedFundations
@@ -228,6 +228,11 @@ bool Game::addBridge(const Position& startPoint, const Position& endPoint)
 	return false;
 }
 
+void Game::moveBob()
+{
+	m_bob.moveToNext(m_board);
+}
+
 void Game::printBoard()
 {
 	std::vector<std::vector<std::string>> boardMatrix(24, std::vector<std::string>(24));
@@ -237,6 +242,7 @@ void Game::printBoard()
 		for (uint8_t j = 0; j < boardMatrix[0].size(); ++j)
 		{
 			Pylon* element = m_board.getBoard()[i][j].getPylon();
+			bool hasBob = m_board.getBoard()[i][j].getBob();
 			bool elementMined = m_board.getBoard()[i][j].getMined();
 			if (element == nullptr)
 			{
@@ -252,6 +258,11 @@ void Game::printBoard()
 			{
 				boardMatrix[i][j] = "m";
 			}
+			if (hasBob)
+			{
+				boardMatrix[i][j] = "X";
+			}
+
 		}
 	}
 
