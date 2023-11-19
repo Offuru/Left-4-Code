@@ -14,5 +14,10 @@ public:
 
 	bool canAddBridge(const Position&) const;
 	bool addBridge(Bridge*, const Position&);
+
+
+	// Inherited via Pylon
+	void removeBridge(Bridge*) override;
+
 };
 

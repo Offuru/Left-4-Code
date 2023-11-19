@@ -54,5 +54,6 @@ public:
 
 	virtual bool canAddBridge(const Position&) const = 0;
 	virtual bool addBridge(Bridge*, const Position&) = 0;
+	virtual void removeBridge(Bridge*) = 0;
 };
 
