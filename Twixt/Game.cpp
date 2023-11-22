@@ -1,8 +1,8 @@
 #include "Game.h"
 
-Game::Game() 
+Game::Game()
 {
-	m_reusableMinedFoundation 
+	m_reusableMinedFoundation
 		= m_bigPylons = m_minedFundations
 		= m_debuilderBob = m_cards = false;
 	m_player1 = Player();
@@ -101,7 +101,7 @@ Player Game::getPlayer2() const
 	return m_player2;
 }
 
-Board& Game::getBoard() 
+Board& Game::getBoard()
 {
 	return m_board;
 }
@@ -114,10 +114,7 @@ bool Game::addPylon(const Position& pos, Pylon::Type type, Pylon::Color color)
 	case Pylon::Type::Single:
 		if (validFoundation(pos, color))
 		{
-			if (verifyMinedFoundation(pos))
-			{
-				m_board.addPylon(m_board.getFoundation(pos), color, type);
-			}
+			m_board.addPylon(m_board.getFoundation(pos), color, type);
 			return true;
 		}
 		break;
@@ -127,22 +124,7 @@ bool Game::addPylon(const Position& pos, Pylon::Type type, Pylon::Color color)
 			validFoundation({ row + 1, col }, color) &&
 			validFoundation({ row + 1, col + 1 }, color))
 		{
-			std::array<bool, 4> foundations = {
-				verifyMinedFoundation(pos),
-				verifyMinedFoundation({ row, col + 1 }),
-				verifyMinedFoundation({ row + 1, col }),
-				verifyMinedFoundation({ row + 1, col + 1 })
-			};
-			for (auto& foundation : foundations)
-			{
-				if (!foundation)
-				{
-					return true;
-				}
-			}
-
 			m_board.addPylon(m_board.getFoundation(pos), color, type);
-			
 			return true;
 		}
 		break;
@@ -153,23 +135,7 @@ bool Game::addPylon(const Position& pos, Pylon::Type type, Pylon::Color color)
 			validFoundation({ row, col + 1 }, color) &&
 			validFoundation({ row, col - 1 }, color))
 		{
-			std::array<bool, 5> foundations = {
-				verifyMinedFoundation(pos) ,
-				verifyMinedFoundation({ row + 1, col }) ,
-				verifyMinedFoundation({ row - 1, col }) ,
-				verifyMinedFoundation({ row, col + 1 }) ,
-				verifyMinedFoundation({ row, col - 1 })
-			};
-			for (auto& foundation : foundations)
-			{
-				if (!foundation)
-				{
-					return true;
-				}
-			}
-
 			m_board.addPylon(m_board.getFoundation(pos), color, type);
-			
 			return true;
 		}
 		break;
@@ -189,14 +155,14 @@ bool Game::addBridge(const Position& startPoint, const Position& endPoint)
 	{
 		return false;
 	}
-	
+
 	if (startPylon->getColor() != endPylon->getColor())
 	{
 		return false;
 	}
 
 	uint8_t dX = abs((int8_t)startPoint.first - (int8_t)endPoint.first),
-			dY = abs((int8_t)startPoint.second - (int8_t)endPoint.second);
+		dY = abs((int8_t)startPoint.second - (int8_t)endPoint.second);
 
 	if ((dX == 1 && dY == 2) || (dX == 2 && dY == 1))
 	{
@@ -247,10 +213,12 @@ void Game::printBoard()
 			if (element == nullptr)
 			{
 				boardMatrix[i][j] = ".";
-			} else if (element->getColor() == Pylon::Color::Black)
+			}
+			else if (element->getColor() == Pylon::Color::Black)
 			{
 				boardMatrix[i][j] = "B";
-			} else
+			}
+			else
 			{
 				boardMatrix[i][j] = "R";
 			}
@@ -273,7 +241,8 @@ void Game::printBoard()
 		{
 			boardMatrix[positionStart.first][positionStart.second] = "r";
 			boardMatrix[positionEnd.first][positionEnd.second] = "r";
-		} else
+		}
+		else
 		{
 			boardMatrix[positionStart.first][positionStart.second] = "b";
 			boardMatrix[positionEnd.first][positionEnd.second] = "b";
@@ -295,16 +264,26 @@ bool Game::validFoundation(const Position& pos, Pylon::Color color)
 	switch (color)
 	{
 	case Pylon::Color::Red:
-		return (0 <= pos.first && pos.first < m_board.getBoard().size() &&
+		if (!(0 <= pos.first && pos.first < m_board.getBoard().size() &&
 			1 <= pos.second && pos.second < m_board.getBoard().size() - 1 &&
-			m_board.getBoard()[pos.first][pos.second].getPylon() == nullptr);
+			m_board.getBoard()[pos.first][pos.second].getPylon() == nullptr))
+			return false;
+		break;
 	case Pylon::Color::Black:
-		return (1 <= pos.first && pos.first < m_board.getBoard().size() - 1 &&
+		if (!(1 <= pos.first && pos.first < m_board.getBoard().size() - 1 &&
 			0 <= pos.second && pos.second < m_board.getBoard().size() &&
-			m_board.getBoard()[pos.first][pos.second].getPylon() == nullptr);
-	default:
-		return false;
+			m_board.getBoard()[pos.first][pos.second].getPylon() == nullptr))
+			return false;
+		break;
 	}
+
+	if (!verifyMinedFoundation(pos))
+		return false;
+
+	if (m_board[pos].getBob())
+		return false;
+
+	return true;
 }
 
 bool Game::verifyMinedFoundation(const Position& pos)
@@ -326,7 +305,7 @@ bool Game::verifyMinedFoundation(const Position& pos)
 	{
 		return true;
 	}
-	 
+
 	return false;
 }
 
