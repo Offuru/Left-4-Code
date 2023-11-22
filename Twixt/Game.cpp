@@ -198,7 +198,7 @@ bool Game::addBridge(const Position& startPoint, const Position& endPoint)
 	uint8_t dX = abs((int8_t)startPoint.first - (int8_t)endPoint.first),
 			dY = abs((int8_t)startPoint.second - (int8_t)endPoint.second);
 
-	if ((dX != 1 && dY != 2) || (dX != 2 && dY != 1))
+	if ((dX == 1 && dY == 2) || (dX == 2 && dY == 1))
 	{
 		if (startPylon->canAddBridge(startPoint) && endPylon->canAddBridge(endPoint))
 		{
