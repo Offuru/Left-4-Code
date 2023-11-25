@@ -279,6 +279,22 @@ void Board::removePylon(const Position& position)
 
 }
 
+void Board::removeBridge(Bridge* bridge)
+{
+	for (auto it = m_bridges.begin(); it != m_bridges.end(); ++it)
+	{
+		if (it->second == bridge)
+		{
+			it->second->getPylonEnd()->removeBridge(bridge);
+			it->second->getPylonStart()->removeBridge(bridge);
+			m_bridges.erase(it);
+			delete bridge;
+			
+			return;
+		}
+	}
+}
+
 void Board::spawnMines()
 {
 	int numMines = 0;

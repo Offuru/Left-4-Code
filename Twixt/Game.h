@@ -35,8 +35,12 @@ public:
 
 	bool addPylon(const Position&, Pylon::Type, Pylon::Color);
 	bool addBridge(const Position&, const Position&);
+	
+	bool removeBridge(const Position&, const Position&);
+	
 	void moveBob();
 	void printBoard();
+
 private:
 	
 	DebuilderBob m_bob;

@@ -259,6 +259,31 @@ void Game::printBoard()
 	}
 }
 
+bool Game::removeBridge(const Position& start, const Position& end)
+{
+	Bridge* bridgeToRemove = nullptr;
+
+	for (const auto& [pylon, bridge] : m_board.getBridges())
+	{
+		if (bridge->getPosStart() == start && bridge->getPosEnd() == end)
+		{
+			bridgeToRemove = bridge;
+			break;
+		}
+		if (bridge->getPosStart() == end && bridge->getPosEnd() == start)
+		{
+			bridgeToRemove = bridge;
+			break;
+		}
+	}
+
+	if (!bridgeToRemove)
+		return false;
+
+	m_board.removeBridge(bridgeToRemove);
+	return true;
+}
+
 bool Game::validFoundation(const Position& pos, Pylon::Color color)
 {
 	switch (color)
