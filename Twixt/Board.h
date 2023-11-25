@@ -21,13 +21,13 @@ public:
 	~Board();
 
 	std::vector<std::vector<Foundation>>& getBoard();
-	std::map<Position, Pylon*> getPylons() const;
+	std::unordered_map<Position, std::unique_ptr<Pylon>>& getPylons();
 	std::multimap<Pylon*, Bridge*> getBridges() const;
 	uint8_t getSize() const;
 	uint8_t getTotalMines() const;
 
 	void setBoard(const std::vector<std::vector<Foundation>>&);
-	void setPylons(const std::map<Position, Pylon*>&);
+	void setPylons(const std::unordered_map<Position, std::unique_ptr<Pylon>>&);
 	void setBridges(const std::multimap<Pylon*, Bridge*>&);
 	void setSize(uint8_t);
 	void setTotalMines(uint8_t);
@@ -49,7 +49,7 @@ private:
 	uint8_t m_totalMines;
 
 	std::vector<std::vector<Foundation>> m_board;
-	std::map<Position, Pylon*> m_pylons;
+	std::unordered_map<Position, std::unique_ptr<Pylon>> m_pylons;
 	std::multimap<Pylon*, Bridge*> m_bridges;
 
 	bool winnerFoundation(const Foundation&, uint8_t, Pylon::Color) const;
