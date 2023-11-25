@@ -45,6 +45,12 @@
     <ClCompile Include="CrossPylon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DebuilderBob.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IPlayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Foundation.h">
@@ -72,6 +78,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CrossPylon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DebuilderBob.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IPlayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
