@@ -2,7 +2,6 @@
 #include "Board.h"
 #include "Player.h"
 #include "DebuilderBob.h"
-
 #include <array>
 #include <iostream>
 
@@ -52,12 +51,14 @@ private:
 	Player m_player1;
 	Player m_player2;
 	Board m_board;
+	uint8_t m_areaLength;
 
 	bool validFoundation(const Position&, Pylon::Color);
-	bool verifyMinedFoundation(const Position&, Pylon::Color);
-	void explodePylons(const Position&, Pylon::Color);
+	bool verifyMinedFoundation(const Position&);
+	void explodePylons(const Position&);
 	void explodeSingleLocation(const Position&);
 	void explodeCol(const Position&);
 	void explodeRow(const Position&);
+	void explodeArea(const Position&);
 };
 
