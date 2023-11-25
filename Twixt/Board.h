@@ -35,7 +35,7 @@ public:
 	void addPylon(Foundation&, Pylon::Color, Pylon::Type);
 	void addBridge(Foundation&, Foundation&, Pylon::Color);
 	void removePylon(const Position&);
-
+	void removeBridge(Bridge*);
 
 	void spawnMines();
 
