@@ -8,13 +8,17 @@
 
 using Position = std::pair<uint8_t, uint8_t>;
 
-struct pair_hash
+namespace std
 {
-	const size_t operator () (Position const& p) const
+	template<>
+	struct hash<Position>
 	{
-		return (std::hash<uint8_t>()(p.first) + std::hash<uint8_t>()(p.second));
-	}
-};
+		const size_t operator () (Position const& p) const
+		{
+			return (std::hash<uint8_t>()(p.first) + std::hash<uint8_t>()(p.second));
+		}
+	};
+}
 
 class Bridge;
 

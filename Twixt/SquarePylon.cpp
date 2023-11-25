@@ -49,7 +49,7 @@ void SquarePylon::removeBridge(Bridge* bridge)
 			++it;
 	}
 
-	std::unordered_set<Position, pair_hash> usedPositions;
+	std::unordered_set<Position> usedPositions;
 	for (auto bridge : m_connections)
 	{
 		usedPositions.insert(bridge->getPosStart());

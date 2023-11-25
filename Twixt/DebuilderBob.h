@@ -1,8 +1,9 @@
 #pragma once
-#include <utility>;
-#include <random>;
+#include <utility>
+#include <random>
 #include <optional>
-#include "Board.h";
+#include "Board.h"
+
 using Position = std::pair<uint8_t, uint8_t>;
 
 class Board;
