@@ -54,6 +54,10 @@ private:
 	Board m_board;
 
 	bool validFoundation(const Position&, Pylon::Color);
-	bool verifyMinedFoundation(const Position&);
+	bool verifyMinedFoundation(const Position&, Pylon::Color);
+	void explodePylons(const Position&, Pylon::Color);
+	void explodeSingleLocation(const Position&);
+	void explodeCol(const Position&);
+	void explodeRow(const Position&);
 };
 

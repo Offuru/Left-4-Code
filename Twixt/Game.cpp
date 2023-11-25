@@ -210,6 +210,7 @@ void Game::printBoard()
 			Pylon* element = m_board.getBoard()[i][j].getPylon();
 			bool hasBob = m_board.getBoard()[i][j].getBob();
 			bool elementMined = m_board.getBoard()[i][j].getMined();
+			bool elementExploded = m_board.getBoard()[i][j].getExploded();
 			if (element == nullptr)
 			{
 				boardMatrix[i][j] = ".";
@@ -230,7 +231,10 @@ void Game::printBoard()
 			{
 				boardMatrix[i][j] = "X";
 			}
-
+			if (elementExploded)
+			{
+				boardMatrix[i][j] = "E";
+			}
 		}
 	}
 
@@ -302,7 +306,7 @@ bool Game::validFoundation(const Position& pos, Pylon::Color color)
 		break;
 	}
 
-	if (!verifyMinedFoundation(pos))
+	if (!verifyMinedFoundation(pos, color))
 		return false;
 
 	if (m_board[pos].getBob())
@@ -311,7 +315,7 @@ bool Game::validFoundation(const Position& pos, Pylon::Color color)
 	return true;
 }
 
-bool Game::verifyMinedFoundation(const Position& pos)
+bool Game::verifyMinedFoundation(const Position& pos, Pylon::Color color)
 {
 	Foundation& foundation = m_board.getBoard()[pos.first][pos.second];
 
@@ -322,16 +326,53 @@ bool Game::verifyMinedFoundation(const Position& pos)
 
 	if (!foundation.getExploded())
 	{
-		foundation.setMined(false);
-		foundation.setExploded(true);
+		explodePylons(pos, color);
 		return false;
-	}
+	} 
 	else if (m_reusableMinedFoundation)
 	{
 		return true;
 	}
 
 	return false;
+}
+
+void Game::explodePylons(const Position& pos, Pylon::Color color)
+{}
+
+void Game::explodeSingleLocation(const Position& pos)
+{
+	Foundation& foundation = m_board.getBoard()[pos.first][pos.second];
+	foundation.setMined(false);
+	foundation.setExploded(true);
+}
+
+void Game::explodeCol(const Position& pos)
+{
+	for (size_t indexBoard = 0; indexBoard < m_board.getSize(); ++indexBoard)
+	{
+		Foundation& foundation = m_board.getBoard()[pos.first][indexBoard];
+		if (foundation.getPylon())
+		{
+			m_board.removePylon({ pos.first, indexBoard });
+		}
+		foundation.setMined(false);
+		foundation.setExploded(true);
+	}
+}
+
+void Game::explodeRow(const Position& pos)
+{
+	for (size_t indexBoard = 0; indexBoard < m_board.getSize(); ++indexBoard)
+	{
+		Foundation& foundation = m_board.getBoard()[indexBoard][pos.second];
+		if (foundation.getPylon())
+		{
+			m_board.removePylon({ indexBoard, pos.second });
+		}
+		foundation.setMined(false);
+		foundation.setExploded(true);
+	}
 }
 
 bool Game::getCards() const
