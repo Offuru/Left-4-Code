@@ -16,6 +16,10 @@ public:
 
 	void setBigPylons(bool);
 	void setMinedFoundations(bool);
+	void setExplodeSingleLocation(bool);
+	void setExplodeCol(bool);
+	void setExplodeRow(bool);
+	void setExplodeArea(bool);
 	void setReusableMinedFoundation(bool);
 	void setDebuilderBob(bool);
 	void setCards(bool);
@@ -25,6 +29,10 @@ public:
 
 	bool getBigPylons() const;
 	bool getMinedFoundations() const;
+	bool getExplodeSingleLocation() const;
+	bool getExplodeCol() const;
+	bool getExplodeRow() const;
+	bool getExplodeArea() const;
 	bool getReusableMinedFoundation() const;
 	bool getDebuilderBob() const;
 	bool getCards() const;
@@ -45,6 +53,10 @@ private:
 	DebuilderBob m_bob;
 	bool m_bigPylons;
 	bool m_minedFundations;
+	bool m_explodeSingleLocation;
+	bool m_explodeCol;
+	bool m_explodeRow;
+	bool m_explodeArea;
 	bool m_reusableMinedFoundation;
 	bool m_debuilderBob;
 	bool m_cards;

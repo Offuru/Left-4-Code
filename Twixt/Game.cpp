@@ -9,7 +9,7 @@ Game::Game()
 	m_player2 = Player();
 	m_player2.setColor(Pylon::Color::Black);
 	m_board = Board();
-	m_areaLength = 3;
+	m_areaLength = 2;
 }
 
 Game::Game(const Game& other)
@@ -42,6 +42,26 @@ void Game::setBigPylons(bool bigPylons)
 void Game::setMinedFoundations(bool minedFoundations)
 {
 	m_minedFundations = minedFoundations;
+}
+
+void Game::setExplodeSingleLocation(bool explodeSingleLocation)
+{
+	m_explodeSingleLocation = explodeSingleLocation;
+}
+
+void Game::setExplodeCol(bool explodeCol)
+{
+	m_explodeCol = explodeCol;
+}
+
+void Game::setExplodeRow(bool explodeRow)
+{
+	m_explodeRow = explodeRow;
+}
+
+void Game::setExplodeArea(bool explodeArea)
+{
+	m_explodeArea = explodeArea;
 }
 
 void Game::setReusableMinedFoundation(bool reusableMinedFoundation)
@@ -82,6 +102,26 @@ bool Game::getBigPylons() const
 bool Game::getMinedFoundations() const
 {
 	return m_minedFundations;
+}
+
+bool Game::getExplodeSingleLocation() const
+{
+	return m_explodeSingleLocation;
+}
+
+bool Game::getExplodeCol() const
+{
+	return m_explodeCol;
+}
+
+bool Game::getExplodeRow() const
+{
+	return m_explodeRow;
+}
+
+bool Game::getExplodeArea() const
+{
+	return m_explodeArea;
 }
 
 bool Game::getReusableMinedFoundation() const
@@ -342,7 +382,22 @@ bool Game::verifyMinedFoundation(const Position& pos)
 
 void Game::explodePylons(const Position& pos)
 {
-	
+	if (m_explodeSingleLocation)
+	{
+		explodeSingleLocation(pos);
+	}
+	if (m_explodeCol)
+	{
+		explodeCol(pos);
+	}
+	if (m_explodeRow)
+	{
+		explodeRow(pos);
+	}
+	if (m_explodeArea)
+	{
+		explodeArea(pos);
+	}
 }
 
 void Game::explodeSingleLocation(const Position& pos)
@@ -383,9 +438,9 @@ void Game::explodeRow(const Position& pos)
 void Game::explodeArea(const Position& pos)
 {
 	auto& [rowPos, colPos] = pos;
-	for (size_t indexRowBoard = std::max(rowPos - m_areaLength, 0); indexRowBoard < std::min(rowPos + m_areaLength, (int)m_board.getSize()); ++indexRowBoard)
+	for (size_t indexRowBoard = std::max(rowPos - m_areaLength, 0); indexRowBoard < std::min(rowPos + m_areaLength + 1, (int)m_board.getSize()); ++indexRowBoard)
 	{
-		for (size_t indexColBoard = std::max(colPos - m_areaLength, 0); indexColBoard < std::min(colPos + m_areaLength, (int)m_board.getSize()); ++indexColBoard)
+		for (size_t indexColBoard = std::max(colPos - m_areaLength, 0); indexColBoard < std::min(colPos + m_areaLength + 1, (int)m_board.getSize()); ++indexColBoard)
 		{
 			Foundation& foundation = m_board.getBoard()[indexRowBoard][indexColBoard];
 			if (foundation.getPylon())
