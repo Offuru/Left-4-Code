@@ -9,10 +9,10 @@
 #include <random>
 #include <unordered_set>
 #include <queue>
+#include "Utilities.h"
 
 namespace twixt
 {
-	using Position = ::std::pair<uint8_t, uint8_t>;
 
 	class Board
 	{

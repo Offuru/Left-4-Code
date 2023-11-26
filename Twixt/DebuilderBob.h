@@ -3,10 +3,10 @@
 #include <random>
 #include <optional>
 #include "Board.h"
+#include "Utilities.h"
 
 namespace twixt
 {
-	using Position = ::std::pair<uint8_t, uint8_t>;
 
 	class Board;
 

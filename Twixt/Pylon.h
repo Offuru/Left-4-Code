@@ -4,13 +4,12 @@
 #include <functional>
 #include <unordered_set>
 #include "Bridge.h"
+#include "Utilities.h"
 //#include "Foundation.h"
 
 
 namespace twixt
 {
-	using Position = ::std::pair<uint8_t, uint8_t>;
-
 	class Bridge;
 
 	class Pylon
