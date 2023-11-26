@@ -1,5 +1,7 @@
 #include "SinglePylon.h"
 
+using namespace twixt;
+
 SinglePylon::SinglePylon(const Position& foundation, Color color, Type type) :
 	Pylon{ foundation, color, type }
 {

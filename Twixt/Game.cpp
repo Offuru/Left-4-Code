@@ -1,5 +1,7 @@
 #include "Game.h"
 
+using namespace twixt;
+
 Game::Game()
 {
 	m_reusableMinedFoundation
@@ -244,7 +246,7 @@ void Game::moveBob()
 
 void Game::printBoard()
 {
-	std::vector<std::vector<std::string>> boardMatrix(24, std::vector<std::string>(24));
+	::std::vector<::std::vector<::std::string>> boardMatrix(24, ::std::vector<::std::string>(24));
 
 	for (uint8_t i = 0; i < boardMatrix.size(); ++i)
 	{
@@ -300,9 +302,9 @@ void Game::printBoard()
 	{
 		for (auto& element : line)
 		{
-			std::cout << element << " ";
+			::std::cout << element << " ";
 		}
-		std::cout << std::endl;
+		::std::cout << ::std::endl;
 	}
 }
 
@@ -438,9 +440,9 @@ void Game::explodeRow(const Position& pos)
 void Game::explodeArea(const Position& pos)
 {
 	auto& [rowPos, colPos] = pos;
-	for (size_t indexRowBoard = std::max(rowPos - m_areaLength, 0); indexRowBoard < std::min(rowPos + m_areaLength + 1, (int)m_board.getSize()); ++indexRowBoard)
+	for (size_t indexRowBoard = ::std::max(rowPos - m_areaLength, 0); indexRowBoard < ::std::min(rowPos + m_areaLength + 1, (int)m_board.getSize()); ++indexRowBoard)
 	{
-		for (size_t indexColBoard = std::max(colPos - m_areaLength, 0); indexColBoard < std::min(colPos + m_areaLength + 1, (int)m_board.getSize()); ++indexColBoard)
+		for (size_t indexColBoard = ::std::max(colPos - m_areaLength, 0); indexColBoard < ::std::min(colPos + m_areaLength + 1, (int)m_board.getSize()); ++indexColBoard)
 		{
 			Foundation& foundation = m_board.getBoard()[indexRowBoard][indexColBoard];
 			if (foundation.getPylon())

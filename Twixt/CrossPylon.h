@@ -2,20 +2,21 @@
 
 #include "Pylon.h"
 
-
-class Pylon;
-
-class CrossPylon : public Pylon
+namespace twixt
 {
-public:
-	CrossPylon() = delete;
-	CrossPylon(const Position&, Color, Type);
-	CrossPylon(const CrossPylon&);
-	~CrossPylon() = default;
+	class Pylon;
 
-	bool canAddBridge(const Position&) const;
-	bool addBridge(Bridge*, const Position&);
-	void removeBridge(Bridge*) override;
+	class CrossPylon : public Pylon
+	{
+	public:
+		CrossPylon() = delete;
+		CrossPylon(const Position&, Color, Type);
+		CrossPylon(const CrossPylon&);
+		~CrossPylon() = default;
 
-};
+		bool canAddBridge(const Position&) const;
+		bool addBridge(Bridge*, const Position&);
+		void removeBridge(Bridge*) override;
 
+	};
+}

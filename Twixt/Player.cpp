@@ -1,5 +1,7 @@
 #include "Player.h"
 
+using namespace twixt;
+
 Player::Player() :
 	m_color{ Pylon::Color::Red }, m_noBridges{ 50 }, m_noPylons1x1{ 50 }, m_noPylons2x2{ 5 }, m_noPylonsCross{ 5 } {}
 

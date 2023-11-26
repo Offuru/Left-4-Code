@@ -6,37 +6,39 @@
 #include "SinglePylon.h"
 #include "SquarePylon.h"
 
-using Position = std::pair<uint8_t, uint8_t>;
-
-class Pylon;
-
-class Foundation
+namespace twixt
 {
-private:
-	Position m_position;
-	bool m_mined;
-	bool m_hasBob;
-	bool m_exploded;
-	Pylon* m_pylon;
+	using Position = ::std::pair<uint8_t, uint8_t>;
 
-public:
-	Foundation();
-	Foundation(Position, bool = false, Pylon* = nullptr);
-	Foundation(const Foundation&);
-	Foundation& operator=(Foundation&);
-	~Foundation() = default; // pilonii se distrug din board!!
+	class Pylon;
 
-	Position getPosition() const;
-	bool getMined() const;
-	bool getExploded() const;
-	bool getBob() const;
-	Pylon* getPylon() const;
+	class Foundation
+	{
+	private:
+		Position m_position;
+		bool m_mined;
+		bool m_hasBob;
+		bool m_exploded;
+		Pylon* m_pylon;
+
+	public:
+		Foundation();
+		Foundation(Position, bool = false, Pylon* = nullptr);
+		Foundation(const Foundation&);
+		Foundation& operator=(Foundation&);
+		~Foundation() = default; // pilonii se distrug din board!!
+
+		Position getPosition() const;
+		bool getMined() const;
+		bool getExploded() const;
+		bool getBob() const;
+		Pylon* getPylon() const;
 
 
-	void setPosition(const Position&);
-	void setMined(bool);
-	void setExploded(bool);
-	void setPylon(Pylon*);
-	void setBob(bool);
-};
-
+		void setPosition(const Position&);
+		void setMined(bool);
+		void setExploded(bool);
+		void setPylon(Pylon*);
+		void setBob(bool);
+	};
+}

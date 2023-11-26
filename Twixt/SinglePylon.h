@@ -2,19 +2,21 @@
 
 #include "Pylon.h"
 
-class SinglePylon : public Pylon
+namespace twixt
 {
-private:
+	class SinglePylon : public Pylon
+	{
+	private:
 
-public:
-	SinglePylon() = delete;
-	SinglePylon(const Position&, Color, Type);
-	SinglePylon(const SinglePylon&);
-	~SinglePylon() = default;
+	public:
+		SinglePylon() = delete;
+		SinglePylon(const Position&, Color, Type);
+		SinglePylon(const SinglePylon&);
+		~SinglePylon() = default;
 
-	bool canAddBridge(const Position&) const;
-	bool addBridge(Bridge*, const Position&);
-	void removeBridge(Bridge*) override;
+		bool canAddBridge(const Position&) const;
+		bool addBridge(Bridge*, const Position&);
+		void removeBridge(Bridge*) override;
 
-};
-
+	};
+}

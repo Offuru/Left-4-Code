@@ -1,8 +1,9 @@
 #include "Foundation.h"
 
+using namespace twixt;
 
 Foundation::Foundation() :
-	m_position{ std::make_pair(0,0) }, m_mined{ false }, m_exploded{ false }, m_pylon{ nullptr }, m_hasBob{ false } {}
+	m_position{ ::std::make_pair(0,0) }, m_mined{ false }, m_exploded{ false }, m_pylon{ nullptr }, m_hasBob{ false } {}
 
 Foundation::Foundation(Position position, bool mined, Pylon* pylon) :
 	m_position{ position }, m_mined{ mined }, m_exploded{ false }, m_pylon{ pylon }, m_hasBob{ false } {};
