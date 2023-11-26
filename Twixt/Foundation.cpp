@@ -15,10 +15,10 @@ Foundation::Foundation(const Foundation& other) :
 {
 	if (other.getPylon() != nullptr)
 	{
-		SinglePylon* single = dynamic_cast<SinglePylon*>(other.getPylon());
-		if (single)
+
+		if (instanceOf<Pylon,SinglePylon>(other.getPylon()))
 		{
-			m_pylon = new SinglePylon(*single);
+			m_pylon = new SinglePylon(*dynamic_cast<SinglePylon*>(other.getPylon()));
 			return;
 		}
 		SquarePylon* square = dynamic_cast<SquarePylon*>(other.getPylon());
