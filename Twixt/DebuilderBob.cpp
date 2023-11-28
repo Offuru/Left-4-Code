@@ -4,9 +4,9 @@ using namespace twixt;
 
 DebuilderBob::DebuilderBob(uint8_t size) : m_lastPosition{ {} }
 {
-	::std::random_device rd;
-	::std::mt19937 gen(rd());
-	::std::uniform_int_distribution<> distrib(0, size - 1);
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<> distrib(0, size - 1);
 	m_position = { distrib(gen),  distrib(gen) };
 }
 Position DebuilderBob::getPosition() const
@@ -21,9 +21,9 @@ void DebuilderBob::setPosition(const Position& position)
 
 void DebuilderBob::moveToNext(Board& board)
 {
-	::std::random_device rd;
-	::std::mt19937 gen(rd());
-	::std::uniform_int_distribution<> distrib(0, board.getSize() - 1);
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<> distrib(0, board.getSize() - 1);
 	Position position;
 
 	while (true)

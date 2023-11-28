@@ -12,7 +12,7 @@ CrossPylon::CrossPylon(const CrossPylon& other) :
 
 bool CrossPylon::canAddBridge(const Position& foundation) const
 {
-	auto itFoundation = ::std::find(m_connectionPoints.begin(), m_connectionPoints.end(), foundation);
+	auto itFoundation = std::find(m_connectionPoints.begin(), m_connectionPoints.end(), foundation);
 
 	if (itFoundation == m_connectionPoints.end() && m_connectionPoints.size() < 2)
 		return true;
@@ -23,7 +23,7 @@ bool CrossPylon::canAddBridge(const Position& foundation) const
 
 bool CrossPylon::addBridge(Bridge* bridge, const Position& foundation)
 {
-	auto itFoundation = ::std::find(m_connectionPoints.begin(), m_connectionPoints.end(), foundation);
+	auto itFoundation = std::find(m_connectionPoints.begin(), m_connectionPoints.end(), foundation);
 	if (itFoundation == m_connectionPoints.end() && m_connectionPoints.size() < 2)
 	{
 		m_connections.emplace_back(bridge);
@@ -51,7 +51,7 @@ void CrossPylon::removeBridge(Bridge* bridge)
 			++it;
 	}
 
-	::std::unordered_set<Position> usedPositions;
+	std::unordered_set<Position> usedPositions;
 	for (auto bridge : m_connections)
 	{
 		usedPositions.insert(bridge->getPosStart());

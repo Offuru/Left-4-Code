@@ -3,8 +3,8 @@
 using namespace twixt;
 
 Pylon::Pylon(const Position& foundation, Color color, Type type) :
-	m_color{ color }, m_connections{ ::std::vector<Bridge*>() },
-	m_connectionPoints{ ::std::vector<Position>() },
+	m_color{ color }, m_connections{ std::vector<Bridge*>() },
+	m_connectionPoints{ std::vector<Position>() },
 	m_type{ type } 
 {}
 
@@ -25,17 +25,17 @@ Pylon& Pylon::operator=(const Pylon& other)
 	return *this;
 }
 
-::std::vector<Position> Pylon::getFoundations() const
+std::vector<Position> Pylon::getFoundations() const
 {
 	return m_foundations;
 }
 
-::std::vector<Bridge*> Pylon::getConnections() const
+std::vector<Bridge*> Pylon::getConnections() const
 {
 	return m_connections;
 }
 
-::std::vector<Position> Pylon::getConnectionPoints() const
+std::vector<Position> Pylon::getConnectionPoints() const
 {
 	return m_connectionPoints;
 }
@@ -50,17 +50,17 @@ Pylon::Type Pylon::getType() const
 	return m_type;
 }
 
-void Pylon::setFoundations(const ::std::vector<Position>& foundations)
+void Pylon::setFoundations(const std::vector<Position>& foundations)
 {
 	m_foundations = foundations;
 }
 
-void Pylon::setConnections(const ::std::vector<Bridge*>& connections)
+void Pylon::setConnections(const std::vector<Bridge*>& connections)
 {
 	m_connections = connections;
 }
 
-void Pylon::setConnectionPoints(const ::std::vector<Position>& connectionPoints)
+void Pylon::setConnectionPoints(const std::vector<Position>& connectionPoints)
 {
 	m_connectionPoints = connectionPoints;
 }

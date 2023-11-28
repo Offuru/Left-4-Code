@@ -3,7 +3,7 @@
 using namespace twixt;
 
 Bridge::Bridge() :
-	m_pylonStart{ nullptr }, m_pylonEnd{ nullptr }, m_posStart{ ::std::make_pair(0,0) }, m_posEnd{ ::std::make_pair(0,0) } {};
+	m_pylonStart{ nullptr }, m_pylonEnd{ nullptr }, m_posStart{ std::make_pair(0,0) }, m_posEnd{ std::make_pair(0,0) } {};
 
 Bridge::Bridge(Pylon* pylonStart, Pylon* pylonEnd, const Position& posStart, const Position& posEnd) :
 	m_pylonStart{ pylonStart }, m_pylonEnd{ pylonEnd}, m_posStart{ posStart }, m_posEnd{ posEnd } {};

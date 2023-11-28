@@ -7,7 +7,6 @@
 #include "Utilities.h"
 //#include "Foundation.h"
 
-
 namespace twixt
 {
 	class Bridge;
@@ -29,9 +28,9 @@ namespace twixt
 		};
 
 	protected:
-		::std::vector<Position> m_foundations;
-		::std::vector<Bridge*> m_connections; //shared_ptr
-		::std::vector<Position> m_connectionPoints;
+		std::vector<Position> m_foundations;
+		std::vector<Bridge*> m_connections;
+		std::vector<Position> m_connectionPoints;
 		Color m_color;
 		Type m_type;
 
@@ -42,15 +41,15 @@ namespace twixt
 		Pylon& operator=(const Pylon&);
 		virtual ~Pylon() = default;
 
-		::std::vector<Position> getFoundations() const; //first foundation is always the one that "spawns" the pylon (center for cross and single, top left corner for square)
-		::std::vector<Bridge*> getConnections() const;
-		::std::vector<Position> getConnectionPoints() const;
+		std::vector<Position> getFoundations() const; //first foundation is always the one that "spawns" the pylon (center for cross and single, top left corner for square)
+		std::vector<Bridge*> getConnections() const;
+		std::vector<Position> getConnectionPoints() const; //TO DO: change to predefined pylon connection points
 		Color getColor() const;
 		Type getType() const;
 
-		void setFoundations(const ::std::vector<Position>&);
-		void setConnections(const ::std::vector<Bridge*>&);
-		void setConnectionPoints(const ::std::vector<Position>&);
+		void setFoundations(const std::vector<Position>&);
+		void setConnections(const std::vector<Bridge*>&);
+		void setConnectionPoints(const std::vector<Position>&); //TO DO: change to predefined pylon connection points
 		void setColor(const Color&);
 
 		void addFoundation(const Position&);
@@ -68,7 +67,7 @@ namespace std
 	{
 		const size_t operator () (twixt::Position const& p) const
 		{
-			return (::std::hash<uint8_t>()(p.first) + ::std::hash<uint8_t>()(p.second));
+			return (std::hash<uint8_t>()(p.first) + std::hash<uint8_t>()(p.second));
 		}
 	};
 }

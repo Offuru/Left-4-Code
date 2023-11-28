@@ -24,8 +24,8 @@ namespace twixt
 	public:
 		Foundation();
 		Foundation(Position, bool = false, Pylon* = nullptr);
-		Foundation(const Foundation&);
-		Foundation& operator=(Foundation&);
+		Foundation(const Foundation&); //TO DO: take care of memory leak, change allocation to unique_ptr
+		Foundation& operator=(Foundation&); //TO DO: take care of memory leak, change allocation to unique_ptr
 		~Foundation() = default; // pilonii se distrug din board!!
 
 		Position getPosition() const;
