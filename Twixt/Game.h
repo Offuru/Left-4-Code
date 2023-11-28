@@ -11,7 +11,7 @@ namespace twixt
 	{
 	public:
 
-		Game();
+		Game(uint8_t = 24);
 		Game(const Game&);
 		Game& operator=(const Game&);
 		~Game() = default;
@@ -71,6 +71,7 @@ namespace twixt
 		HumanPlayer m_player2;
 		Board m_board;
 		uint8_t m_areaLength;
+		uint8_t m_boardSize;
 
 		bool validFoundation(const Position&, Pylon::Color);
 		bool verifyMinedFoundation(const Position&);

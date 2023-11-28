@@ -2,7 +2,8 @@
 
 using namespace twixt;
 
-Game::Game()
+Game::Game(uint8_t boardSize) :
+	m_board{ Board(boardSize) }
 {
 	m_reusableMinedFoundation
 		= m_bigPylons = m_minedFundations
@@ -18,7 +19,8 @@ Game::Game()
 	std::cin >> name2;
 	m_player2 = HumanPlayer(name2);
 	m_player2.setColor(Pylon::Color::Black);
-	m_board = Board();
+
+	m_boardSize = boardSize;
 	m_areaLength = 2;
 }
 
@@ -58,7 +60,7 @@ void twixt::Game::Run()
 
 	while (true)
 	{
-		moveBob();
+		//moveBob();
 		std::system("cls");
 		printBoard();
 
@@ -136,6 +138,9 @@ void Game::setReusableMinedFoundation(bool reusableMinedFoundation)
 void Game::setDebuilderBob(bool debuilderBob)
 {
 	m_debuilderBob = debuilderBob;
+
+	if (m_debuilderBob)
+		m_bob = DebuilderBob(m_boardSize);
 }
 
 void Game::setCards(bool cards)
