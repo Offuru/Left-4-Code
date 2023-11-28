@@ -1,6 +1,6 @@
 #pragma once
 #include "Board.h"
-#include "Player.h"
+#include "HumanPlayer.h"
 #include "DebuilderBob.h"
 #include <array>
 #include <iostream>
@@ -16,6 +16,11 @@ namespace twixt
 		Game& operator=(const Game&);
 		~Game() = default;
 
+		void Run(); //TO DO: modularize function
+					//player must place a pylon every turn
+					//player place one/multiple bridges or none at all
+					
+
 		void setBigPylons(bool);
 		void setMinedFoundations(bool);
 		void setExplodeSingleLocation(bool);
@@ -25,8 +30,8 @@ namespace twixt
 		void setReusableMinedFoundation(bool);
 		void setDebuilderBob(bool);
 		void setCards(bool);
-		void setPlayer1(const Player&);
-		void setPlayer2(const Player&);
+		void setPlayer1(const HumanPlayer&);
+		void setPlayer2(const HumanPlayer&);
 		void setBoard(const Board&);
 
 		bool getBigPylons() const;
@@ -38,12 +43,12 @@ namespace twixt
 		bool getReusableMinedFoundation() const;
 		bool getDebuilderBob() const;
 		bool getCards() const;
-		Player getPlayer1() const;
-		Player getPlayer2() const;
+		HumanPlayer getPlayer1() const;
+		HumanPlayer getPlayer2() const;
 		Board& getBoard();
 
 		bool addPylon(const Position&, Pylon::Type, Pylon::Color);
-		bool addBridge(const Position&, const Position&);
+		bool addBridge(const Position&, const Position&, Pylon::Color);
 
 		bool removeBridge(const Position&, const Position&);
 
@@ -61,9 +66,9 @@ namespace twixt
 		bool m_explodeArea;
 		bool m_reusableMinedFoundation;
 		bool m_debuilderBob;
-		bool m_cards;
-		Player m_player1;
-		Player m_player2;
+		bool m_cards; //TO DO: change to flag bitset
+		HumanPlayer m_player1;//TO DO: change to IPlayer* to allow for human/ai players
+		HumanPlayer m_player2;
 		Board m_board;
 		uint8_t m_areaLength;
 
