@@ -381,30 +381,10 @@ bool Board::checkWinningRoute(std::queue<Pylon*>& nextVisit, std::unordered_set<
 
 		//verify if currPylon stands on winning pos
 
-
-		SinglePylon* single = dynamic_cast<SinglePylon*>(currPylon);
-		if (single)
+		for (const auto& pos : currPylon->getFoundations())
 		{
-			if (winnerFoundation(single->getFoundations()[0], currRuleForWinning, single->getColor()))
+			if (winnerFoundation(pos, currRuleForWinning, currPylon->getColor()))
 				return true;
-		}
-		CrossPylon* cross = dynamic_cast<CrossPylon*>(currPylon);
-		if (cross)
-		{
-			for (const auto& pos : cross->getFoundations())
-			{
-				if (winnerFoundation(pos, currRuleForWinning, single->getColor()))
-					return true;
-			}
-		}
-		SquarePylon* square = dynamic_cast<SquarePylon*>(currPylon);
-		if (square)
-		{
-			for (const auto& pos : square->getFoundations())
-			{
-				if (winnerFoundation(pos, currRuleForWinning, single->getColor()))
-					return true;
-			}
 		}
 	}
 
