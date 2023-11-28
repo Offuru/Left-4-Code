@@ -6,9 +6,17 @@ Game::Game()
 {
 	m_reusableMinedFoundation
 		= m_bigPylons = m_minedFundations
-		= m_debuilderBob = m_cards = false;
-	m_player1 = Player();
-	m_player2 = Player();
+		= m_debuilderBob = m_cards = m_explodeArea = m_explodeCol = m_explodeRow = m_explodeSingleLocation = false;
+	std::string name1, name2;
+
+	std::cout << "Player 1 : ";
+	std::cin >> name1;
+	m_player1 = HumanPlayer(name1);
+	m_player1.setColor(Pylon::Color::Red);
+
+	std::cout << "Player 2 : ";
+	std::cin >> name2;
+	m_player2 = HumanPlayer(name2);
 	m_player2.setColor(Pylon::Color::Black);
 	m_board = Board();
 	m_areaLength = 2;
@@ -22,6 +30,10 @@ Game::Game(const Game& other)
 	m_debuilderBob = other.m_debuilderBob;
 	m_cards = other.m_cards;
 	m_areaLength = other.m_areaLength;
+	m_explodeArea = other.m_explodeArea;
+	m_explodeCol = other.m_explodeCol;
+	m_explodeRow = other.m_explodeRow;
+	m_explodeSingleLocation = other.m_explodeSingleLocation;
 }
 
 Game& Game::operator=(const Game& other)
@@ -34,6 +46,56 @@ Game& Game::operator=(const Game& other)
 	m_areaLength = other.m_areaLength;
 
 	return *this;
+}
+
+void twixt::Game::Run()
+{
+	HumanPlayer currentPlayer = m_player1;
+	HumanPlayer nextPlayer = m_player2;
+
+	Position red = { 1,3 };
+	Position black = { 0, 0 };
+
+	while (true)
+	{
+		moveBob();
+		std::system("cls");
+		printBoard();
+
+		const auto& [action, pos1, pos2] = currentPlayer.getNextMove();
+		switch (action)
+		{
+		case IPlayer::Action::AddSinglePylon:
+			addPylon(pos1, Pylon::Type::Single, currentPlayer.getColor());
+			break;
+		case IPlayer::Action::AddSquarePylon:
+			addPylon(pos1, Pylon::Type::Square, currentPlayer.getColor());
+			break;
+		case IPlayer::Action::AddCrossPylon:
+			addPylon(pos1, Pylon::Type::Cross, currentPlayer.getColor());
+			break;
+		case IPlayer::Action::AddBridge:
+			addBridge(pos1, pos2.value(), currentPlayer.getColor());
+			break;
+		case IPlayer::Action::RemovePylon:
+			m_board.removePylon(pos1);
+			break;
+		case IPlayer::Action::RemoveBridge:
+			removeBridge(pos1, pos2.value());
+			break;
+		default:
+			break;
+		}
+
+		if (m_board.verifyWinner(currentPlayer))
+		{
+			printBoard();
+			std::cout << currentPlayer.getName() << " won\n";
+			return;
+		}
+
+		std::swap(currentPlayer, nextPlayer);
+	}
 }
 
 void Game::setBigPylons(bool bigPylons)
@@ -81,12 +143,12 @@ void Game::setCards(bool cards)
 	m_cards = cards;
 }
 
-void Game::setPlayer1(const Player& player)
+void Game::setPlayer1(const HumanPlayer& player)
 {
 	m_player1 = player;
 }
 
-void Game::setPlayer2(const Player& player)
+void Game::setPlayer2(const HumanPlayer& player)
 {
 	m_player2 = player;
 }
@@ -136,12 +198,12 @@ bool Game::getDebuilderBob() const
 	return m_debuilderBob;
 }
 
-Player Game::getPlayer1() const
+HumanPlayer Game::getPlayer1() const
 {
 	return m_player1;
 }
 
-Player Game::getPlayer2() const
+HumanPlayer Game::getPlayer2() const
 {
 	return m_player2;
 }
@@ -191,10 +253,13 @@ bool Game::addPylon(const Position& pos, Pylon::Type type, Pylon::Color color)
 	return false;
 }
 
-bool Game::addBridge(const Position& startPoint, const Position& endPoint)
+bool Game::addBridge(const Position& startPoint, const Position& endPoint, Pylon::Color color)
 {
 	Pylon* startPylon = m_board.getFoundation(startPoint).getPylon();
 	Pylon* endPylon = m_board.getFoundation(endPoint).getPylon();
+
+	if (startPylon->getColor() != color || startPylon->getColor() != color)
+		return false;
 
 	if (startPylon == nullptr || endPylon == nullptr)
 	{
@@ -246,7 +311,7 @@ void Game::moveBob()
 
 void Game::printBoard()
 {
-	::std::vector<::std::vector<::std::string>> boardMatrix(24, ::std::vector<::std::string>(24));
+	std::vector<std::vector<std::string>> boardMatrix(m_board.getSize(), std::vector<std::string>(m_board.getSize()));
 
 	for (uint8_t i = 0; i < boardMatrix.size(); ++i)
 	{
@@ -302,9 +367,9 @@ void Game::printBoard()
 	{
 		for (auto& element : line)
 		{
-			::std::cout << element << " ";
+			std::cout << element << " ";
 		}
-		::std::cout << ::std::endl;
+		std::cout << std::endl;
 	}
 }
 
@@ -351,7 +416,7 @@ bool Game::validFoundation(const Position& pos, Pylon::Color color)
 		break;
 	}
 
-	if (!verifyMinedFoundation(pos))
+	if (!verifyMinedFoundation(pos)) //TO DO: should be removed, @stdragos for more info
 		return false;
 
 	if (m_board[pos].getBob())
@@ -373,7 +438,7 @@ bool Game::verifyMinedFoundation(const Position& pos)
 	{
 		explodePylons(pos);
 		return false;
-	} 
+	}
 	else if (m_reusableMinedFoundation)
 	{
 		return true;
@@ -440,9 +505,9 @@ void Game::explodeRow(const Position& pos)
 void Game::explodeArea(const Position& pos)
 {
 	auto& [rowPos, colPos] = pos;
-	for (size_t indexRowBoard = ::std::max(rowPos - m_areaLength, 0); indexRowBoard < ::std::min(rowPos + m_areaLength + 1, (int)m_board.getSize()); ++indexRowBoard)
+	for (size_t indexRowBoard = std::max(rowPos - m_areaLength, 0); indexRowBoard < std::min(rowPos + m_areaLength + 1, (int)m_board.getSize()); ++indexRowBoard)
 	{
-		for (size_t indexColBoard = ::std::max(colPos - m_areaLength, 0); indexColBoard < ::std::min(colPos + m_areaLength + 1, (int)m_board.getSize()); ++indexColBoard)
+		for (size_t indexColBoard = std::max(colPos - m_areaLength, 0); indexColBoard < std::min(colPos + m_areaLength + 1, (int)m_board.getSize()); ++indexColBoard)
 		{
 			Foundation& foundation = m_board.getBoard()[indexRowBoard][indexColBoard];
 			if (foundation.getPylon())
