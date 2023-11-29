@@ -60,38 +60,15 @@ void twixt::Game::Run()
 
 	Position red = { 1,3 };
 	Position black = { 0, 0 };
-
+	moveBob();
 	while (true)
 	{
-		moveBob();
+		
 		std::system("cls");
 		printBoard();
 
-		const auto& [action, pos1, pos2] = currentPlayer.getNextMove();
-		switch (action)
-		{
-		case IPlayer::Action::AddSinglePylon:
-			addPylon(pos1, Pylon::Type::Single, currentPlayer.getColor());
-			break;
-		case IPlayer::Action::AddSquarePylon:
-			addPylon(pos1, Pylon::Type::Square, currentPlayer.getColor());
-			break;
-		case IPlayer::Action::AddCrossPylon:
-			addPylon(pos1, Pylon::Type::Cross, currentPlayer.getColor());
-			break;
-		case IPlayer::Action::AddBridge:
-			addBridge(pos1, pos2.value(), currentPlayer.getColor());
-			break;
-		case IPlayer::Action::RemovePylon:
-			m_board.removePylon(pos1);
-			break;
-		case IPlayer::Action::RemoveBridge:
-			removeBridge(pos1, pos2.value());
-			break;
-		default:
-			break;
-		}
-
+		bool keepRound = processTurn(currentPlayer.getNextMove(), currentPlayer);
+		
 		if (m_board.verifyWinner(currentPlayer))
 		{
 			printBoard();
@@ -99,7 +76,11 @@ void twixt::Game::Run()
 			return;
 		}
 
-		std::swap(currentPlayer, nextPlayer);
+		if(!keepRound)
+		{
+			std::swap(currentPlayer, nextPlayer);
+			moveBob();
+		}
 	}
 }
 
@@ -406,6 +387,16 @@ bool Game::removeBridge(const Position& start, const Position& end)
 	return true;
 }
 
+bool twixt::Game::removePylon(const Position& position)
+{
+	Pylon* pylon = m_board[position].getPylon();
+	if (pylon == nullptr)
+		return false;
+
+	m_board.removePylon(position);
+	return true;
+}
+
 bool Game::validFoundation(const Position& pos, Pylon::Color color)
 {
 	switch (color)
@@ -446,7 +437,7 @@ bool Game::verifyMinedFoundation(const Position& pos)
 	{
 		explodePylons(pos);
 		return true;  //if it gets here it means that the player placed a pylon
-					  //on a mine, so their turn should skip
+		//on a mine, so their turn should skip
 	}
 	else if (m_reusableMinedFoundation)
 	{
@@ -526,6 +517,37 @@ void Game::explodeArea(const Position& pos)
 			foundation.setMined(false);
 			foundation.setExploded(true);
 		}
+	}
+}
+
+bool twixt::Game::processTurn(const IPlayer::Move& nextMove, const IPlayer& currentPlayer)
+{
+	const auto& [action, pos1, pos2] = nextMove;
+
+	switch (action)
+	{
+	case IPlayer::Action::AddSinglePylon:
+		if (!addPylon(pos1, Pylon::Type::Single, currentPlayer.getColor()))
+			return true; //pylon couldn't be placed, so the player gets another chance
+		return false;
+	case IPlayer::Action::AddSquarePylon:
+		if (!addPylon(pos1, Pylon::Type::Square, currentPlayer.getColor()))
+			return true;
+		return false;
+	case IPlayer::Action::AddCrossPylon:
+		if (!addPylon(pos1, Pylon::Type::Cross, currentPlayer.getColor()))
+			return true;
+		return false;
+	case IPlayer::Action::AddBridge:
+		addBridge(pos1, pos2.value(), currentPlayer.getColor());
+		return true;
+	case IPlayer::Action::RemovePylon:
+		if (!removePylon(pos1))
+			return true;
+		return false;
+	case IPlayer::Action::RemoveBridge:
+		removeBridge(pos1, pos2.value());
+		return true;
 	}
 }
 

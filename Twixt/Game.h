@@ -51,6 +51,7 @@ namespace twixt
 		bool addBridge(const Position&, const Position&, Pylon::Color);
 
 		bool removeBridge(const Position&, const Position&);
+		bool removePylon(const Position&);
 
 		void moveBob();
 		void printBoard();
@@ -80,5 +81,10 @@ namespace twixt
 		void explodeCol(const Position&);
 		void explodeRow(const Position&);
 		void explodeArea(const Position&);
+		bool processTurn(const IPlayer::Move&, const IPlayer&); //it returns true only if the player
+																//changed their bridges, so they can
+																//modify more of them in the same round,
+																//and returns false if a pylon was added/deleted
+																//so the round skips
 	};
 }

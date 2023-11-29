@@ -10,6 +10,7 @@ twixt::HumanPlayer::HumanPlayer(const std::string& name) : IPlayer(name)
 
 HumanPlayer& HumanPlayer::operator=(const HumanPlayer& other)
 {
+	m_name = other.m_name;
 	m_color = other.m_color;
 	m_noBridges = other.m_noBridges;
 	m_noPylons1x1 = other.m_noPylons1x1;
@@ -21,7 +22,7 @@ HumanPlayer& HumanPlayer::operator=(const HumanPlayer& other)
 
 HumanPlayer::Move twixt::HumanPlayer::getNextMove()
 {
-	std::cout << "Input next move: "; //TO DO?: move to game to 
+	std::cout <<getName() << ", input your next move: "; //TO DO?: move to game to 
 									  //prevent multiple printing 
 									  //(adding/moving multiple bridges, invalid move)
 	std::vector<uint8_t> input;

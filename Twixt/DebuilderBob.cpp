@@ -38,5 +38,4 @@ void DebuilderBob::moveToNext(Board& board)
 	board.removePylon(position);
 	board[m_lastPosition.value()].setBob(false);
 	board[position].setBob(true);
-	//TO DO: make setPylon not possible on position where Bob exists
 }
