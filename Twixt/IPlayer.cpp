@@ -10,6 +10,22 @@ twixt::IPlayer::IPlayer(const std::string& name)
 	m_noPylonsCross = 5;
 }
 
+bool twixt::IPlayer::validMove(const Move& nextMove, uint8_t boardSize) const
+{
+	const auto& [action, pos1, pos2] = nextMove;
+
+	if (action != Action::AddBridge && action != Action::AddCrossPylon &&
+		action != Action::AddSinglePylon && action != Action::AddSquarePylon &&
+		action != Action::RemoveBridge && action != Action::RemovePylon)
+		return false;
+	if (pos1.first < 0 || pos1.second >= boardSize)
+		return false;
+	if (pos2.has_value() && (pos2.value().first < 0 || pos2.value().second >= boardSize))
+		return false;
+
+	return true;
+}
+
 void twixt::IPlayer::setName(const std::string& name)
 {
 	m_name = name;

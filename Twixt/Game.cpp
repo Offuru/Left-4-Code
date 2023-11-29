@@ -63,7 +63,6 @@ void twixt::Game::Run()
 	moveBob();
 	while (true)
 	{
-		
 		std::system("cls");
 		printBoard();
 
@@ -522,6 +521,10 @@ void Game::explodeArea(const Position& pos)
 
 bool twixt::Game::processTurn(const IPlayer::Move& nextMove, const IPlayer& currentPlayer)
 {
+	if (!currentPlayer.validMove(nextMove, m_boardSize))
+	{
+		return true; //bad move, another chance
+	}
 	const auto& [action, pos1, pos2] = nextMove;
 
 	switch (action)

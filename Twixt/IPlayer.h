@@ -36,7 +36,7 @@ namespace twixt
 
 
 		virtual Move getNextMove() = 0;
-		bool validMove(const Move&) const;//TO DO: define to check 
+		bool validMove(const Move&, uint8_t) const;//TO DO: define to check 
 										  //whether or not move was valid (position, color, noPieces, etc)
 
 		void setName(const std::string&);
