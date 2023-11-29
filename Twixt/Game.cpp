@@ -424,7 +424,7 @@ bool Game::validFoundation(const Position& pos, Pylon::Color color)
 		break;
 	}
 
-	if (!verifyMinedFoundation(pos)) //TO DO: should be removed, @stdragos for more info
+	if (!verifyMinedFoundation(pos))
 		return false;
 
 	if (m_board[pos].getBob())
@@ -445,7 +445,8 @@ bool Game::verifyMinedFoundation(const Position& pos)
 	if (!foundation.getExploded())
 	{
 		explodePylons(pos);
-		return false;
+		return true;  //if it gets here it means that the player placed a pylon
+					  //on a mine, so their turn should skip
 	}
 	else if (m_reusableMinedFoundation)
 	{
