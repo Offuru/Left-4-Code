@@ -247,7 +247,7 @@ bool Game::addBridge(const Position& startPoint, const Position& endPoint, Pylon
 	Pylon* startPylon = m_board.getFoundation(startPoint).getPylon();
 	Pylon* endPylon = m_board.getFoundation(endPoint).getPylon();
 
-	if (startPylon->getColor() != color || startPylon->getColor() != color)
+	if (startPylon->getColor() != color || endPylon->getColor() != color)
 		return false;
 
 	if (startPylon == nullptr || endPylon == nullptr)
@@ -362,7 +362,7 @@ void Game::printBoard()
 	}
 }
 
-bool Game::removeBridge(const Position& start, const Position& end)
+bool Game::removeBridge(const Position& start, const Position& end, Pylon::Color color)
 {
 	Bridge* bridgeToRemove = nullptr;
 
@@ -380,17 +380,17 @@ bool Game::removeBridge(const Position& start, const Position& end)
 		}
 	}
 
-	if (!bridgeToRemove)
+	if (!bridgeToRemove || bridgeToRemove->getPylonStart()->getColor() != color)
 		return false;
 
 	m_board.removeBridge(bridgeToRemove);
 	return true;
 }
 
-bool twixt::Game::removePylon(const Position& position)
+bool twixt::Game::removePylon(const Position& position, Pylon::Color color)
 {
 	Pylon* pylon = m_board[position].getPylon();
-	if (pylon == nullptr)
+	if (pylon == nullptr || pylon->getColor() != color)
 		return false;
 
 	m_board.removePylon(position);
@@ -542,11 +542,11 @@ bool twixt::Game::processTurn(const IPlayer::Move& nextMove, const IPlayer& curr
 		addBridge(pos1, pos2.value(), currentPlayer.getColor());
 		return true;
 	case IPlayer::Action::RemovePylon:
-		if (!removePylon(pos1))
+		if (!removePylon(pos1, currentPlayer.getColor()))
 			return true;
 		return false;
 	case IPlayer::Action::RemoveBridge:
-		removeBridge(pos1, pos2.value());
+		removeBridge(pos1, pos2.value(), currentPlayer.getColor());
 		return true;
 	}
 }

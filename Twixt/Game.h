@@ -50,8 +50,8 @@ namespace twixt
 		bool addPylon(const Position&, Pylon::Type, Pylon::Color);
 		bool addBridge(const Position&, const Position&, Pylon::Color);
 
-		bool removeBridge(const Position&, const Position&);
-		bool removePylon(const Position&);
+		bool removeBridge(const Position&, const Position&, Pylon::Color);
+		bool removePylon(const Position&, Pylon::Color);
 
 		void moveBob();
 		void printBoard();
