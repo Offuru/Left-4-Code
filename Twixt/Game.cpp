@@ -3,7 +3,7 @@
 using namespace twixt;
 
 Game::Game(uint8_t boardSize) :
-	m_board{ Board(boardSize) }
+	m_board{ Board(boardSize) }, m_bob{ DebuilderBob(boardSize) }
 {
 	m_reusableMinedFoundation
 		= m_bigPylons = m_minedFundations
@@ -24,7 +24,8 @@ Game::Game(uint8_t boardSize) :
 	m_areaLength = 2;
 }
 
-Game::Game(const Game& other)
+Game::Game(const Game& other) :
+	m_bob{ DebuilderBob(other.m_boardSize) }
 {
 	m_reusableMinedFoundation = other.m_reusableMinedFoundation;
 	m_bigPylons = other.m_bigPylons;
@@ -36,6 +37,7 @@ Game::Game(const Game& other)
 	m_explodeCol = other.m_explodeCol;
 	m_explodeRow = other.m_explodeRow;
 	m_explodeSingleLocation = other.m_explodeSingleLocation;
+	m_boardSize = other.m_boardSize;
 }
 
 Game& Game::operator=(const Game& other)
@@ -46,7 +48,8 @@ Game& Game::operator=(const Game& other)
 	m_debuilderBob = other.m_debuilderBob;
 	m_cards = other.m_cards;
 	m_areaLength = other.m_areaLength;
-
+	m_boardSize = other.m_boardSize;
+	m_bob = other.m_bob;
 	return *this;
 }
 
@@ -60,7 +63,7 @@ void twixt::Game::Run()
 
 	while (true)
 	{
-		//moveBob();
+		moveBob();
 		std::system("cls");
 		printBoard();
 

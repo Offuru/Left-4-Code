@@ -17,7 +17,7 @@ namespace twixt
 		std::optional<Position> m_lastPosition;
 
 	public:
-		DebuilderBob(uint8_t = 24); //TO DO: get rid of magic number
+		DebuilderBob(uint8_t);
 		DebuilderBob(const DebuilderBob&) = default;
 		~DebuilderBob() = default;
 		DebuilderBob& operator=(const DebuilderBob&) = default;
