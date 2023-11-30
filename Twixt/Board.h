@@ -17,7 +17,7 @@ namespace twixt
 	class Board
 	{
 	public:
-		Board(uint8_t = 24, uint8_t mines = 0);
+		Board(uint8_t = 24, uint8_t mines = 12);
 		Board(const Board&);
 		Board& operator=(const Board&);
 		~Board();

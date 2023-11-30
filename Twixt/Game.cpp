@@ -2,8 +2,8 @@
 
 using namespace twixt;
 
-Game::Game(uint8_t boardSize) :
-	m_board{ Board(boardSize) }, m_bob{ DebuilderBob(boardSize) }
+Game::Game(uint8_t boardSize, uint8_t minesNumber) :
+	m_board{ Board(boardSize, minesNumber) }, m_bob{ DebuilderBob(boardSize) }
 {
 	m_reusableMinedFoundation
 		= m_bigPylons = m_minedFundations
@@ -284,6 +284,9 @@ bool Game::addBridge(const Position& startPoint, const Position& endPoint, Pylon
 						return false;
 					}
 				}
+
+				if (overlappingBridges(startPoint, endPoint, bridge->getPosStart(), bridge->getPosEnd()))
+					return false;
 			}
 			m_board.addBridge(m_board.getFoundation(startPoint), m_board.getFoundation(endPoint), startPylon->getColor());
 			return true;
@@ -394,6 +397,19 @@ bool twixt::Game::removePylon(const Position& position, Pylon::Color color)
 
 	m_board.removePylon(position);
 	return true;
+}
+
+bool twixt::Game::overlappingBridges(const Position& bridge1Start, const Position& bridge1End, const Position& bridge2Start, const Position& bridge2End) const
+{
+	return ccw(bridge1Start, bridge2Start, bridge2End) != ccw(bridge1End, bridge2Start, bridge2End) &&
+		ccw(bridge1Start, bridge1End, bridge2Start) != ccw(bridge1Start, bridge1End, bridge2End);
+}
+
+bool twixt::Game::ccw(const Position& A, const Position& B, const Position& C) const
+{
+    //verify if the third points are in counterclock wise order
+	return (C.second - A.second) * (B.first - A.first) >
+		(B.second - A.second) * (C.first - A.first);
 }
 
 bool Game::validFoundation(const Position& pos, Pylon::Color color)
