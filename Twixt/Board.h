@@ -1,5 +1,7 @@
 #pragma once
 
+#define DllExport   __declspec( dllexport )
+
 //#include "SinglePylon.h"
 //#include "CrossPylon.h"
 //#include "SquarePylon.h"
@@ -20,7 +22,7 @@ namespace twixt
 		Board(uint8_t = 24, uint8_t mines = 12);
 		Board(const Board&);
 		Board& operator=(const Board&);
-		~Board();
+		DllExport ~Board();
 
 		std::vector<std::vector<Foundation>>& getBoard();
 		std::unordered_map<Position, std::unique_ptr<Pylon>>& getPylons();

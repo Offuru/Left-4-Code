@@ -1,4 +1,7 @@
 #pragma once
+
+#define DllExport   __declspec( dllexport )
+
 #include "Board.h"
 #include "HumanPlayer.h"
 #include "DebuilderBob.h"
@@ -7,7 +10,7 @@
 
 namespace twixt
 {
-	class Game
+	class DllExport Game
 	{
 	public:
 

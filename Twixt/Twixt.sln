@@ -5,6 +5,8 @@ VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Twixt", "Twixt.vcxproj", "{8529735F-B56A-41E8-BDCD-2A93958C9940}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GUI", "..\GUI\GUI.vcxproj", "{E39651CF-9383-4AC5-ABDF-F40C98ED670D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{8529735F-B56A-41E8-BDCD-2A93958C9940}.Release|x64.Build.0 = Release|x64
 		{8529735F-B56A-41E8-BDCD-2A93958C9940}.Release|x86.ActiveCfg = Release|Win32
 		{8529735F-B56A-41E8-BDCD-2A93958C9940}.Release|x86.Build.0 = Release|Win32
+		{E39651CF-9383-4AC5-ABDF-F40C98ED670D}.Debug|x64.ActiveCfg = Debug|x64
+		{E39651CF-9383-4AC5-ABDF-F40C98ED670D}.Debug|x64.Build.0 = Debug|x64
+		{E39651CF-9383-4AC5-ABDF-F40C98ED670D}.Debug|x86.ActiveCfg = Debug|x64
+		{E39651CF-9383-4AC5-ABDF-F40C98ED670D}.Debug|x86.Build.0 = Debug|x64
+		{E39651CF-9383-4AC5-ABDF-F40C98ED670D}.Release|x64.ActiveCfg = Release|x64
+		{E39651CF-9383-4AC5-ABDF-F40C98ED670D}.Release|x64.Build.0 = Release|x64
+		{E39651CF-9383-4AC5-ABDF-F40C98ED670D}.Release|x86.ActiveCfg = Release|x64
+		{E39651CF-9383-4AC5-ABDF-F40C98ED670D}.Release|x86.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
