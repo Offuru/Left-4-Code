@@ -142,6 +142,7 @@
     <ClCompile Include="Pylon.cpp" />
     <ClCompile Include="SinglePylon.cpp" />
     <ClCompile Include="SquarePylon.cpp" />
+    <ClCompile Include="Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h" />

@@ -78,6 +78,7 @@ namespace twixt
 		uint8_t m_boardSize;
 		DebuilderBob m_bob;
 
+		bool overlappingBridges(const Position&, const Position&, const Position&, const Position&) const;
 		bool validFoundation(const Position&, Pylon::Color);
 		bool verifyMinedFoundation(const Position&);
 		void explodePylons(const Position&);

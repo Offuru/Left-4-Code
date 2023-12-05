@@ -11,4 +11,6 @@ namespace twixt
 	{
 		return dynamic_cast<Base*>(derived) != nullptr;
 	}
+
+	bool counterclockwiseOrder(const Position&, const Position&, const Position&);
 }

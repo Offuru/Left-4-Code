@@ -286,6 +286,9 @@ bool Game::addBridge(const Position& startPoint, const Position& endPoint, Pylon
 						return false;
 					}
 				}
+
+				if (overlappingBridges(startPoint, endPoint, bridge->getPosStart(), bridge->getPosEnd()))
+					return false;
 			}
 			m_board.addBridge(m_board.getFoundation(startPoint), m_board.getFoundation(endPoint), startPylon->getColor());
 			return true;
@@ -396,6 +399,12 @@ bool twixt::Game::removePylon(const Position& position, Pylon::Color color)
 
 	m_board.removePylon(position);
 	return true;
+}
+
+bool twixt::Game::overlappingBridges(const Position& bridge1Start, const Position& bridge1End, const Position& bridge2Start, const Position& bridge2End) const
+{
+	return counterclockwiseOrder(bridge1Start, bridge2Start, bridge2End) != counterclockwiseOrder(bridge1End, bridge2Start, bridge2End) &&
+		counterclockwiseOrder(bridge1Start, bridge1End, bridge2Start) != counterclockwiseOrder(bridge1Start, bridge1End, bridge2End);
 }
 
 bool Game::validFoundation(const Position& pos, Pylon::Color color)
