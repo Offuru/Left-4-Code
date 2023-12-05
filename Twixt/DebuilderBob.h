@@ -15,16 +15,17 @@ namespace twixt
 	private:
 		Position m_position;
 		std::optional<Position> m_lastPosition;
+		std::reference_wrapper<Board> m_board;
 
 	public:
-		DebuilderBob(uint8_t);
-		DebuilderBob(const DebuilderBob&) = default;
+		DebuilderBob(Board&);
+		DebuilderBob(const DebuilderBob&);
 		~DebuilderBob() = default;
-		DebuilderBob& operator=(const DebuilderBob&) = default;
+		DebuilderBob& operator=(const DebuilderBob&);
 
 		Position getPosition() const;
 		void setPosition(const Position&);
 
-		void moveToNext(Board&);
+		void moveToNext();
 	};
 }
