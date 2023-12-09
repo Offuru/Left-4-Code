@@ -27,7 +27,7 @@ Board::Board(const Board& other) :
 		SinglePylon* single = dynamic_cast<SinglePylon*>(pylon.get());
 		if (single)
 		{
-			m_pylons.insert({ position, 
+			m_pylons.insert({ position,
 				std::make_shared<SinglePylon>(pylon->getFoundations().at(0),pylon->getColor(),pylon->getType()) });
 			continue;
 		}
@@ -53,8 +53,8 @@ Board::Board(const Board& other) :
 
 		if (whichPylon != m_pylons.end())
 		{
-			Bridge* newBridge = new Bridge(*bridge);
-			m_bridges.insert({ whichPylon->second, newBridge});
+			std::shared_ptr<Bridge> newBridge(new Bridge(*bridge));
+			m_bridges.insert({ whichPylon->second, newBridge });
 			//pylon* from bridge shouldn't get modified
 		}
 	}
@@ -96,7 +96,7 @@ Board& Board::operator=(const Board& other)
 
 		if (whichPylon != m_pylons.end())
 		{
-			Bridge* newBridge = new Bridge(*bridge);
+			std::shared_ptr<Bridge> newBridge(new Bridge(*bridge));
 			m_bridges.insert({ whichPylon->second, newBridge });
 			//pylon* from bridge shouldn't get modified
 		}
@@ -107,8 +107,7 @@ Board& Board::operator=(const Board& other)
 
 Board::~Board()
 {
-	for (auto& it : m_bridges)
-		delete it.second;
+	//
 }
 
 std::vector<std::vector<Foundation>>& Board::getBoard()
@@ -121,7 +120,7 @@ std::unordered_map<Position, std::shared_ptr<Pylon>>& Board::getPylons()
 	return m_pylons;
 }
 
-std::multimap<std::shared_ptr<Pylon>, Bridge*> Board::getBridges() const
+std::multimap<std::shared_ptr<Pylon>, std::shared_ptr<Bridge>> Board::getBridges() const
 {
 	return m_bridges;
 }
@@ -148,7 +147,7 @@ void Board::setPylons(const std::unordered_map<Position, std::shared_ptr<Pylon>>
 			it.second->getColor(), it.second->getType());
 }
 
-void Board::setBridges(const std::multimap<std::shared_ptr<Pylon>, Bridge*>& bridges)
+void Board::setBridges(const std::multimap<std::shared_ptr<Pylon>, std::shared_ptr<Bridge>>& bridges)
 {
 	m_bridges = bridges;
 }
@@ -214,7 +213,7 @@ void Board::addPylon(Foundation& foundation, Pylon::Color color, Pylon::Type typ
 
 void Board::addBridge(Foundation& foundation1, Foundation& foundation2, Pylon::Color color)
 {
-	Bridge* bridge = new Bridge(foundation1.getPylon(), foundation2.getPylon(), foundation1.getPosition(), foundation2.getPosition());
+	std::shared_ptr<Bridge> bridge(new Bridge(foundation1.getPylon(), foundation2.getPylon(), foundation1.getPosition(), foundation2.getPosition()));
 
 	foundation1.getPylon()->addBridge(bridge, foundation1.getPosition());
 	foundation2.getPylon()->addBridge(bridge, foundation2.getPosition());
@@ -228,7 +227,7 @@ void Board::removePylon(const Position& position)
 		return;
 
 	//delete bridges
-	for (auto bridge : currPylon->getConnections())
+	for (auto& bridge : currPylon->getConnections())
 	{
 		if (bridge->getPylonStart() != currPylon)
 		{
@@ -261,7 +260,7 @@ void Board::removePylon(const Position& position)
 				}
 			}
 		}
-		delete bridge;
+		bridge.reset();
 	}
 
 	for (auto& [posX, posY] : currPylon->getFoundations())
@@ -280,7 +279,7 @@ void Board::removePylon(const Position& position)
 
 }
 
-void Board::removeBridge(Bridge* bridge)
+void Board::removeBridge(std::shared_ptr<Bridge> bridge)
 {
 	for (auto it = m_bridges.begin(); it != m_bridges.end(); ++it)
 	{
@@ -289,7 +288,6 @@ void Board::removeBridge(Bridge* bridge)
 			it->second->getPylonEnd()->removeBridge(bridge);
 			it->second->getPylonStart()->removeBridge(bridge);
 			m_bridges.erase(it);
-			delete bridge;
 
 			return;
 		}

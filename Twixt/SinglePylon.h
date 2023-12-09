@@ -15,8 +15,8 @@ namespace twixt
 		~SinglePylon() = default;
 
 		bool canAddBridge(const Position&) const;
-		bool addBridge(Bridge*, const Position&);
-		void removeBridge(Bridge*) override;
+		bool addBridge(std::shared_ptr<Bridge>, const Position&);
+		void removeBridge(std::shared_ptr<Bridge>) override;
 
 	};
 }

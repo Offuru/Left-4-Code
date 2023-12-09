@@ -17,13 +17,13 @@ bool SinglePylon::canAddBridge(const Position& foundation) const
 	return true;
 }
 
-bool SinglePylon::addBridge(Bridge* bridge, const Position& foundation)
+bool SinglePylon::addBridge(std::shared_ptr<Bridge> bridge, const Position& foundation)
 {
 	m_connections.emplace_back(bridge);
 	return true;
 }
 
-void SinglePylon::removeBridge(Bridge* bridge)
+void SinglePylon::removeBridge(std::shared_ptr<Bridge> bridge)
 {
 	auto it = m_connections.begin();
 	while (it != m_connections.end())

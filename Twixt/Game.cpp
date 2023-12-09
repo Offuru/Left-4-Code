@@ -368,7 +368,7 @@ void Game::printBoard()
 
 bool Game::removeBridge(const Position& start, const Position& end, Pylon::Color color)
 {
-	Bridge* bridgeToRemove = nullptr;
+	std::shared_ptr<Bridge> bridgeToRemove = nullptr;
 
 	for (const auto& [pylon, bridge] : m_board.getBridges())
 	{
@@ -388,6 +388,7 @@ bool Game::removeBridge(const Position& start, const Position& end, Pylon::Color
 		return false;
 
 	m_board.removeBridge(bridgeToRemove);
+	std::cout << bridgeToRemove.use_count();
 	return true;
 }
 
