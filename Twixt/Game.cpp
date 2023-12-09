@@ -148,6 +148,16 @@ void Game::setBoard(const Board& board)
 	m_board = board;
 }
 
+void twixt::Game::setCardDeck(const std::vector<Card>& cardDeck)
+{
+	m_cardDeck = cardDeck;
+}
+
+void twixt::Game::setCardStack(const std::stack<Card>& cardStack)
+{
+	m_cardStack = cardStack;
+}
+
 bool Game::getBigPylons() const
 {
 	return m_bigPylons;
@@ -201,6 +211,16 @@ HumanPlayer Game::getPlayer2() const
 Board& Game::getBoard()
 {
 	return m_board;
+}
+
+std::vector<Card> twixt::Game::getCardDeck() const
+{
+	return m_cardDeck;
+}
+
+std::stack<Card> twixt::Game::getCardStack() const
+{
+	return m_cardStack;
 }
 
 bool Game::addPylon(const Position& pos, Pylon::Type type, Pylon::Color color)
@@ -397,6 +417,14 @@ bool twixt::Game::removePylon(const Position& position, Pylon::Color color)
 	return true;
 }
 
+bool twixt::Game::drawCard(HumanPlayer& player)
+{
+	if(m_cardStack.empty())
+		return false;
+	player.draw(m_cardStack);
+	return true;
+}
+
 bool twixt::Game::overlappingBridges(const Position& bridge1Start, const Position& bridge1End, const Position& bridge2Start, const Position& bridge2End) const
 {
 	return counterclockwiseOrder(bridge1Start, bridge2Start, bridge2End) != counterclockwiseOrder(bridge1End, bridge2Start, bridge2End) &&
@@ -536,27 +564,30 @@ bool twixt::Game::processTurn(const IPlayer::Move& nextMove, const IPlayer& curr
 
 	switch (action)
 	{
+	case IPlayer::Action::DrawCard:
+		return false; //TO DO: need IPlayer shared ptr
+	//TO DO: add play card method
 	case IPlayer::Action::AddSinglePylon:
-		if (!addPylon(pos1, Pylon::Type::Single, currentPlayer.getColor()))
+		if (!addPylon(pos1.value(), Pylon::Type::Single, currentPlayer.getColor()))
 			return true; //pylon couldn't be placed, so the player gets another chance
 		return false;
 	case IPlayer::Action::AddSquarePylon:
-		if (!addPylon(pos1, Pylon::Type::Square, currentPlayer.getColor()))
+		if (!addPylon(pos1.value(), Pylon::Type::Square, currentPlayer.getColor()))
 			return true;
 		return false;
 	case IPlayer::Action::AddCrossPylon:
-		if (!addPylon(pos1, Pylon::Type::Cross, currentPlayer.getColor()))
+		if (!addPylon(pos1.value(), Pylon::Type::Cross, currentPlayer.getColor()))
 			return true;
 		return false;
 	case IPlayer::Action::AddBridge:
-		addBridge(pos1, pos2.value(), currentPlayer.getColor());
+		addBridge(pos1.value(), pos2.value(), currentPlayer.getColor());
 		return true;
 	case IPlayer::Action::RemovePylon:
-		if (!removePylon(pos1, currentPlayer.getColor()))
+		if (!removePylon(pos1.value(), currentPlayer.getColor()))
 			return true;
 		return false;
 	case IPlayer::Action::RemoveBridge:
-		removeBridge(pos1, pos2.value(), currentPlayer.getColor());
+		removeBridge(pos1.value(), pos2.value(), currentPlayer.getColor());
 		return true;
 	}
 }
