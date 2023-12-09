@@ -22,17 +22,17 @@ namespace twixt
 		Board(uint8_t = 24, uint8_t mines = 12);
 		Board(const Board&);
 		Board& operator=(const Board&);
-		DllExport ~Board();
+		~Board() = default;
 
 		std::vector<std::vector<Foundation>>& getBoard();
 		std::unordered_map<Position, std::shared_ptr<Pylon>>& getPylons();
-		std::multimap<std::shared_ptr<Pylon>, std::shared_ptr<Bridge>> getBridges() const;
+		std::unordered_set<std::shared_ptr<Bridge>> getBridges() const;
 		uint8_t getSize() const;
 		uint8_t getTotalMines() const;
 
 		void setBoard(const std::vector<std::vector<Foundation>>&);
 		void setPylons(const std::unordered_map<Position, std::shared_ptr<Pylon>>&);
-		void setBridges(const std::multimap<std::shared_ptr<Pylon>, std::shared_ptr<Bridge>>&);
+		void setBridges(const std::unordered_set<std::shared_ptr<Bridge>>&);
 		void setSize(uint8_t);
 		void setTotalMines(uint8_t);
 
@@ -55,7 +55,7 @@ namespace twixt
 
 		std::vector<std::vector<Foundation>> m_board;
 		std::unordered_map<Position, std::shared_ptr<Pylon>> m_pylons;
-		std::multimap<std::shared_ptr<Pylon>, std::shared_ptr<Bridge>> m_bridges; //TO DO: change Bridge* to unique_ptr
+		std::unordered_set<std::shared_ptr<Bridge>> m_bridges; //TO DO: change Bridge* to unique_ptr
 
 
 		bool winnerFoundation(const Foundation&, uint8_t, Pylon::Color) const; //TO DO: fix memory access
