@@ -268,23 +268,18 @@ bool Game::addBridge(const Position& startPoint, const Position& endPoint, Pylon
 	{
 		if (startPylon->canAddBridge(startPoint) && endPylon->canAddBridge(endPoint))
 		{
-			for (auto& [pylon, bridge] : m_board.getBridges())
+			for (auto& bridge : m_board.getBridges())
 			{
-				if (startPylon == pylon)
+				if (bridge->getPosStart() == startPoint &&
+					bridge->getPosEnd() == endPoint)
 				{
-					if (bridge->getPosStart() == startPoint &&
-						bridge->getPosEnd() == endPoint)
-					{
-						return false;
-					}
+					return false;
 				}
-				else if (endPylon == pylon)
+
+				if (bridge->getPosStart() == endPoint &&
+					bridge->getPosEnd() == startPoint)
 				{
-					if (bridge->getPosStart() == endPoint &&
-						bridge->getPosEnd() == startPoint)
-					{
-						return false;
-					}
+					return false;
 				}
 
 				if (overlappingBridges(startPoint, endPoint, bridge->getPosStart(), bridge->getPosEnd()))
@@ -341,10 +336,10 @@ void Game::printBoard()
 		}
 	}
 
-	for (auto& [pylon, bridge] : m_board.getBridges())
+	for (auto& bridge : m_board.getBridges())
 	{
 		Position positionStart = bridge->getPosStart(), positionEnd = bridge->getPosEnd();
-		if (pylon->getColor() == Pylon::Color::Red)
+		if (bridge->getPylonEnd()->getColor() == Pylon::Color::Red)
 		{
 			boardMatrix[positionStart.first][positionStart.second] = "r";
 			boardMatrix[positionEnd.first][positionEnd.second] = "r";
@@ -370,7 +365,7 @@ bool Game::removeBridge(const Position& start, const Position& end, Pylon::Color
 {
 	std::shared_ptr<Bridge> bridgeToRemove = nullptr;
 
-	for (const auto& [pylon, bridge] : m_board.getBridges())
+	for (const auto& bridge : m_board.getBridges())
 	{
 		if (bridge->getPosStart() == start && bridge->getPosEnd() == end)
 		{
