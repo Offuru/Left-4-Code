@@ -36,6 +36,8 @@ namespace twixt
 		void setPlayer1(const HumanPlayer&);
 		void setPlayer2(const HumanPlayer&);
 		void setBoard(const Board&);
+		void setCardDeck(const std::vector<Card>&);
+		void setCardStack(const std::stack<Card>&);
 
 		bool getBigPylons() const;
 		bool getMinedFoundations() const;
@@ -49,12 +51,16 @@ namespace twixt
 		HumanPlayer getPlayer1() const;
 		HumanPlayer getPlayer2() const;
 		Board& getBoard();
+		std::vector<Card> getCardDeck() const;
+		std::stack<Card> getCardStack() const;
 
 		bool addPylon(const Position&, Pylon::Type, Pylon::Color);
 		bool addBridge(const Position&, const Position&, Pylon::Color);
 
 		bool removeBridge(const Position&, const Position&, Pylon::Color);
 		bool removePylon(const Position&, Pylon::Color);
+
+		bool drawCard(HumanPlayer&);//TO DO: change to IPlayer shared_ptr later
 
 		void moveBob();
 		void printBoard();
@@ -77,6 +83,8 @@ namespace twixt
 		uint8_t m_areaLength;
 		uint8_t m_boardSize;
 		DebuilderBob m_bob;
+		std::vector<Card> m_cardDeck;
+		std::stack<Card> m_cardStack;
 
 		bool overlappingBridges(const Position&, const Position&, const Position&, const Position&) const;
 		bool validFoundation(const Position&, Pylon::Color);
