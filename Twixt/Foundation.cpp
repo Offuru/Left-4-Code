@@ -5,14 +5,14 @@ using namespace twixt;
 Foundation::Foundation() :
 	m_position{ std::make_pair(0,0) }, m_mined{ false }, m_exploded{ false }, m_pylon{ nullptr }, m_hasBob{ false } {}
 
-Foundation::Foundation(Position position, bool mined, Pylon* pylon) :
+Foundation::Foundation(Position position, bool mined, std::shared_ptr<Pylon> pylon) :
 	m_position{ position }, m_mined{ mined }, m_exploded{ false }, m_pylon{ pylon }, m_hasBob{ false } {};
 
 
 Foundation::Foundation(const Foundation& other) :
 	m_exploded{ other.m_exploded }, m_position{ other.m_position }, 
 	m_hasBob{ other.m_hasBob }, m_mined{ other.m_mined }
-{
+{/*
 	if (other.getPylon() != nullptr)
 	{
 
@@ -34,8 +34,8 @@ Foundation::Foundation(const Foundation& other) :
 			return;
 		}
 	}
-	m_pylon = nullptr;
-}
+	m_pylon = nullptr;*/
+} 
 
 Foundation& Foundation::operator=(Foundation& other)
 {
@@ -44,7 +44,9 @@ Foundation& Foundation::operator=(Foundation& other)
 	m_mined = other.m_mined;
 	m_hasBob = other.m_hasBob;
 	
-	if (m_pylon)
+	//TO DO: change operator= and copy constructor
+
+	/*if (m_pylon)
 		delete m_pylon;
 
 	SinglePylon* single = dynamic_cast<SinglePylon*>(other.getPylon());
@@ -66,7 +68,7 @@ Foundation& Foundation::operator=(Foundation& other)
 		return *this;
 	}
 
-	m_pylon = nullptr;
+	m_pylon = nullptr;*/
 	return *this;
 }
 
@@ -90,7 +92,7 @@ bool Foundation::getBob() const
 	return m_hasBob;
 }
 
-Pylon* Foundation::getPylon() const
+std::shared_ptr<Pylon> Foundation::getPylon() const
 {
 	return m_pylon;
 }
@@ -110,7 +112,7 @@ void Foundation::setExploded(bool exploded)
 	m_exploded = exploded;
 }
 
-void Foundation::setPylon(Pylon* pylon)
+void Foundation::setPylon(std::shared_ptr<Pylon> pylon)
 {
 	m_pylon = pylon;
 }

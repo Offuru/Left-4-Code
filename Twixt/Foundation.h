@@ -19,11 +19,11 @@ namespace twixt
 		bool m_mined;
 		bool m_hasBob;
 		bool m_exploded;
-		Pylon* m_pylon;
+		std::shared_ptr<Pylon> m_pylon;
 
 	public:
 		Foundation();
-		Foundation(Position, bool = false, Pylon* = nullptr);
+		Foundation(Position, bool = false, std::shared_ptr<Pylon> = nullptr);
 		Foundation(const Foundation&); //TO DO: take care of memory leak, change allocation to unique_ptr
 		Foundation& operator=(Foundation&); //TO DO: take care of memory leak, change allocation to unique_ptr
 		~Foundation() = default; // pylons are destroyed from board!!
@@ -32,13 +32,13 @@ namespace twixt
 		bool getMined() const;
 		bool getExploded() const;
 		bool getBob() const;
-		Pylon* getPylon() const;
+		std::shared_ptr<Pylon> getPylon() const;
 
 
 		void setPosition(const Position&);
 		void setMined(bool);
 		void setExploded(bool);
-		void setPylon(Pylon*);
+		void setPylon(std::shared_ptr<Pylon>);
 		void setBob(bool);
 	};
 }

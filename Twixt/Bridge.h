@@ -12,25 +12,25 @@ namespace twixt
 	class Bridge
 	{
 	private:
-		Pylon* m_pylonStart;
-		Pylon* m_pylonEnd;
+		std::shared_ptr<Pylon> m_pylonStart;
+		std::shared_ptr<Pylon> m_pylonEnd;
 		Position m_posStart;
 		Position m_posEnd;
 
 	public:
 		Bridge();
-		Bridge(Pylon*, Pylon*, const Position&, const Position&);
+		Bridge(std::shared_ptr<Pylon>, std::shared_ptr<Pylon>, const Position&, const Position&);
 		Bridge(const Bridge&);
 		Bridge& operator=(const Bridge&);
 		~Bridge() = default;
 
-		Pylon* getPylonStart() const;
-		Pylon* getPylonEnd() const;
+		std::shared_ptr<Pylon> getPylonStart() const;
+		std::shared_ptr<Pylon> getPylonEnd() const;
 		Position getPosStart() const;
 		Position getPosEnd() const;
 
-		void setPylonStart(Pylon*);
-		void setPylonEnd(Pylon*);
+		void setPylonStart(std::shared_ptr<Pylon>);
+		void setPylonEnd(std::shared_ptr<Pylon>);
 		void setPosStart(const Position&);
 		void setPosEnd(const Position&);
 	};

@@ -245,8 +245,8 @@ bool Game::addPylon(const Position& pos, Pylon::Type type, Pylon::Color color)
 
 bool Game::addBridge(const Position& startPoint, const Position& endPoint, Pylon::Color color)
 {
-	Pylon* startPylon = m_board.getFoundation(startPoint).getPylon();
-	Pylon* endPylon = m_board.getFoundation(endPoint).getPylon();
+	std::shared_ptr<Pylon> startPylon = m_board.getFoundation(startPoint).getPylon();
+	std::shared_ptr<Pylon> endPylon = m_board.getFoundation(endPoint).getPylon();
 
 	if (startPylon->getColor() != color || endPylon->getColor() != color)
 		return false;
@@ -310,7 +310,7 @@ void Game::printBoard()
 	{
 		for (uint8_t j = 0; j < boardMatrix[0].size(); ++j)
 		{
-			Pylon* element = m_board.getBoard()[i][j].getPylon();
+			std::shared_ptr<Pylon> element = m_board.getBoard()[i][j].getPylon();
 			bool hasBob = m_board.getBoard()[i][j].getBob();
 			bool elementMined = m_board.getBoard()[i][j].getMined();
 			bool elementExploded = m_board.getBoard()[i][j].getExploded();
@@ -393,7 +393,7 @@ bool Game::removeBridge(const Position& start, const Position& end, Pylon::Color
 
 bool twixt::Game::removePylon(const Position& position, Pylon::Color color)
 {
-	Pylon* pylon = m_board[position].getPylon();
+	std::shared_ptr<Pylon> pylon = m_board[position].getPylon();
 	if (pylon == nullptr || pylon->getColor() != color)
 		return false;
 
