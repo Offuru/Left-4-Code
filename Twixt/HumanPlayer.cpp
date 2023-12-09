@@ -46,6 +46,10 @@ HumanPlayer::Move twixt::HumanPlayer::getNextMove()
 
 	switch (input.size())
 	{
+	case 1:
+		return { static_cast<Action>(input[0]) , std::nullopt ,std::nullopt };
+	case 2: 
+		return { static_cast<Action>(input[0]), {input[1], 0}, std::nullopt };
 	case 3:
 		return { static_cast<Action>(input[0]), {input[1],input[2]}, std::nullopt };
 	case 5:

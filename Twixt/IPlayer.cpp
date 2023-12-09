@@ -10,6 +10,12 @@ twixt::IPlayer::IPlayer(const std::string& name)
 	m_noPylonsCross = 5;
 }
 
+void twixt::IPlayer::draw(std::stack<Card>& cards)
+{
+	m_cards.push_back(cards.top());
+	cards.pop();
+}
+
 bool twixt::IPlayer::validMove(const Move& nextMove, uint8_t boardSize) const
 {
 	const auto& [action, pos1, pos2] = nextMove;
@@ -18,7 +24,7 @@ bool twixt::IPlayer::validMove(const Move& nextMove, uint8_t boardSize) const
 		action != Action::AddSinglePylon && action != Action::AddSquarePylon &&
 		action != Action::RemoveBridge && action != Action::RemovePylon)
 		return false;
-	if (pos1.first < 0 || pos1.second >= boardSize)
+	if (pos1.value().first < 0 || pos1.value().second >= boardSize)
 		return false;
 	if (pos2.has_value() && (pos2.value().first < 0 || pos2.value().second >= boardSize))
 		return false;
@@ -56,6 +62,11 @@ void twixt::IPlayer::setNoPylonsCross(uint8_t noPylons)
 	m_noPylonsCross = noPylons;
 }
 
+void twixt::IPlayer::setCards(const std::vector<Card>& cards)
+{
+	m_cards = cards;
+}
+
 std::string twixt::IPlayer::getName() const
 {
 	return m_name;
@@ -84,4 +95,9 @@ uint8_t twixt::IPlayer::getNoPylons2x2() const
 uint8_t twixt::IPlayer::getNoPylonsCross() const
 {
 	return m_noPylonsCross;
+}
+
+std::vector<Card> twixt::IPlayer::getCards() const
+{
+	return m_cards;
 }
