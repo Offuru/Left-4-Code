@@ -3,6 +3,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
+    setWindowFlags(Qt::MSWindowsFixedSizeDialogHint);
     m_name2PlayersWindow = std::make_unique<Name2PlayersWindow>();
     m_nameAIWindow = std::make_unique<NameAIWindow>();
     ui.setupUi(this);
