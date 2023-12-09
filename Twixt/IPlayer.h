@@ -5,6 +5,8 @@
 #include <string_view>
 #include "Utilities.h"
 #include "Pylon.h"
+#include "Card.h"
+#include <stack>
 
 namespace twixt
 {
@@ -19,12 +21,14 @@ namespace twixt
 			AddCrossPylon,
 			AddBridge,
 			RemovePylon,
-			RemoveBridge
+			RemoveBridge,
+			DrawCard,
+			PlayCard,
 
 		};
 
 		// optional position in case of add/remove bridge action
-		using Move = std::tuple<Action, Position, std::optional<Position>>;
+		using Move = std::tuple<Action, std::optional<Position>, std::optional<Position>>;
 
 		IPlayer(const std::string& name = "");
 
@@ -34,7 +38,7 @@ namespace twixt
 		IPlayer& operator=(IPlayer&&) = default;
 		virtual ~IPlayer() = default;
 
-
+		void draw(std::stack<Card>&);
 		virtual Move getNextMove() = 0;
 		bool validMove(const Move&, uint8_t) const;//TO DO: define to check 
 										  //whether or not move was valid (position, color, noPieces, etc)
@@ -45,6 +49,7 @@ namespace twixt
 		void setNoPylons1x1(uint8_t);
 		void setNoPylons2x2(uint8_t);
 		void setNoPylonsCross(uint8_t);
+		void setCards(const std::vector<Card>&);
 
 		std::string getName() const;
 		Pylon::Color getColor() const;
@@ -52,9 +57,11 @@ namespace twixt
 		uint8_t getNoPylons1x1() const;
 		uint8_t getNoPylons2x2() const;
 		uint8_t getNoPylonsCross() const;
+		std::vector<Card> getCards() const;
 
 	protected:
 
+		std::vector<Card> m_cards;
 		std::string m_name;
 		Pylon::Color m_color : 2;
 		uint8_t m_noBridges;
