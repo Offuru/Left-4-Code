@@ -49,11 +49,11 @@ HumanPlayer::Move twixt::HumanPlayer::getNextMove()
 	case 1:
 		return { static_cast<Action>(input[0]) , std::nullopt ,std::nullopt };
 	case 2: 
-		return { static_cast<Action>(input[0]), {input[1], 0}, std::nullopt };
+		return { static_cast<Action>(input[0]), std::optional<Position>({input[1], 0}), std::nullopt };
 	case 3:
-		return { static_cast<Action>(input[0]), {input[1],input[2]}, std::nullopt };
+		return { static_cast<Action>(input[0]), std::optional<Position>({input[1],input[2]}), std::nullopt };
 	case 5:
-		return { static_cast<Action>(input[0]), {input[1],input[2]}, std::optional<Position>({input[3],input[4]}) };
+		return { static_cast<Action>(input[0]), std::optional<Position>({input[1],input[2]}), std::optional<Position>({input[3],input[4]}) };
 	default:
 		return {};
 		break;
