@@ -12,30 +12,7 @@ Foundation::Foundation(Position position, bool mined, std::shared_ptr<Pylon> pyl
 Foundation::Foundation(const Foundation& other) :
 	m_exploded{ other.m_exploded }, m_position{ other.m_position }, 
 	m_hasBob{ other.m_hasBob }, m_mined{ other.m_mined }
-{/*
-	if (other.getPylon() != nullptr)
-	{
-
-		if (instanceOf<Pylon,SinglePylon>(other.getPylon()))
-		{
-			m_pylon = new SinglePylon(*dynamic_cast<SinglePylon*>(other.getPylon()));
-			return;
-		}
-		SquarePylon* square = dynamic_cast<SquarePylon*>(other.getPylon());
-		if (square)
-		{
-			m_pylon = new SquarePylon(*square);
-			return;
-		}
-		CrossPylon* cross = dynamic_cast<CrossPylon*>(other.getPylon());
-		if (cross)
-		{
-			m_pylon = new CrossPylon(*cross);
-			return;
-		}
-	}
-	m_pylon = nullptr;*/
-} 
+{} 
 
 Foundation& Foundation::operator=(Foundation& other)
 {
