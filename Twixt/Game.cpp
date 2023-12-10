@@ -7,18 +7,7 @@ Game::Game(uint8_t boardSize, uint8_t minesNumber) :
 {
 	m_reusableMinedFoundation
 		= m_bigPylons = m_minedFundations
-		= m_debuilderBob = m_cards = m_explodeArea = m_explodeCol = m_explodeRow = m_explodeSingleLocation = false;
-	std::string name1, name2;
-
-	std::cout << "Player 1 : ";
-	std::cin >> name1;
-	m_player1 = HumanPlayer(name1);
-	m_player1.setColor(Pylon::Color::Red);
-
-	std::cout << "Player 2 : ";
-	std::cin >> name2;
-	m_player2 = HumanPlayer(name2);
-	m_player2.setColor(Pylon::Color::Black);
+		= m_debuilderBob = m_cards = m_explodeArea = m_explodeCol = m_explodeRow = m_explodeSingleLocation = m_humanPlayers = false;
 
 	m_boardSize = boardSize;
 	m_areaLength = 2;
@@ -28,6 +17,7 @@ Game::Game(const Game& other) :
 	m_board{other.m_board},
 	m_bob{ DebuilderBob(m_board) }
 {
+	m_humanPlayers = other.m_humanPlayers;
 	m_reusableMinedFoundation = other.m_reusableMinedFoundation;
 	m_bigPylons = other.m_bigPylons;
 	m_minedFundations = other.m_minedFundations;
@@ -43,6 +33,7 @@ Game::Game(const Game& other) :
 
 Game& Game::operator=(const Game& other)
 {
+	m_humanPlayers = other.m_humanPlayers;
 	m_reusableMinedFoundation = other.m_reusableMinedFoundation;
 	m_bigPylons = other.m_bigPylons;
 	m_minedFundations = other.m_minedFundations;
@@ -83,6 +74,11 @@ void twixt::Game::Run()
 		}
 
 	}
+}
+
+void twixt::Game::setHumanPlayers(bool humanPlayers)
+{
+	m_humanPlayers = humanPlayers;
 }
 
 void Game::setBigPylons(bool bigPylons)
@@ -156,6 +152,11 @@ void twixt::Game::setCardDeck(const std::vector<Card>& cardDeck)
 void twixt::Game::setCardStack(const std::stack<Card>& cardStack)
 {
 	m_cardStack = cardStack;
+}
+
+bool twixt::Game::getHumanPlayers() const
+{
+	return m_humanPlayers;
 }
 
 bool Game::getBigPylons() const
