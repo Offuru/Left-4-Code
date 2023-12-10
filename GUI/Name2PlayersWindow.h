@@ -11,6 +11,9 @@ public:
 	Name2PlayersWindow(QWidget *parent = nullptr);
 	~Name2PlayersWindow();
 
+public slots:
+	void on_buttonBack_clicked();
+
 private:
 	Ui::Name2PlayersWindowClass ui;
 };

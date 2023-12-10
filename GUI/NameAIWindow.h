@@ -11,6 +11,9 @@ public:
 	NameAIWindow(QWidget *parent = nullptr);
 	~NameAIWindow();
 
+public slots:
+	void on_buttonBack_clicked();
+
 private:
 	Ui::NameAIWindowClass ui;
 };
