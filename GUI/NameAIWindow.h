@@ -11,6 +11,8 @@ public:
 	NameAIWindow(QWidget *parent = nullptr);
 	~NameAIWindow();
 
+	void closeEvent(QCloseEvent* event);
+
 public slots:
 	void on_buttonBack_clicked();
 

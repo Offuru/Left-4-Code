@@ -11,6 +11,8 @@ public:
 	Name2PlayersWindow(QWidget *parent = nullptr);
 	~Name2PlayersWindow();
 
+	void closeEvent(QCloseEvent* event);
+
 public slots:
 	void on_buttonBack_clicked();
 
