@@ -1,7 +1,5 @@
 #pragma once
 
-#define DllExport   __declspec( dllexport )
-
 #include "Board.h"
 #include "HumanPlayer.h"
 #include "DebuilderBob.h"
@@ -10,7 +8,7 @@
 
 namespace twixt
 {
-	class DllExport Game
+	class Game
 	{
 	public:
 
@@ -22,8 +20,9 @@ namespace twixt
 		void Run(); //TO DO: modularize function
 					//player must place a pylon every turn
 					//player place one/multiple bridges or none at all
-					
 
+
+		void setHumanPlayers(bool);
 		void setBigPylons(bool);
 		void setMinedFoundations(bool);
 		void setExplodeSingleLocation(bool);
@@ -39,6 +38,7 @@ namespace twixt
 		void setCardDeck(const std::vector<Card>&);
 		void setCardStack(const std::stack<Card>&);
 
+		bool getHumanPlayers() const;
 		bool getBigPylons() const;
 		bool getMinedFoundations() const;
 		bool getExplodeSingleLocation() const;
@@ -67,7 +67,7 @@ namespace twixt
 
 	private:
 
-		
+		bool m_humanPlayers;
 		bool m_bigPylons;
 		bool m_minedFundations;
 		bool m_explodeSingleLocation;

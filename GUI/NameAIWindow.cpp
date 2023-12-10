@@ -1,9 +1,10 @@
 #include "NameAIWindow.h"
 
-NameAIWindow::NameAIWindow(QWidget *parent)
+NameAIWindow::NameAIWindow(QWidget* parent, std::shared_ptr<twixt::Game> game)
 	: QMainWindow(parent)
 {
 	setWindowFlags(Qt::Window | Qt::MSWindowsFixedSizeDialogHint);
+	m_game = game;
 	ui.setupUi(this);
 }
 

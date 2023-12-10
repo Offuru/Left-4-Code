@@ -1,7 +1,5 @@
 #pragma once
 
-#define DllExport   __declspec( dllexport )
-
 //#include "SinglePylon.h"
 //#include "CrossPylon.h"
 //#include "SquarePylon.h"

@@ -7,27 +7,17 @@ Game::Game(uint8_t boardSize, uint8_t minesNumber) :
 {
 	m_reusableMinedFoundation
 		= m_bigPylons = m_minedFundations
-		= m_debuilderBob = m_cards = m_explodeArea = m_explodeCol = m_explodeRow = m_explodeSingleLocation = false;
-	std::string name1, name2;
-
-	std::cout << "Player 1 : ";
-	std::cin >> name1;
-	m_player1 = HumanPlayer(name1);
-	m_player1.setColor(Pylon::Color::Red);
-
-	std::cout << "Player 2 : ";
-	std::cin >> name2;
-	m_player2 = HumanPlayer(name2);
-	m_player2.setColor(Pylon::Color::Black);
+		= m_debuilderBob = m_cards = m_explodeArea = m_explodeCol = m_explodeRow = m_explodeSingleLocation = m_humanPlayers = false;
 
 	m_boardSize = boardSize;
 	m_areaLength = 2;
 }
 
 Game::Game(const Game& other) :
-	m_board{other.m_board},
+	m_board{ other.m_board },
 	m_bob{ DebuilderBob(m_board) }
 {
+	m_humanPlayers = other.m_humanPlayers;
 	m_reusableMinedFoundation = other.m_reusableMinedFoundation;
 	m_bigPylons = other.m_bigPylons;
 	m_minedFundations = other.m_minedFundations;
@@ -43,6 +33,7 @@ Game::Game(const Game& other) :
 
 Game& Game::operator=(const Game& other)
 {
+	m_humanPlayers = other.m_humanPlayers;
 	m_reusableMinedFoundation = other.m_reusableMinedFoundation;
 	m_bigPylons = other.m_bigPylons;
 	m_minedFundations = other.m_minedFundations;
@@ -68,7 +59,7 @@ void twixt::Game::Run()
 		printBoard();
 
 		bool keepRound = processTurn(currentPlayer.getNextMove(), currentPlayer);
-		
+
 		if (m_board.verifyWinner(currentPlayer))
 		{
 			printBoard();
@@ -76,13 +67,18 @@ void twixt::Game::Run()
 			return;
 		}
 
-		if(!keepRound)
+		if (!keepRound)
 		{
 			std::swap(currentPlayer, nextPlayer);
 			moveBob();
 		}
 
 	}
+}
+
+void twixt::Game::setHumanPlayers(bool humanPlayers)
+{
+	m_humanPlayers = humanPlayers;
 }
 
 void Game::setBigPylons(bool bigPylons)
@@ -158,6 +154,11 @@ void twixt::Game::setCardStack(const std::stack<Card>& cardStack)
 	m_cardStack = cardStack;
 }
 
+bool twixt::Game::getHumanPlayers() const
+{
+	return m_humanPlayers;
+}
+
 bool Game::getBigPylons() const
 {
 	return m_bigPylons;
@@ -228,36 +229,36 @@ bool Game::addPylon(const Position& pos, Pylon::Type type, Pylon::Color color)
 	const auto& [row, col] = pos;
 	switch (type)
 	{
-	case Pylon::Type::Single:
-		if (validFoundation(pos, color))
-		{
-			m_board.addPylon(m_board.getFoundation(pos), color, type);
-			return true;
-		}
-		break;
-	case Pylon::Type::Square:
-		if (validFoundation(pos, color) &&
-			validFoundation({ row,col + 1 }, color) &&
-			validFoundation({ row + 1, col }, color) &&
-			validFoundation({ row + 1, col + 1 }, color))
-		{
-			m_board.addPylon(m_board.getFoundation(pos), color, type);
-			return true;
-		}
-		break;
-	case Pylon::Type::Cross:
-		if (validFoundation(pos, color) &&
-			validFoundation({ row + 1, col }, color) &&
-			validFoundation({ row - 1, col }, color) &&
-			validFoundation({ row, col + 1 }, color) &&
-			validFoundation({ row, col - 1 }, color))
-		{
-			m_board.addPylon(m_board.getFoundation(pos), color, type);
-			return true;
-		}
-		break;
-	default:
-		break;
+		case Pylon::Type::Single:
+			if (validFoundation(pos, color))
+			{
+				m_board.addPylon(m_board.getFoundation(pos), color, type);
+				return true;
+			}
+			break;
+		case Pylon::Type::Square:
+			if (validFoundation(pos, color) &&
+				validFoundation({ row,col + 1 }, color) &&
+				validFoundation({ row + 1, col }, color) &&
+				validFoundation({ row + 1, col + 1 }, color))
+			{
+				m_board.addPylon(m_board.getFoundation(pos), color, type);
+				return true;
+			}
+			break;
+		case Pylon::Type::Cross:
+			if (validFoundation(pos, color) &&
+				validFoundation({ row + 1, col }, color) &&
+				validFoundation({ row - 1, col }, color) &&
+				validFoundation({ row, col + 1 }, color) &&
+				validFoundation({ row, col - 1 }, color))
+			{
+				m_board.addPylon(m_board.getFoundation(pos), color, type);
+				return true;
+			}
+			break;
+		default:
+			break;
 	}
 
 	return false;
@@ -332,12 +333,10 @@ void Game::printBoard()
 			if (element == nullptr)
 			{
 				boardMatrix[i][j] = ".";
-			}
-			else if (element->getColor() == Pylon::Color::Black)
+			} else if (element->getColor() == Pylon::Color::Black)
 			{
 				boardMatrix[i][j] = "B";
-			}
-			else
+			} else
 			{
 				boardMatrix[i][j] = "R";
 			}
@@ -363,8 +362,7 @@ void Game::printBoard()
 		{
 			boardMatrix[positionStart.first][positionStart.second] = "r";
 			boardMatrix[positionEnd.first][positionEnd.second] = "r";
-		}
-		else
+		} else
 		{
 			boardMatrix[positionStart.first][positionStart.second] = "b";
 			boardMatrix[positionEnd.first][positionEnd.second] = "b";
@@ -419,7 +417,7 @@ bool twixt::Game::removePylon(const Position& position, Pylon::Color color)
 
 bool twixt::Game::drawCard(HumanPlayer& player)
 {
-	if(m_cardStack.empty())
+	if (m_cardStack.empty())
 		return false;
 	player.draw(m_cardStack);
 	return true;
@@ -435,18 +433,18 @@ bool Game::validFoundation(const Position& pos, Pylon::Color color)
 {
 	switch (color)
 	{
-	case Pylon::Color::Red:
-		if (!(0 <= pos.first && pos.first < m_board.getBoard().size() &&
-			1 <= pos.second && pos.second < m_board.getBoard().size() - 1 &&
-			m_board.getBoard()[pos.first][pos.second].getPylon() == nullptr))
-			return false;
-		break;
-	case Pylon::Color::Black:
-		if (!(1 <= pos.first && pos.first < m_board.getBoard().size() - 1 &&
-			0 <= pos.second && pos.second < m_board.getBoard().size() &&
-			m_board.getBoard()[pos.first][pos.second].getPylon() == nullptr))
-			return false;
-		break;
+		case Pylon::Color::Red:
+			if (!(0 <= pos.first && pos.first < m_board.getBoard().size() &&
+				  1 <= pos.second && pos.second < m_board.getBoard().size() - 1 &&
+				  m_board.getBoard()[pos.first][pos.second].getPylon() == nullptr))
+				return false;
+			break;
+		case Pylon::Color::Black:
+			if (!(1 <= pos.first && pos.first < m_board.getBoard().size() - 1 &&
+				  0 <= pos.second && pos.second < m_board.getBoard().size() &&
+				  m_board.getBoard()[pos.first][pos.second].getPylon() == nullptr))
+				return false;
+			break;
 	}
 
 	if (!verifyMinedFoundation(pos))
@@ -471,9 +469,8 @@ bool Game::verifyMinedFoundation(const Position& pos)
 	{
 		explodePylons(pos);
 		return true;  //if it gets here it means that the player placed a pylon
-		//on a mine, so their turn should skip
-	}
-	else if (m_reusableMinedFoundation)
+					//on a mine, so their turn should skip
+	} else if (m_reusableMinedFoundation)
 	{
 		return true;
 	}
@@ -564,31 +561,31 @@ bool twixt::Game::processTurn(const IPlayer::Move& nextMove, const IPlayer& curr
 
 	switch (action)
 	{
-	case IPlayer::Action::DrawCard:
-		return false; //TO DO: need IPlayer shared ptr
-	//TO DO: add play card method
-	case IPlayer::Action::AddSinglePylon:
-		if (!addPylon(pos1.value(), Pylon::Type::Single, currentPlayer.getColor()))
-			return true; //pylon couldn't be placed, so the player gets another chance
-		return false;
-	case IPlayer::Action::AddSquarePylon:
-		if (!addPylon(pos1.value(), Pylon::Type::Square, currentPlayer.getColor()))
+		case IPlayer::Action::DrawCard:
+			return false; //TO DO: need IPlayer shared ptr
+			//TO DO: add play card method
+		case IPlayer::Action::AddSinglePylon:
+			if (!addPylon(pos1.value(), Pylon::Type::Single, currentPlayer.getColor()))
+				return true; //pylon couldn't be placed, so the player gets another chance
+			return false;
+		case IPlayer::Action::AddSquarePylon:
+			if (!addPylon(pos1.value(), Pylon::Type::Square, currentPlayer.getColor()))
+				return true;
+			return false;
+		case IPlayer::Action::AddCrossPylon:
+			if (!addPylon(pos1.value(), Pylon::Type::Cross, currentPlayer.getColor()))
+				return true;
+			return false;
+		case IPlayer::Action::AddBridge:
+			addBridge(pos1.value(), pos2.value(), currentPlayer.getColor());
 			return true;
-		return false;
-	case IPlayer::Action::AddCrossPylon:
-		if (!addPylon(pos1.value(), Pylon::Type::Cross, currentPlayer.getColor()))
+		case IPlayer::Action::RemovePylon:
+			if (!removePylon(pos1.value(), currentPlayer.getColor()))
+				return true;
+			return false;
+		case IPlayer::Action::RemoveBridge:
+			removeBridge(pos1.value(), pos2.value(), currentPlayer.getColor());
 			return true;
-		return false;
-	case IPlayer::Action::AddBridge:
-		addBridge(pos1.value(), pos2.value(), currentPlayer.getColor());
-		return true;
-	case IPlayer::Action::RemovePylon:
-		if (!removePylon(pos1.value(), currentPlayer.getColor()))
-			return true;
-		return false;
-	case IPlayer::Action::RemoveBridge:
-		removeBridge(pos1.value(), pos2.value(), currentPlayer.getColor());
-		return true;
 	}
 }
 

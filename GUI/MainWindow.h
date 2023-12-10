@@ -6,6 +6,7 @@
 #include "ui_MainWindow.h"
 #include "Name2PlayersWindow.h"
 #include "NameAIWindow.h"
+#include "Game.h"
 
 class MainWindow : public QMainWindow
 {
@@ -25,4 +26,5 @@ private:
 	Ui::MainWindowClass ui;
 	std::unique_ptr<Name2PlayersWindow> m_name2PlayersWindow;
 	std::unique_ptr<NameAIWindow> m_nameAIWindow;
+	std::shared_ptr<twixt::Game> m_game;
 };

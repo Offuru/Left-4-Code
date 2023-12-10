@@ -109,9 +109,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GameModeWindow.cpp" />
     <ClCompile Include="Name2PlayersWindow.cpp" />
     <ClCompile Include="NameAIWindow.cpp" />
     <QtRcc Include="MainWindow.qrc" />
+    <QtUic Include="GameModeWindow.ui" />
     <QtUic Include="MainWindow.ui" />
     <QtMoc Include="MainWindow.h" />
     <ClCompile Include="MainWindow.cpp" />
@@ -124,6 +126,9 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="NameAIWindow.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="GameModeWindow.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
