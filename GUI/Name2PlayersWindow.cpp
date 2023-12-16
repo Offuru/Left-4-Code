@@ -12,7 +12,7 @@ Name2PlayersWindow::Name2PlayersWindow(QWidget* parent, std::shared_ptr<twixt::G
 Name2PlayersWindow::~Name2PlayersWindow()
 {}
 
-void Name2PlayersWindow::on_buttonBack_clicked()
+void Name2PlayersWindow::on_backButton_clicked()
 {
 	this->hide();
 	this->parentWidget()->show();

@@ -13,14 +13,14 @@ MainWindow::MainWindow(QWidget* parent)
 MainWindow::~MainWindow()
 {}
 
-void MainWindow::on_button2Players_clicked()
+void MainWindow::on_twoPlayersButton_clicked()
 {
     this->hide();
     m_game->setHumanPlayers(true);
     m_name2PlayersWindow->show();
 }
 
-void MainWindow::on_buttonAIPlayer_clicked()
+void MainWindow::on_aiPlayerButton_clicked()
 {
     this->hide();
     m_game->setHumanPlayers(false);

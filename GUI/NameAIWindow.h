@@ -16,7 +16,7 @@ public:
 	void closeEvent(QCloseEvent* event);
 
 public slots:
-	void on_buttonBack_clicked();
+	void on_backButton_clicked();
 
 private:
 	Ui::NameAIWindowClass ui;

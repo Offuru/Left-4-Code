@@ -17,8 +17,8 @@ public:
 	~MainWindow();
 
 public slots:
-	void on_button2Players_clicked();
-	void on_buttonAIPlayer_clicked();
+	void on_twoPlayersButton_clicked();
+	void on_aiPlayerButton_clicked();
 
 signals:
 

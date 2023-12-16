@@ -68,7 +68,7 @@
       <item row="3" column="0">
        <layout class="QGridLayout" name="gridLayout_2">
         <item row="0" column="3">
-         <widget class="QPushButton" name="buttonAIPlayer">
+         <widget class="QPushButton" name="aiPlayerButton">
           <property name="text">
            <string>AI Player</string>
           </property>
@@ -91,7 +91,7 @@
          </spacer>
         </item>
         <item row="0" column="1">
-         <widget class="QPushButton" name="button2Players">
+         <widget class="QPushButton" name="twoPlayersButton">
           <property name="text">
            <string>2 Players</string>
           </property>

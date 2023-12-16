@@ -13,7 +13,7 @@ NameAIWindow::~NameAIWindow()
 	this->close();
 }
 
-void NameAIWindow::on_buttonBack_clicked()
+void NameAIWindow::on_backButton_clicked()
 {
 	this->hide();
 	this->parentWidget()->show();
