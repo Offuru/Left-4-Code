@@ -112,6 +112,7 @@
     <ClCompile Include="GameModeWindow.cpp" />
     <ClCompile Include="Name2PlayersWindow.cpp" />
     <ClCompile Include="NameAIWindow.cpp" />
+    <ClCompile Include="SettingsWindow.cpp" />
     <QtRcc Include="MainWindow.qrc" />
     <QtUic Include="GameModeWindow.ui" />
     <QtUic Include="MainWindow.ui" />
@@ -120,6 +121,7 @@
     <ClCompile Include="main.cpp" />
     <QtUic Include="Name2PlayersWindow.ui" />
     <QtUic Include="NameAIWindow.ui" />
+    <QtUic Include="SettingsWindow.ui" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Name2PlayersWindow.h" />
@@ -129,6 +131,9 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="GameModeWindow.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="SettingsWindow.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
