@@ -9,6 +9,8 @@
 #include <random>
 #include <unordered_set>
 #include <queue>
+//#include "../ObserverPtr/observer_ptr.h"
+#include "observer_test.h"
 #include "Utilities.h"
 
 namespace twixt
@@ -46,7 +48,7 @@ namespace twixt
 
 		Foundation& getFoundation(const Position&);
 	
-		bool verifyWinner(const HumanPlayer&);
+		bool verifyWinner(const nonstd::observer_ptr<IPlayer>&);
 	private:
 		uint8_t m_size;
 		uint8_t m_totalMines;
@@ -55,11 +57,9 @@ namespace twixt
 		std::unordered_map<Position, std::shared_ptr<Pylon>> m_pylons;
 		std::unordered_set<std::shared_ptr<Bridge>> m_bridges; //TO DO: change Bridge* to unique_ptr
 
-
 		bool winnerFoundation(const Foundation&, uint8_t, Pylon::Color) const; //TO DO: fix memory access
 																			   //violation for cross and square pylons on edge
 		bool checkWinningRoute(std::queue<std::shared_ptr<Pylon>>&, std::unordered_set<std::shared_ptr<Pylon>>&, bool);//TO DO: fix memory access
 																						 //violation for cross and square pylons on edge
-	
 	};
 }
