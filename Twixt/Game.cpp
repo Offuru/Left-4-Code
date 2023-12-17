@@ -627,6 +627,16 @@ bool twixt::Game::removeOpponentCard(nonstd::observer_ptr<IPlayer> target)
 	return true;
 }
 
+bool twixt::Game::removePylon(nonstd::observer_ptr<IPlayer> target, const Position& position)
+{
+	if (m_board[position].getPylon() == nullptr || m_board[position].getPylon()->getColor() != target->getColor())
+		return false;
+
+	removePylon(position, target->getColor());
+
+	return true;
+}
+
 bool Game::getCards() const
 {
 	return m_cards;
