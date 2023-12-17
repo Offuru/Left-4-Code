@@ -1,11 +1,18 @@
 #pragma once
+
+#ifdef OBSERVER_PTR_EXPORTS	
+#define OBSERVER_PTR_API __declspec(dllexport)
+#else
+#define OBSERVER_PTR_API __declspec(dllimport)
+#endif
+
 #include <type_traits>
 #include <memory>
 
 namespace nonstd
 {
 	template<typename T>
-	class observer_ptr
+	class OBSERVER_PTR_API observer_ptr
 	{
 	public:
 		constexpr observer_ptr() noexcept {};
