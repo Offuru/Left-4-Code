@@ -12,6 +12,12 @@ GameModeWindow::GameModeWindow(QWidget* parent, std::shared_ptr<twixt::Game> gam
 GameModeWindow::~GameModeWindow()
 {}
 
+void GameModeWindow::on_backButton_clicked()
+{
+	this->hide();
+	this->parentWidget()->show();
+}
+
 void GameModeWindow::closeEvent(QCloseEvent* event)
 {
 	QCoreApplication::quit();

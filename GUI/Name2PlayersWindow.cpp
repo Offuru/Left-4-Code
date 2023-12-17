@@ -5,14 +5,14 @@ Name2PlayersWindow::Name2PlayersWindow(QWidget* parent, std::shared_ptr<twixt::G
 {
 	setWindowFlags(Qt::Window | Qt::MSWindowsFixedSizeDialogHint);
 	m_game = game;
-	m_gameModeWindow = std::make_unique<GameModeWindow>(this);
+	m_gameModeWindow = std::make_unique<GameModeWindow>(this, m_game);
 	m_ui->setupUi(this);
 }
 
 Name2PlayersWindow::~Name2PlayersWindow()
 {}
 
-void Name2PlayersWindow::on_backButton_clicked()
+void Name2PlayersWindow::on_goBackButton_clicked()
 {
 	this->hide();
 	this->parentWidget()->show();
@@ -34,7 +34,7 @@ void Name2PlayersWindow::setPlayersName()
 {
 	std::string name1 = m_ui->player1NameLineEdit->text().toStdString();
 	std::string name2 = m_ui->player2NameLineEdit->text().toStdString();
-	m_game->setPlayer1({ name1 });
-	m_game->setPlayer2({ name2 });
-	m_game->getPlayer2().setColor(twixt::Pylon::Color::Black);
+	m_game->setPlayer1(name1);
+	m_game->setPlayer2(name2);
+	m_game->getPlayer2()->setColor(twixt::Pylon::Color::Black);
 }

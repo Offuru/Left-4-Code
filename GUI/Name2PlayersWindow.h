@@ -17,7 +17,7 @@ public:
 	void closeEvent(QCloseEvent* event);
 
 public slots:
-	void on_backButton_clicked();
+	void on_goBackButton_clicked();
 	void on_gameModeButton_clicked();
 
 private:

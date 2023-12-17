@@ -1,7 +1,7 @@
-#include "MainWindow.h"
+#include "StartWindow.h"
 
-MainWindow::MainWindow(QWidget* parent)
-	: QMainWindow{ parent }, m_ui{ std::make_unique<Ui::MainWindowClass>() }
+StartWindow::StartWindow(QWidget* parent)
+	: QMainWindow(parent), m_ui{ std::make_unique<Ui::StartWindowClass>() }
 {
 	m_game = std::make_shared<twixt::Game>();
 	m_name2PlayersWindow = std::make_unique<Name2PlayersWindow>(this, m_game);
@@ -10,17 +10,17 @@ MainWindow::MainWindow(QWidget* parent)
 	m_ui->setupUi(this);
 }
 
-MainWindow::~MainWindow()
+StartWindow::~StartWindow()
 {}
 
-void MainWindow::on_twoPlayersButton_clicked()
+void StartWindow::on_twoPlayersButton_clicked()
 {
 	this->hide();
 	m_game->setHumanPlayers(true);
 	m_name2PlayersWindow->show();
 }
 
-void MainWindow::on_aiPlayerButton_clicked()
+void StartWindow::on_aiPlayerButton_clicked()
 {
 	this->hide();
 	m_game->setHumanPlayers(false);

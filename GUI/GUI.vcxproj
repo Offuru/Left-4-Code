@@ -115,9 +115,9 @@
     <ClCompile Include="SettingsWindow.cpp" />
     <QtRcc Include="MainWindow.qrc" />
     <QtUic Include="GameModeWindow.ui" />
-    <QtUic Include="MainWindow.ui" />
-    <QtMoc Include="MainWindow.h" />
-    <ClCompile Include="MainWindow.cpp" />
+    <QtUic Include="StartWindow.ui" />
+    <QtMoc Include="StartWindow.h" />
+    <ClCompile Include="StartWindow.cpp" />
     <ClCompile Include="main.cpp" />
     <QtUic Include="Name2PlayersWindow.ui" />
     <QtUic Include="NameAIWindow.ui" />

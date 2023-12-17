@@ -9,11 +9,9 @@ NameAIWindow::NameAIWindow(QWidget* parent, std::shared_ptr<twixt::Game> game)
 }
 
 NameAIWindow::~NameAIWindow()
-{
-	this->close();
-}
+{}
 
-void NameAIWindow::on_backButton_clicked()
+void NameAIWindow::on_goBackButton_clicked()
 {
 	this->hide();
 	this->parentWidget()->show();

@@ -36,7 +36,7 @@
       <item row="0" column="0">
        <layout class="QGridLayout" name="gridLayout_3">
         <item row="0" column="0">
-         <widget class="QPushButton" name="backButton">
+         <widget class="QPushButton" name="goBackButton">
           <property name="text">
            <string>Go Back</string>
           </property>

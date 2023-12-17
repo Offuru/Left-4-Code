@@ -16,7 +16,7 @@ public:
 	void closeEvent(QCloseEvent* event);
 
 public slots:
-	void on_backButton_clicked();
+	void on_goBackButton_clicked();
 
 private:
 	std::unique_ptr<Ui::NameAIWindowClass> m_ui;

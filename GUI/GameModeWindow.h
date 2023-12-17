@@ -2,6 +2,7 @@
 
 #include <QMainWindow>
 #include <memory>
+
 #include "ui_GameModeWindow.h"
 #include "Game.h"
 
@@ -14,6 +15,9 @@ public:
 	~GameModeWindow();
 
 	void closeEvent(QCloseEvent* event);
+
+public slots:
+	void on_backButton_clicked();
 
 private:
 	std::unique_ptr<Ui::GameModeWindowClass> m_ui;
