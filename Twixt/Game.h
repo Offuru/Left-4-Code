@@ -3,6 +3,8 @@
 #include "Board.h"
 #include "HumanPlayer.h"
 #include "DebuilderBob.h"
+//#include "../ObserverPtr/observer_ptr.h"
+#include "observer_test.h"
 #include <array>
 #include <iostream>
 
@@ -32,8 +34,10 @@ namespace twixt
 		void setReusableMinedFoundation(bool);
 		void setDebuilderBob(bool);
 		void setCards(bool);
-		void setPlayer1(const HumanPlayer&);
-		void setPlayer2(const HumanPlayer&);
+		void setPlayer1(const nonstd::observer_ptr<IPlayer>&);
+		void setPlayer1(const std::string&, bool aiPlayer = false);
+		void setPlayer2(const nonstd::observer_ptr<IPlayer>&);
+		void setPlayer2(const std::string&, bool aiPlayer = false);
 		void setBoard(const Board&);
 		void setCardDeck(const std::vector<Card>&);
 		void setCardStack(const std::stack<Card>&);
@@ -48,8 +52,8 @@ namespace twixt
 		bool getReusableMinedFoundation() const;
 		bool getDebuilderBob() const;
 		bool getCards() const;
-		HumanPlayer getPlayer1() const;
-		HumanPlayer getPlayer2() const;
+		std::unique_ptr<IPlayer>& getPlayer1();
+		std::unique_ptr<IPlayer>& getPlayer2();
 		Board& getBoard();
 		std::vector<Card> getCardDeck() const;
 		std::stack<Card> getCardStack() const;
@@ -60,7 +64,7 @@ namespace twixt
 		bool removeBridge(const Position&, const Position&, Pylon::Color);
 		bool removePylon(const Position&, Pylon::Color);
 
-		bool drawCard(HumanPlayer&);//TO DO: change to IPlayer shared_ptr later
+		bool drawCard(const nonstd::observer_ptr<IPlayer>&);//TO DO: change to IPlayer shared_ptr later
 
 		void moveBob();
 		void printBoard();
@@ -77,8 +81,8 @@ namespace twixt
 		bool m_reusableMinedFoundation;
 		bool m_debuilderBob;
 		bool m_cards; //TO DO: change to flag bitset
-		HumanPlayer m_player1;//TO DO: change to IPlayer* to allow for human/ai players
-		HumanPlayer m_player2;
+		std::unique_ptr<IPlayer> m_player1;//TO DO: change to IPlayer* to allow for human/ai players
+		std::unique_ptr<IPlayer> m_player2;
 		Board m_board;
 		uint8_t m_areaLength;
 		uint8_t m_boardSize;
@@ -94,10 +98,22 @@ namespace twixt
 		void explodeCol(const Position&);
 		void explodeRow(const Position&);
 		void explodeArea(const Position&);
-		bool processTurn(const IPlayer::Move&, const IPlayer&); //it returns true only if the player
+		bool processTurn(const IPlayer::Move&, const nonstd::observer_ptr<IPlayer>&); //it returns true only if the player
 																//changed their bridges, so they can
 																//modify more of them in the same round,
 																//and returns false if a pylon was added/deleted
 																//so the round skips
+
+		Position getPlayerPosInput() const;
+
+		bool draw2Cards(nonstd::observer_ptr<IPlayer> target);
+		bool removeOpponentCard(nonstd::observer_ptr<IPlayer> target);
+		bool removePylon(nonstd::observer_ptr<IPlayer> target);
+		bool removeBridge(nonstd::observer_ptr<IPlayer> target);
+		bool place2Pylons(nonstd::observer_ptr<IPlayer> target);
+		bool placeSquare(nonstd::observer_ptr<IPlayer> target);
+		bool placeCross(nonstd::observer_ptr<IPlayer> target);
+		bool moveBobCard();
+		bool placeMine();
 	};
 }
