@@ -161,3 +161,15 @@ namespace nonstd
 		return !(p1 < p2);
 	}
 }
+
+namespace std
+{
+	template<typename T>
+	struct hash<::nonstd::observer_ptr<T>>
+	{
+		size_t operator()(::nonstd::observer_ptr<T> p) const noexcept
+		{
+			return hash<T*>()(p.get());
+		}
+	};
+}
