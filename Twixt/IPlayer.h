@@ -38,6 +38,7 @@ namespace twixt
 		IPlayer& operator=(IPlayer&&) = default;
 		virtual ~IPlayer() = default;
 
+		void removeCard(size_t index);
 		void draw(std::stack<Card>&);
 		virtual Move getNextMove() = 0;
 		bool validMove(const Move&, uint8_t) const;//TO DO: define to check 
