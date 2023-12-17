@@ -140,7 +140,7 @@ namespace nonstd
 	template<typename T1, typename T2>
 	[[nodiscard]] bool operator<(const observer_ptr<T1>& p1, const observer_ptr<T2>& p2)
 	{
-		return p1.get() < p2.get();
+		return std::less<typename std::common_type<T1*, T2*>::type>()(p1.get(), p2.get());
 	}
 
 	template<typename T1, typename T2>
