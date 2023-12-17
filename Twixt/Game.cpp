@@ -50,7 +50,7 @@ void twixt::Game::Run()
 	nonstd::observer_ptr<IPlayer> currentPlayer = nonstd::make_observer(m_player1.get());
 	nonstd::observer_ptr<IPlayer> nextPlayer = nonstd::make_observer(m_player2.get());
 
-	nextPlayer.setColor(Pylon::Color::Black);
+	nextPlayer->setColor(Pylon::Color::Black);
 	/*currentPlayer.setName("R");
 	nextPlayer.setName("B");*/
 

@@ -368,7 +368,7 @@ bool Board::verifyWinner(const nonstd::observer_ptr<IPlayer>& player)
 	for (int i = 0; i < m_board.size(); ++i)
 	{
 		nonstd::observer_ptr<Pylon> currPylon;
-		if (player.getColor() == Pylon::Color::Red)
+		if (player->getColor() == Pylon::Color::Red)
 			currPylon = m_board[0][i].getPylon();
 		else
 			currPylon = m_board[i][0].getPylon();
@@ -387,7 +387,7 @@ bool Board::verifyWinner(const nonstd::observer_ptr<IPlayer>& player)
 	for (int i = 0; i < m_board.size(); ++i)
 	{
 		nonstd::observer_ptr<Pylon> currPylon;
-		if (player.getColor() == Pylon::Color::Red)
+		if (player->getColor() == Pylon::Color::Red)
 			currPylon = m_board[m_size - 1][i].getPylon();
 		else
 			currPylon = m_board[i][m_size - 1].getPylon();
