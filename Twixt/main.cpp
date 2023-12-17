@@ -5,7 +5,7 @@ using namespace twixt;
 
 int main()
 {
-	Game test(24, 10);
+	Game test(24, 0);
 
 	test.setReusableMinedFoundation(true);
 	test.setExplodeSingleLocation(true);

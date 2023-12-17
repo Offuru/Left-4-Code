@@ -5,7 +5,7 @@ using namespace twixt;
 Foundation::Foundation() :
 	m_position{ std::make_pair(0,0) }, m_mined{ false }, m_exploded{ false }, m_pylon{ nullptr }, m_hasBob{ false } {}
 
-Foundation::Foundation(Position position, bool mined, std::shared_ptr<Pylon> pylon) :
+Foundation::Foundation(Position position, bool mined, nonstd::observer_ptr<Pylon> pylon) :
 	m_position{ position }, m_mined{ mined }, m_exploded{ false }, m_pylon{ pylon }, m_hasBob{ false } {};
 
 
@@ -20,32 +20,10 @@ Foundation& Foundation::operator=(Foundation& other)
 	m_position = other.m_position;
 	m_mined = other.m_mined;
 	m_hasBob = other.m_hasBob;
+	m_pylon = other.m_pylon;
 	
 	//TO DO: change operator= and copy constructor
 
-	/*if (m_pylon)
-		delete m_pylon;
-
-	SinglePylon* single = dynamic_cast<SinglePylon*>(other.getPylon());
-	if (single)
-	{
-		m_pylon = new SinglePylon(*single);
-		return *this;
-	}
-	SquarePylon* square = dynamic_cast<SquarePylon*>(other.getPylon());
-	if (square)
-	{
-		m_pylon = new SquarePylon(*square);
-		return *this;
-	}
-	CrossPylon* cross = dynamic_cast<CrossPylon*>(other.getPylon());
-	if (cross)
-	{
-		m_pylon = new CrossPylon(*cross);
-		return *this;
-	}
-
-	m_pylon = nullptr;*/
 	return *this;
 }
 
@@ -69,7 +47,7 @@ bool Foundation::getBob() const
 	return m_hasBob;
 }
 
-std::shared_ptr<Pylon> Foundation::getPylon() const
+nonstd::observer_ptr<Pylon> Foundation::getPylon() const
 {
 	return m_pylon;
 }
@@ -89,7 +67,7 @@ void Foundation::setExploded(bool exploded)
 	m_exploded = exploded;
 }
 
-void Foundation::setPylon(std::shared_ptr<Pylon> pylon)
+void Foundation::setPylon(nonstd::observer_ptr<Pylon> pylon)
 {
 	m_pylon = pylon;
 }

@@ -3,7 +3,7 @@
 using namespace twixt;
 
 Pylon::Pylon(const Position& foundation, Color color, Type type) :
-	m_color{ color }, m_connections{ std::vector<std::shared_ptr<Bridge>>() },
+	m_color{ color }, m_connections{ std::vector<nonstd::observer_ptr<Bridge>>() },
 	m_connectionPoints{ std::vector<Position>() },
 	m_type{ type } 
 {}
@@ -30,7 +30,7 @@ std::vector<Position> Pylon::getFoundations() const
 	return m_foundations;
 }
 
-std::vector<std::shared_ptr<Bridge>> Pylon::getConnections() const
+std::vector<nonstd::observer_ptr<Bridge>> Pylon::getConnections() const
 {
 	return m_connections;
 }
@@ -55,7 +55,7 @@ void Pylon::setFoundations(const std::vector<Position>& foundations)
 	m_foundations = foundations;
 }
 
-void Pylon::setConnections(const std::vector<std::shared_ptr<Bridge>>& connections)
+void Pylon::setConnections(const std::vector<nonstd::observer_ptr<Bridge>>& connections)
 {
 	m_connections = connections;
 }

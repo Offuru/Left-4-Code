@@ -28,29 +28,28 @@ Board::Board(const Board& other) :
 		if (single)
 		{
 			m_pylons.insert({ position,
-				std::make_shared<SinglePylon>(pylon->getFoundations().at(0),pylon->getColor(),pylon->getType()) });
+				std::make_unique<SinglePylon>(pylon->getFoundations().at(0),pylon->getColor(),pylon->getType()) });
 			continue;
 		}
 		SquarePylon* square = dynamic_cast<SquarePylon*>(pylon.get());
 		if (square)
 		{
 			m_pylons.insert({ position,
-				std::make_shared<SquarePylon>(pylon->getFoundations().at(0),pylon->getColor(),pylon->getType()) });
+				std::make_unique<SquarePylon>(pylon->getFoundations().at(0),pylon->getColor(),pylon->getType()) });
 			continue;
 		}
 		CrossPylon* cross = dynamic_cast<CrossPylon*>(pylon.get());
 		if (cross)
 		{
 			m_pylons.insert({ position,
-				std::make_shared<CrossPylon>(pylon->getFoundations().at(0),pylon->getColor(),pylon->getType()) });
+				std::make_unique<CrossPylon>(pylon->getFoundations().at(0),pylon->getColor(),pylon->getType()) });
 			continue;
 		}
 	}
 
 	for (const auto& bridge : other.m_bridges)
 	{
-		std::shared_ptr<Bridge> newBridge(new Bridge(*bridge));
-		m_bridges.insert(newBridge);
+		m_bridges.emplace(std::make_unique<Bridge>(bridge->getPylonStart(), bridge->getPylonEnd(), bridge->getPosStart(), bridge->getPosEnd()));
 	}
 }
 
@@ -65,29 +64,28 @@ Board& Board::operator=(const Board& other)
 		if (single)
 		{
 			m_pylons.insert({ position,
-				std::make_shared<SinglePylon>(pylon->getFoundations().at(0),pylon->getColor(),pylon->getType()) });
+				std::make_unique<SinglePylon>(pylon->getFoundations().at(0),pylon->getColor(),pylon->getType()) });
 			continue;
 		}
 		SquarePylon* square = dynamic_cast<SquarePylon*>(pylon.get());
 		if (square)
 		{
 			m_pylons.insert({ position,
-				std::make_shared<SquarePylon>(pylon->getFoundations().at(0),pylon->getColor(),pylon->getType()) });
+				std::make_unique<SquarePylon>(pylon->getFoundations().at(0),pylon->getColor(),pylon->getType()) });
 			continue;
 		}
 		CrossPylon* cross = dynamic_cast<CrossPylon*>(pylon.get());
 		if (cross)
 		{
 			m_pylons.insert({ position,
-				std::make_shared<CrossPylon>(pylon->getFoundations().at(0),pylon->getColor(),pylon->getType()) });
+				std::make_unique<CrossPylon>(pylon->getFoundations().at(0),pylon->getColor(),pylon->getType()) });
 			continue;
 		}
 	}
 
 	for (const auto& bridge : other.m_bridges)
 	{
-		std::shared_ptr<Bridge> newBridge(new Bridge(*bridge));
-		m_bridges.insert(newBridge);
+		m_bridges.emplace(std::make_unique<Bridge>(bridge->getPylonStart(), bridge->getPylonEnd(), bridge->getPosStart(), bridge->getPosEnd()));
 	}
 
 	return *this;
@@ -98,12 +96,12 @@ std::vector<std::vector<Foundation>>& Board::getBoard()
 	return m_board;
 }
 
-std::unordered_map<Position, std::shared_ptr<Pylon>>& Board::getPylons()
+std::unordered_map<Position, std::unique_ptr<Pylon>>& Board::getPylons()
 {
 	return m_pylons;
 }
 
-std::unordered_set<std::shared_ptr<Bridge>> Board::getBridges() const
+std::unordered_set<std::unique_ptr<Bridge>>& Board::getBridges()
 {
 	return m_bridges;
 }
@@ -123,16 +121,19 @@ void Board::setBoard(const std::vector<std::vector<Foundation>>& board)
 	m_board = board;
 }
 
-void Board::setPylons(const std::unordered_map<Position, std::shared_ptr<Pylon>>& pylons)
+void Board::setPylons(const std::unordered_map<Position, std::unique_ptr<Pylon>>& pylons)
 {
 	for (const auto& it : pylons)
 		addPylon(m_board[it.second->getFoundations().at(0).first][it.second->getFoundations().at(0).second],
 			it.second->getColor(), it.second->getType());
 }
 
-void Board::setBridges(const std::unordered_set<std::shared_ptr<Bridge>>& bridges)
+void Board::setBridges(const std::unordered_set<std::unique_ptr<Bridge>>& bridges)
 {
-	m_bridges = bridges;
+	for (const auto& bridge : m_bridges)
+	{
+		m_bridges.emplace(std::make_unique<Bridge>(bridge->getPylonStart(), bridge->getPylonEnd(), bridge->getPosStart(), bridge->getPosEnd()));
+	}
 }
 
 void Board::setSize(uint8_t size)
@@ -147,16 +148,16 @@ void Board::setTotalMines(uint8_t totalMines)
 
 void Board::addPylon(Foundation& foundation, Pylon::Color color, Pylon::Type type)
 {
-	std::shared_ptr<Pylon> pylon = nullptr;
+	std::unique_ptr<Pylon> pylon;
 
 	const auto& [x, y] = foundation.getPosition();
 	switch (type)
 	{
 	case Pylon::Type::Single:
-		pylon = std::make_shared<SinglePylon>(foundation.getPosition(), color, type);
+		pylon = std::make_unique<SinglePylon>(foundation.getPosition(), color, type);
 		pylon->addFoundation({ x, y });
 
-		foundation.setPylon(pylon);
+		foundation.setPylon(nonstd::make_observer<Pylon>(pylon.get()));
 		break;
 
 	case Pylon::Type::Square:
@@ -166,10 +167,10 @@ void Board::addPylon(Foundation& foundation, Pylon::Color color, Pylon::Type typ
 		pylon->addFoundation({ x + 1, y + 1 });
 		pylon->addFoundation({ x, y + 1 });
 
-		foundation.setPylon(pylon);
-		m_board[x + 1][y].setPylon(pylon);
-		m_board[x + 1][y + 1].setPylon(pylon);
-		m_board[x][y + 1].setPylon(pylon);
+		foundation.setPylon(nonstd::make_observer<Pylon>(pylon.get()));
+		m_board[x + 1][y].setPylon(nonstd::make_observer<Pylon>(pylon.get()));
+		m_board[x + 1][y + 1].setPylon(nonstd::make_observer<Pylon>(pylon.get()));
+		m_board[x][y + 1].setPylon(nonstd::make_observer<Pylon>(pylon.get()));
 		break;
 
 	case Pylon::Type::Cross:
@@ -180,11 +181,11 @@ void Board::addPylon(Foundation& foundation, Pylon::Color color, Pylon::Type typ
 		pylon->addFoundation({ x, y + 1 });
 		pylon->addFoundation({ x, y - 1 });
 
-		foundation.setPylon(pylon);
-		m_board[x + 1][y].setPylon(pylon);
-		m_board[x - 1][y].setPylon(pylon);
-		m_board[x][y + 1].setPylon(pylon);
-		m_board[x][y - 1].setPylon(pylon);
+		foundation.setPylon(nonstd::make_observer<Pylon>(pylon.get()));
+		m_board[x + 1][y].setPylon(nonstd::make_observer<Pylon>(pylon.get()));
+		m_board[x - 1][y].setPylon(nonstd::make_observer<Pylon>(pylon.get()));
+		m_board[x][y + 1].setPylon(nonstd::make_observer<Pylon>(pylon.get()));
+		m_board[x][y - 1].setPylon(nonstd::make_observer<Pylon>(pylon.get()));
 		break;
 
 	default:
@@ -196,16 +197,17 @@ void Board::addPylon(Foundation& foundation, Pylon::Color color, Pylon::Type typ
 
 void Board::addBridge(Foundation& foundation1, Foundation& foundation2, Pylon::Color color)
 {
-	std::shared_ptr<Bridge> bridge(new Bridge(foundation1.getPylon(), foundation2.getPylon(), foundation1.getPosition(), foundation2.getPosition()));
+	auto it = m_bridges.emplace(std::make_unique<Bridge>(foundation1.getPylon(), foundation2.getPylon(), foundation1.getPosition(), foundation2.getPosition()));
 
-	foundation1.getPylon()->addBridge(bridge, foundation1.getPosition());
-	foundation2.getPylon()->addBridge(bridge, foundation2.getPosition());
-	m_bridges.insert(bridge);
+	auto bridge = it.first->get();
+
+	foundation1.getPylon()->addBridge(nonstd::make_observer<Bridge>(bridge), foundation1.getPosition());
+	foundation2.getPylon()->addBridge(nonstd::make_observer<Bridge>(bridge), foundation2.getPosition());
 }
 
 void Board::removePylon(const Position& position)
 {
-	std::shared_ptr<Pylon> currPylon = m_board[position.first][position.second].getPylon();
+	nonstd::observer_ptr<Pylon> currPylon = m_board[position.first][position.second].getPylon();
 	if (currPylon == nullptr)
 		return;
 
@@ -221,7 +223,15 @@ void Board::removePylon(const Position& position)
 			bridge->getPylonEnd()->removeBridge(bridge);
 		}
 
-		m_bridges.erase(bridge);
+		for (auto& board_bridge : m_bridges)
+		{
+			if (board_bridge.get() == bridge.get())
+			{
+				m_bridges.erase(board_bridge);
+				break;
+			}
+		}
+
 		bridge.reset();
 	}
 
@@ -232,7 +242,7 @@ void Board::removePylon(const Position& position)
 
 	for (const auto& it : m_pylons)
 	{
-		if (it.second == currPylon)
+		if (it.second.get() == currPylon.get())
 		{
 			m_pylons.erase(it.first);
 			break;
@@ -241,12 +251,18 @@ void Board::removePylon(const Position& position)
 
 }
 
-void Board::removeBridge(std::shared_ptr<Bridge> bridge)
+void Board::removeBridge(const nonstd::observer_ptr<Bridge>& bridge)
 {
-	bridge->getPylonEnd()->removeBridge(bridge);
-	bridge->getPylonStart()->removeBridge(bridge);
-	m_bridges.erase(bridge);
-	std::cout << bridge.use_count();
+	bridge->getPylonEnd()->removeBridge(nonstd::make_observer(bridge.get()));
+	bridge->getPylonStart()->removeBridge(nonstd::make_observer(bridge.get()));
+	for (const auto& boardBridge : m_bridges)
+	{
+		if (boardBridge.get() == bridge.get())
+		{
+			m_bridges.erase(boardBridge);
+			break;
+		}
+	}
 }
 
 void Board::spawnMines()
@@ -304,7 +320,7 @@ bool Board::winnerFoundation(const Foundation& foundation, uint8_t rule, Pylon::
 	return false;
 }
 
-bool Board::checkWinningRoute(std::queue<std::shared_ptr<Pylon>>& nextVisit, std::unordered_set<std::shared_ptr<Pylon>>& visited, bool firstRun = true)
+bool Board::checkWinningRoute(std::queue<nonstd::observer_ptr<Pylon>>& nextVisit, std::unordered_set<nonstd::observer_ptr<Pylon>>& visited, bool firstRun = true)
 {
 	//firstRun == true means that the current route starts from the left side (for red) or
 	//from the above (for black)
@@ -314,14 +330,14 @@ bool Board::checkWinningRoute(std::queue<std::shared_ptr<Pylon>>& nextVisit, std
 
 	while (!nextVisit.empty())
 	{
-		std::shared_ptr<Pylon> currPylon = nextVisit.front();
+		nonstd::observer_ptr<Pylon> currPylon = nextVisit.front();
 		nextVisit.pop();
 
 		if (visited.find(currPylon) == visited.end())
 		{
 			for (const auto& bridge : (*currPylon).getConnections())
 			{
-				std::shared_ptr<Pylon> nextPylon = bridge->getPylonEnd();
+				nonstd::observer_ptr<Pylon> nextPylon = bridge->getPylonEnd();
 
 				if (nextPylon == currPylon)
 					nextPylon = bridge->getPylonStart();
@@ -346,12 +362,12 @@ bool Board::checkWinningRoute(std::queue<std::shared_ptr<Pylon>>& nextVisit, std
 
 bool Board::verifyWinner(const HumanPlayer& player)
 {
-	std::queue<std::shared_ptr<Pylon>> nextVisit;
-	std::unordered_set<std::shared_ptr<Pylon>> visited;
+	std::queue<nonstd::observer_ptr<Pylon>> nextVisit;
+	std::unordered_set<nonstd::observer_ptr<Pylon>> visited;
 
 	for (int i = 0; i < m_board.size(); ++i)
 	{
-		std::shared_ptr<Pylon> currPylon;
+		nonstd::observer_ptr<Pylon> currPylon;
 		if (player.getColor() == Pylon::Color::Red)
 			currPylon = m_board[0][i].getPylon();
 		else
@@ -370,7 +386,7 @@ bool Board::verifyWinner(const HumanPlayer& player)
 
 	for (int i = 0; i < m_board.size(); ++i)
 	{
-		std::shared_ptr<Pylon> currPylon;
+		nonstd::observer_ptr<Pylon> currPylon;
 		if (player.getColor() == Pylon::Color::Red)
 			currPylon = m_board[m_size - 1][i].getPylon();
 		else

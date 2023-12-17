@@ -21,7 +21,7 @@ bool SquarePylon::canAddBridge(const Position& foundation) const
 	return false;
 }
 
-bool SquarePylon::addBridge(std::shared_ptr<Bridge> bridge, const Position& foundation)
+bool SquarePylon::addBridge(nonstd::observer_ptr<Bridge> bridge, const Position& foundation)
 {
 	auto itFoundation = std::find(m_connectionPoints.begin(), m_connectionPoints.end(), foundation);
 	if (itFoundation == m_connectionPoints.end() && m_connectionPoints.size() < 2)
@@ -37,7 +37,7 @@ bool SquarePylon::addBridge(std::shared_ptr<Bridge> bridge, const Position& foun
 	return false;
 }
 
-void SquarePylon::removeBridge(std::shared_ptr<Bridge> bridge)
+void SquarePylon::removeBridge(nonstd::observer_ptr<Bridge> bridge)
 {
 	auto it = m_connections.begin();
 	while (it != m_connections.end())
@@ -52,7 +52,7 @@ void SquarePylon::removeBridge(std::shared_ptr<Bridge> bridge)
 	}
 
 	std::unordered_set<Position> usedPositions;
-	for (auto bridge : m_connections)
+	for (auto& bridge : m_connections)
 	{
 		usedPositions.insert(bridge->getPosStart());
 		usedPositions.insert(bridge->getPosEnd());

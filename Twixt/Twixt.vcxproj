@@ -40,13 +40,13 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -173,15 +173,11 @@
     <ClInclude Include="GameLoader.h" />
     <ClInclude Include="IPlayer.h" />
     <ClInclude Include="HumanPlayer.h" />
+    <ClInclude Include="observer_test.h" />
     <ClInclude Include="Pylon.h" />
     <ClInclude Include="SinglePylon.h" />
     <ClInclude Include="SquarePylon.h" />
     <ClInclude Include="Utilities.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ObserverPtr\ObserverPtr.vcxproj">
-      <Project>{8135ff92-e123-4a8b-b38c-eabceea8280d}</Project>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

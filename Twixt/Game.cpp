@@ -50,9 +50,15 @@ void twixt::Game::Run()
 	HumanPlayer currentPlayer = m_player1;
 	HumanPlayer nextPlayer = m_player2;
 
+	nextPlayer.setColor(Pylon::Color::Black);
+	/*currentPlayer.setName("R");
+	nextPlayer.setName("B");*/
+
 	Position red = { 1,3 };
 	Position black = { 0, 0 };
-	moveBob();
+	
+	if(m_debuilderBob)
+		moveBob();
 	while (true)
 	{
 		std::system("cls");
@@ -70,9 +76,9 @@ void twixt::Game::Run()
 		if (!keepRound)
 		{
 			std::swap(currentPlayer, nextPlayer);
-			moveBob();
+			if (m_debuilderBob)
+				moveBob();
 		}
-
 	}
 }
 
@@ -266,8 +272,8 @@ bool Game::addPylon(const Position& pos, Pylon::Type type, Pylon::Color color)
 
 bool Game::addBridge(const Position& startPoint, const Position& endPoint, Pylon::Color color)
 {
-	std::shared_ptr<Pylon> startPylon = m_board.getFoundation(startPoint).getPylon();
-	std::shared_ptr<Pylon> endPylon = m_board.getFoundation(endPoint).getPylon();
+	nonstd::observer_ptr<Pylon> startPylon = m_board.getFoundation(startPoint).getPylon();
+	nonstd::observer_ptr<Pylon> endPylon = m_board.getFoundation(endPoint).getPylon();
 
 	if (startPylon->getColor() != color || endPylon->getColor() != color)
 		return false;
@@ -326,7 +332,7 @@ void Game::printBoard()
 	{
 		for (uint8_t j = 0; j < boardMatrix[0].size(); ++j)
 		{
-			std::shared_ptr<Pylon> element = m_board.getBoard()[i][j].getPylon();
+			nonstd::observer_ptr<Pylon> element = m_board.getBoard()[i][j].getPylon();
 			bool hasBob = m_board.getBoard()[i][j].getBob();
 			bool elementMined = m_board.getBoard()[i][j].getMined();
 			bool elementExploded = m_board.getBoard()[i][j].getExploded();
@@ -381,18 +387,18 @@ void Game::printBoard()
 
 bool Game::removeBridge(const Position& start, const Position& end, Pylon::Color color)
 {
-	std::shared_ptr<Bridge> bridgeToRemove = nullptr;
+	nonstd::observer_ptr<Bridge> bridgeToRemove = nullptr;
 
 	for (const auto& bridge : m_board.getBridges())
 	{
 		if (bridge->getPosStart() == start && bridge->getPosEnd() == end)
 		{
-			bridgeToRemove = bridge;
+			bridgeToRemove = nonstd::make_observer(bridge.get());
 			break;
 		}
 		if (bridge->getPosStart() == end && bridge->getPosEnd() == start)
 		{
-			bridgeToRemove = bridge;
+			bridgeToRemove = nonstd::make_observer(bridge.get());
 			break;
 		}
 	}
@@ -401,13 +407,12 @@ bool Game::removeBridge(const Position& start, const Position& end, Pylon::Color
 		return false;
 
 	m_board.removeBridge(bridgeToRemove);
-	std::cout << bridgeToRemove.use_count();
 	return true;
 }
 
 bool twixt::Game::removePylon(const Position& position, Pylon::Color color)
 {
-	std::shared_ptr<Pylon> pylon = m_board[position].getPylon();
+	nonstd::observer_ptr<Pylon> pylon = m_board[position].getPylon();
 	if (pylon == nullptr || pylon->getColor() != color)
 		return false;
 

@@ -5,7 +5,7 @@ using namespace twixt;
 Bridge::Bridge() :
 	m_pylonStart{ nullptr }, m_pylonEnd{ nullptr }, m_posStart{ std::make_pair(0,0) }, m_posEnd{ std::make_pair(0,0) } {};
 
-Bridge::Bridge(std::shared_ptr<Pylon> pylonStart, std::shared_ptr<Pylon> pylonEnd, const Position& posStart, const Position& posEnd) :
+Bridge::Bridge(nonstd::observer_ptr<Pylon> pylonStart, nonstd::observer_ptr<Pylon> pylonEnd, const Position& posStart, const Position& posEnd) :
 	m_pylonStart{ pylonStart }, m_pylonEnd{ pylonEnd}, m_posStart{ posStart }, m_posEnd{ posEnd } {};
 
 Bridge::Bridge(const Bridge& other)
@@ -26,12 +26,12 @@ Bridge& Bridge::operator=(const Bridge& other)
 	return *this;
 }
 
-std::shared_ptr<Pylon> Bridge::getPylonStart() const
+nonstd::observer_ptr<Pylon> Bridge::getPylonStart() const
 {
 	return m_pylonStart;
 }
 
-std::shared_ptr<Pylon> Bridge::getPylonEnd() const
+nonstd::observer_ptr<Pylon> Bridge::getPylonEnd() const
 {
 	return m_pylonEnd;
 }
@@ -46,12 +46,12 @@ Position Bridge::getPosEnd() const
 	return m_posEnd;
 }
 
-void Bridge::setPylonStart(std::shared_ptr<Pylon> pylonStart)
+void Bridge::setPylonStart(nonstd::observer_ptr<Pylon> pylonStart)
 {
 	m_pylonStart = pylonStart;
 }
 
-void Bridge::setPylonEnd(std::shared_ptr<Pylon> pylonEnd)
+void Bridge::setPylonEnd(nonstd::observer_ptr<Pylon> pylonEnd)
 {
 	m_pylonEnd = pylonEnd;
 }
