@@ -1,9 +1,9 @@
 #include "SettingsWindow.h"
 
 SettingsWindow::SettingsWindow(QWidget *parent)
-	: QMainWindow(parent)
+	: QMainWindow{ parent }, m_ui{ std::make_unique<Ui::SettingsWindowClass>() }
 {
-	ui.setupUi(this);
+	m_ui->setupUi(this);
 }
 
 SettingsWindow::~SettingsWindow()

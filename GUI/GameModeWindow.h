@@ -16,6 +16,6 @@ public:
 	void closeEvent(QCloseEvent* event);
 
 private:
-	Ui::GameModeWindowClass ui;
+	std::unique_ptr<Ui::GameModeWindowClass> m_ui;
 	std::shared_ptr<twixt::Game> m_game;
 };
