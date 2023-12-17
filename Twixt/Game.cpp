@@ -663,6 +663,15 @@ bool twixt::Game::place2Pylons(nonstd::observer_ptr<IPlayer> target)
 	return true;
 }
 
+bool twixt::Game::moveBobCard()
+{
+	Position position = getPlayerPosInput();
+
+	m_bob.setPosition(position);
+
+	return true;
+}
+
 bool Game::getCards() const
 {
 	return m_cards;
