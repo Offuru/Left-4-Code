@@ -19,6 +19,6 @@ public slots:
 	void on_backButton_clicked();
 
 private:
-	Ui::NameAIWindowClass ui;
+	std::unique_ptr<Ui::NameAIWindowClass> m_ui;
 	std::shared_ptr<twixt::Game> m_game;
 };

@@ -10,6 +10,14 @@ twixt::IPlayer::IPlayer(const std::string& name)
 	m_noPylonsCross = 5;
 }
 
+void twixt::IPlayer::removeCard(size_t index)
+{
+	if (index < 0 || index > m_cards.size())
+		return;
+
+	m_cards.erase(m_cards.begin() + index);
+}
+
 void twixt::IPlayer::draw(std::stack<Card>& cards)
 {
 	m_cards.push_back(cards.top());

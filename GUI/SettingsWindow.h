@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QMainWindow>
+#include <memory>
 #include "ui_SettingsWindow.h"
 
 class SettingsWindow : public QMainWindow
@@ -12,5 +13,5 @@ public:
 	~SettingsWindow();
 
 private:
-	Ui::SettingsWindowClass ui;
+	std::unique_ptr<Ui::SettingsWindowClass> m_ui;
 };

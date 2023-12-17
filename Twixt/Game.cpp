@@ -47,8 +47,8 @@ Game& Game::operator=(const Game& other)
 
 void twixt::Game::Run()
 {
-	HumanPlayer currentPlayer = m_player1;
-	HumanPlayer nextPlayer = m_player2;
+	nonstd::observer_ptr<IPlayer> currentPlayer = nonstd::make_observer(m_player1.get());
+	nonstd::observer_ptr<IPlayer> nextPlayer = nonstd::make_observer(m_player2.get());
 
 	nextPlayer.setColor(Pylon::Color::Black);
 	/*currentPlayer.setName("R");
@@ -64,12 +64,12 @@ void twixt::Game::Run()
 		std::system("cls");
 		printBoard();
 
-		bool keepRound = processTurn(currentPlayer.getNextMove(), currentPlayer);
+		bool keepRound = processTurn(currentPlayer->getNextMove(), currentPlayer);
 
 		if (m_board.verifyWinner(currentPlayer))
 		{
 			printBoard();
-			std::cout << currentPlayer.getName() << " won\n";
+			std::cout << currentPlayer->getName() << " won\n";
 			return;
 		}
 
@@ -135,14 +135,28 @@ void Game::setCards(bool cards)
 	m_cards = cards;
 }
 
-void Game::setPlayer1(const HumanPlayer& player)
+//void Game::setPlayer1(const nonstd::observer_ptr<IPlayer>& player)
+//{
+//	m_player1 = std::make_unique<IPlayer>(player->getName());
+//}
+
+void twixt::Game::setPlayer1(const std::string& name, bool aiPlayer)
 {
-	m_player1 = player;
+	m_player1.release();
+	if(!aiPlayer)
+		m_player1 = std::make_unique<HumanPlayer>(name);
 }
 
-void Game::setPlayer2(const HumanPlayer& player)
+//void Game::setPlayer2(const nonstd::observer_ptr<IPlayer>& player)
+//{
+//	m_player2 = std::make_unique<IPlayer>(player->getName());
+//}
+
+void twixt::Game::setPlayer2(const std::string& name, bool aiPlayer)
 {
-	m_player2 = player;
+	m_player2.release();
+	if (!aiPlayer)
+		m_player2 = std::make_unique<HumanPlayer>(name);
 }
 
 void Game::setBoard(const Board& board)
@@ -205,12 +219,12 @@ bool Game::getDebuilderBob() const
 	return m_debuilderBob;
 }
 
-HumanPlayer Game::getPlayer1() const
+std::unique_ptr<IPlayer>& Game::getPlayer1()
 {
 	return m_player1;
 }
 
-HumanPlayer Game::getPlayer2() const
+std::unique_ptr<IPlayer>& Game::getPlayer2()
 {
 	return m_player2;
 }
@@ -420,11 +434,11 @@ bool twixt::Game::removePylon(const Position& position, Pylon::Color color)
 	return true;
 }
 
-bool twixt::Game::drawCard(HumanPlayer& player)
+bool twixt::Game::drawCard(const nonstd::observer_ptr<IPlayer>& player)
 {
 	if (m_cardStack.empty())
 		return false;
-	player.draw(m_cardStack);
+	player->draw(m_cardStack);
 	return true;
 }
 
@@ -556,9 +570,9 @@ void Game::explodeArea(const Position& pos)
 	}
 }
 
-bool twixt::Game::processTurn(const IPlayer::Move& nextMove, const IPlayer& currentPlayer)
+bool twixt::Game::processTurn(const IPlayer::Move& nextMove, const nonstd::observer_ptr<IPlayer>& currentPlayer)
 {
-	if (!currentPlayer.validMove(nextMove, m_boardSize))
+	if (!currentPlayer->validMove(nextMove, m_boardSize))
 	{
 		return true; //bad move, another chance
 	}
@@ -570,28 +584,97 @@ bool twixt::Game::processTurn(const IPlayer::Move& nextMove, const IPlayer& curr
 			return false; //TO DO: need IPlayer shared ptr
 			//TO DO: add play card method
 		case IPlayer::Action::AddSinglePylon:
-			if (!addPylon(pos1.value(), Pylon::Type::Single, currentPlayer.getColor()))
+			if (!addPylon(pos1.value(), Pylon::Type::Single, currentPlayer->getColor()))
 				return true; //pylon couldn't be placed, so the player gets another chance
 			return false;
 		case IPlayer::Action::AddSquarePylon:
-			if (!addPylon(pos1.value(), Pylon::Type::Square, currentPlayer.getColor()))
+			if (!addPylon(pos1.value(), Pylon::Type::Square, currentPlayer->getColor()))
 				return true;
 			return false;
 		case IPlayer::Action::AddCrossPylon:
-			if (!addPylon(pos1.value(), Pylon::Type::Cross, currentPlayer.getColor()))
+			if (!addPylon(pos1.value(), Pylon::Type::Cross, currentPlayer->getColor()))
 				return true;
 			return false;
 		case IPlayer::Action::AddBridge:
-			addBridge(pos1.value(), pos2.value(), currentPlayer.getColor());
+			addBridge(pos1.value(), pos2.value(), currentPlayer->getColor());
 			return true;
 		case IPlayer::Action::RemovePylon:
-			if (!removePylon(pos1.value(), currentPlayer.getColor()))
+			if (!removePylon(pos1.value(), currentPlayer->getColor()))
 				return true;
 			return false;
 		case IPlayer::Action::RemoveBridge:
-			removeBridge(pos1.value(), pos2.value(), currentPlayer.getColor());
+			removeBridge(pos1.value(), pos2.value(), currentPlayer->getColor());
 			return true;
 	}
+}
+
+Position twixt::Game::getPlayerPosInput() const
+{
+	uint8_t x = -1, y = -1;
+
+	while (x < 0 || x >= m_boardSize)
+		std::cin >> x;
+	while (y < 0 || y >= m_boardSize)
+		std::cin >> y;
+
+	return { x,y };
+}
+
+bool twixt::Game::draw2Cards(nonstd::observer_ptr<IPlayer> target)
+{
+	if (m_cardStack.size() < 2)
+		return false;
+	target->draw(m_cardStack);
+	target->draw(m_cardStack);
+	return true;
+}
+
+bool twixt::Game::removeOpponentCard(nonstd::observer_ptr<IPlayer> target)
+{
+	if (target->getCards().empty())
+		return false;
+	
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<> distrib(0, target->getCards().size() - 1);
+	size_t index = distrib(gen);
+
+	target->removeCard(index);
+
+	return true;
+}
+
+bool twixt::Game::removePylon(nonstd::observer_ptr<IPlayer> target)
+{
+	Position position = getPlayerPosInput();
+	if (m_board[position].getPylon() == nullptr || m_board[position].getPylon()->getColor() != target->getColor())
+		return false;
+
+	removePylon(position, target->getColor());
+
+	return true;
+}
+
+bool twixt::Game::place2Pylons(nonstd::observer_ptr<IPlayer> target)
+{
+	Position position;
+
+	while (m_board[position = getPlayerPosInput()].getPylon() != nullptr);
+	addPylon(position, Pylon::Type::Single, target->getColor());
+
+	while (m_board[position = getPlayerPosInput()].getPylon() != nullptr);
+	addPylon(position, Pylon::Type::Single, target->getColor());
+
+	return true;
+}
+
+bool twixt::Game::moveBobCard()
+{
+	Position position = getPlayerPosInput();
+
+	m_bob.setPosition(position);
+
+	return true;
 }
 
 bool Game::getCards() const

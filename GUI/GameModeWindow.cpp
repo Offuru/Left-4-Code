@@ -1,12 +1,12 @@
 #include "GameModeWindow.h"
 
-GameModeWindow::GameModeWindow(QWidget *parent, std::shared_ptr<twixt::Game> game)
-	: QMainWindow(parent)
+GameModeWindow::GameModeWindow(QWidget* parent, std::shared_ptr<twixt::Game> game)
+	: QMainWindow{ parent }, m_ui{ std::make_unique<Ui::GameModeWindowClass>() }
 {
 	setWindowFlags(Qt::Window | Qt::MSWindowsFixedSizeDialogHint);
 	m_game = game;
 
-	ui.setupUi(this);
+	m_ui->setupUi(this);
 }
 
 GameModeWindow::~GameModeWindow()

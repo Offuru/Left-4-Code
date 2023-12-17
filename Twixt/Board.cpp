@@ -360,7 +360,7 @@ bool Board::checkWinningRoute(std::queue<nonstd::observer_ptr<Pylon>>& nextVisit
 	return false;
 }
 
-bool Board::verifyWinner(const HumanPlayer& player)
+bool Board::verifyWinner(const nonstd::observer_ptr<IPlayer>& player)
 {
 	std::queue<nonstd::observer_ptr<Pylon>> nextVisit;
 	std::unordered_set<nonstd::observer_ptr<Pylon>> visited;

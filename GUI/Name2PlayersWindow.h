@@ -21,7 +21,7 @@ public slots:
 	void on_gameModeButton_clicked();
 
 private:
-	Ui::Name2PlayersWindowClass ui;
+	std::unique_ptr<Ui::Name2PlayersWindowClass> m_ui;
 	std::shared_ptr<twixt::Game> m_game;
 	std::unique_ptr<GameModeWindow> m_gameModeWindow;
 
