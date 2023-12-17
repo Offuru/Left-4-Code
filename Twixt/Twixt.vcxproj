@@ -137,6 +137,7 @@
     <ClCompile Include="DebuilderBob.cpp" />
     <ClCompile Include="Foundation.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameLoader.cpp" />
     <ClCompile Include="IPlayer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="HumanPlayer.cpp" />
@@ -153,6 +154,7 @@
     <ClInclude Include="DebuilderBob.h" />
     <ClInclude Include="Foundation.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameLoader.h" />
     <ClInclude Include="IPlayer.h" />
     <ClInclude Include="HumanPlayer.h" />
     <ClInclude Include="Pylon.h" />
