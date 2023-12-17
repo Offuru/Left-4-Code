@@ -603,6 +603,18 @@ bool twixt::Game::processTurn(const IPlayer::Move& nextMove, const nonstd::obser
 	}
 }
 
+Position twixt::Game::getPlayerPosInput() const
+{
+	uint8_t x = -1, y = -1;
+
+	while (x < 0 || x >= m_boardSize)
+		std::cin >> x;
+	while (y < 0 || y >= m_boardSize)
+		std::cin >> y;
+
+	return { x,y };
+}
+
 bool twixt::Game::draw2Cards(nonstd::observer_ptr<IPlayer> target)
 {
 	if (m_cardStack.size() < 2)
@@ -627,8 +639,9 @@ bool twixt::Game::removeOpponentCard(nonstd::observer_ptr<IPlayer> target)
 	return true;
 }
 
-bool twixt::Game::removePylon(nonstd::observer_ptr<IPlayer> target, const Position& position)
+bool twixt::Game::removePylon(nonstd::observer_ptr<IPlayer> target)
 {
+	Position position = getPlayerPosInput();
 	if (m_board[position].getPylon() == nullptr || m_board[position].getPylon()->getColor() != target->getColor())
 		return false;
 
