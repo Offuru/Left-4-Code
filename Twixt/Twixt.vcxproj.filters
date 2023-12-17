@@ -104,5 +104,8 @@
     <ClInclude Include="GameLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="observer_test.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

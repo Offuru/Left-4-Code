@@ -173,6 +173,7 @@
     <ClInclude Include="GameLoader.h" />
     <ClInclude Include="IPlayer.h" />
     <ClInclude Include="HumanPlayer.h" />
+    <ClInclude Include="observer_test.h" />
     <ClInclude Include="Pylon.h" />
     <ClInclude Include="SinglePylon.h" />
     <ClInclude Include="SquarePylon.h" />
