@@ -650,6 +650,19 @@ bool twixt::Game::removePylon(nonstd::observer_ptr<IPlayer> target)
 	return true;
 }
 
+bool twixt::Game::place2Pylons(nonstd::observer_ptr<IPlayer> target)
+{
+	Position position;
+
+	while (m_board[position = getPlayerPosInput()].getPylon() != nullptr);
+	addPylon(position, Pylon::Type::Single, target->getColor());
+
+	while (m_board[position = getPlayerPosInput()].getPylon() != nullptr);
+	addPylon(position, Pylon::Type::Single, target->getColor());
+
+	return true;
+}
+
 bool Game::getCards() const
 {
 	return m_cards;
