@@ -609,6 +609,22 @@ bool twixt::Game::draw2Cards(nonstd::observer_ptr<IPlayer> target)
 		return false;
 	target->draw(m_cardStack);
 	target->draw(m_cardStack);
+	return true;
+}
+
+bool twixt::Game::removeOpponentCard(nonstd::observer_ptr<IPlayer> target)
+{
+	if (target->getCards().empty())
+		return false;
+	
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<> distrib(0, target->getCards().size() - 1);
+	size_t index = distrib(gen);
+
+	target->removeCard(index);
+
+	return true;
 }
 
 bool Game::getCards() const
