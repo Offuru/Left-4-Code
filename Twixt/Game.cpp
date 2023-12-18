@@ -9,6 +9,9 @@ Game::Game(uint8_t boardSize, uint8_t minesNumber) :
 		= m_bigPylons = m_minedFundations
 		= m_debuilderBob = m_cards = m_explodeArea = m_explodeCol = m_explodeRow = m_explodeSingleLocation = m_humanPlayers = false;
 
+	m_player1 = std::make_unique<HumanPlayer>();
+	m_player2 = std::make_unique<HumanPlayer>();
+
 	m_boardSize = boardSize;
 	m_areaLength = 2;
 }
@@ -51,8 +54,9 @@ void twixt::Game::Run()
 	nonstd::observer_ptr<IPlayer> nextPlayer = nonstd::make_observer(m_player2.get());
 
 	nextPlayer->setColor(Pylon::Color::Black);
-	/*currentPlayer.setName("R");
-	nextPlayer.setName("B");*/
+	
+	currentPlayer->setName("R");
+	nextPlayer->setName("B");
 
 	Position red = { 1,3 };
 	Position black = { 0, 0 };
