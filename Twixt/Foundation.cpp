@@ -20,9 +20,6 @@ Foundation& Foundation::operator=(Foundation& other)
 	m_position = other.m_position;
 	m_mined = other.m_mined;
 	m_hasBob = other.m_hasBob;
-	m_pylon = other.m_pylon;
-	
-	//TO DO: change operator= and copy constructor
 
 	return *this;
 }

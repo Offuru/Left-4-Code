@@ -20,36 +20,35 @@ Board::Board(uint8_t size, uint8_t mines) :
 }
 
 Board::Board(const Board& other) :
-	m_board{ other.m_board }, m_size{ other.m_size }, m_totalMines{ other.m_totalMines }
+	m_size{ other.m_size }, m_totalMines{ other.m_totalMines }
 {
-	for (const auto& [position, pylon] : other.m_pylons)
+
+	Foundation p;
+	m_board.resize(m_size);
+	for (int i = 0; i < m_size; ++i)
 	{
-		SinglePylon* single = dynamic_cast<SinglePylon*>(pylon.get());
-		if (single)
+		m_board[i].resize(m_size);
+		for (int j = 0; j < m_size; ++j)
 		{
-			m_pylons.insert({ position,
-				std::make_unique<SinglePylon>(pylon->getFoundations().at(0),pylon->getColor(),pylon->getType()) });
-			continue;
-		}
-		SquarePylon* square = dynamic_cast<SquarePylon*>(pylon.get());
-		if (square)
-		{
-			m_pylons.insert({ position,
-				std::make_unique<SquarePylon>(pylon->getFoundations().at(0),pylon->getColor(),pylon->getType()) });
-			continue;
-		}
-		CrossPylon* cross = dynamic_cast<CrossPylon*>(pylon.get());
-		if (cross)
-		{
-			m_pylons.insert({ position,
-				std::make_unique<CrossPylon>(pylon->getFoundations().at(0),pylon->getColor(),pylon->getType()) });
-			continue;
+			Foundation p = Foundation(std::make_pair(i, j), false, nullptr);
+			m_board[i][j] = p;
 		}
 	}
 
-	for (const auto& bridge : other.m_bridges)
+	for (const auto& [position, pylon] : other.m_pylons)
 	{
-		m_bridges.emplace(std::make_unique<Bridge>(bridge->getPylonStart(), bridge->getPylonEnd(), bridge->getPosStart(), bridge->getPosEnd()));
+
+		addPylon(m_board[position.first][position.second], pylon->getColor(), pylon->getType());
+
+	}
+
+	for (auto& bridge : other.m_bridges)
+	{
+		const auto& [x1, y1] = bridge->getPosStart();
+		const auto& [x2, y2] = bridge->getPosEnd();
+
+
+		addBridge(m_board[x1][y1], m_board[x2][y2], bridge->getPylonStart()->getColor());
 	}
 }
 
@@ -58,34 +57,32 @@ Board& Board::operator=(const Board& other)
 	if (this == &other)
 		return *this;
 
-	for (const auto& [position, pylon] : other.m_pylons)
+	Foundation p;
+	m_board.resize(m_size);
+	for (int i = 0; i < m_size; ++i)
 	{
-		SinglePylon* single = dynamic_cast<SinglePylon*>(pylon.get());
-		if (single)
+		m_board[i].resize(m_size);
+		for (int j = 0; j < m_size; ++j)
 		{
-			m_pylons.insert({ position,
-				std::make_unique<SinglePylon>(pylon->getFoundations().at(0),pylon->getColor(),pylon->getType()) });
-			continue;
-		}
-		SquarePylon* square = dynamic_cast<SquarePylon*>(pylon.get());
-		if (square)
-		{
-			m_pylons.insert({ position,
-				std::make_unique<SquarePylon>(pylon->getFoundations().at(0),pylon->getColor(),pylon->getType()) });
-			continue;
-		}
-		CrossPylon* cross = dynamic_cast<CrossPylon*>(pylon.get());
-		if (cross)
-		{
-			m_pylons.insert({ position,
-				std::make_unique<CrossPylon>(pylon->getFoundations().at(0),pylon->getColor(),pylon->getType()) });
-			continue;
+			Foundation p = Foundation(std::make_pair(i, j), false, nullptr);
+			m_board[i][j] = p;
 		}
 	}
 
-	for (const auto& bridge : other.m_bridges)
+	for (const auto& [position, pylon] : other.m_pylons)
 	{
-		m_bridges.emplace(std::make_unique<Bridge>(bridge->getPylonStart(), bridge->getPylonEnd(), bridge->getPosStart(), bridge->getPosEnd()));
+
+		addPylon(m_board[position.first][position.second], pylon->getColor(), pylon->getType());
+
+	}
+
+	for (auto& bridge : other.m_bridges)
+	{
+		const auto& [x1, y1] = bridge->getPosStart();
+		const auto& [x2, y2] = bridge->getPosEnd();
+
+
+		addBridge(m_board[x1][y1], m_board[x2][y2], bridge->getPylonStart()->getColor());
 	}
 
 	return *this;
