@@ -5,6 +5,7 @@ GameModeWindow::GameModeWindow(QWidget* parent, std::shared_ptr<twixt::Game> gam
 {
 	setWindowFlags(Qt::Window | Qt::MSWindowsFixedSizeDialogHint);
 	m_game = game;
+	m_settingsWindow = std::make_unique<SettingsWindow>(this, m_game);
 
 	m_ui->setupUi(this);
 }
@@ -16,6 +17,11 @@ void GameModeWindow::on_backButton_clicked()
 {
 	this->hide();
 	this->parentWidget()->show();
+}
+
+void GameModeWindow::on_settingsButton_clicked()
+{
+	m_settingsWindow->show();
 }
 
 void GameModeWindow::closeEvent(QCloseEvent* event)
