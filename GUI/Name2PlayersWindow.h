@@ -16,9 +16,9 @@ public:
 
 	void closeEvent(QCloseEvent* event);
 
-public slots:
-	void on_goBackButton_clicked();
-	void on_gameModeButton_clicked();
+private slots:
+	void openParentWindow();
+	void openGameModeWindow();
 
 private:
 	std::unique_ptr<Ui::Name2PlayersWindowClass> m_ui;

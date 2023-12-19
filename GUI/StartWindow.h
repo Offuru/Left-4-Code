@@ -16,9 +16,9 @@ public:
 	StartWindow(QWidget* parent = nullptr);
 	~StartWindow();
 
-public slots:
-	void on_twoPlayersButton_clicked();
-	void on_aiPlayerButton_clicked();
+private slots:
+	void openTwoPlayersWindow();
+	void openAiPlayerWindow();
 
 private:
 	std::unique_ptr<Ui::StartWindowClass> m_ui;

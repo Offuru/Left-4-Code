@@ -15,8 +15,8 @@ public:
 
 	void closeEvent(QCloseEvent* event);
 
-public slots:
-	void on_goBackButton_clicked();
+private slots:
+	void openParentWindow();
 
 private:
 	std::unique_ptr<Ui::NameAIWindowClass> m_ui;

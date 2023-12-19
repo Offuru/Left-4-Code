@@ -17,9 +17,9 @@ public:
 
 	void closeEvent(QCloseEvent* event);
 
-public slots:
-	void on_backButton_clicked();
-	void on_settingsButton_clicked();
+private slots:
+	void openParentWindow();
+	void openSettingsWindow();
 
 private:
 	std::unique_ptr<Ui::GameModeWindowClass> m_ui;
