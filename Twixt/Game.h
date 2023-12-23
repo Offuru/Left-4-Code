@@ -3,8 +3,8 @@
 #include "Board.h"
 #include "HumanPlayer.h"
 #include "DebuilderBob.h"
-//#include "../ObserverPtr/observer_ptr.h"
-#include "observer_test.h"
+//#include "observer_ptr.h"
+#include "observer_ptr.h"
 #include <array>
 #include <iostream>
 

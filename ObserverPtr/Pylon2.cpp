@@ -1,11 +1,11 @@
-#include "Pylon.h"
+#include "Pylon2.h"
 
 using namespace twixt;
 
 Pylon::Pylon(const Position& foundation, Color color, Type type) :
 	m_color{ color }, m_connections{ std::vector<nonstd::observer_ptr<Bridge>>() },
 	m_connectionPoints{ std::vector<Position>() },
-	m_type{ type } 
+	m_type{ type }
 {}
 
 Pylon::Pylon(const Pylon& other) :

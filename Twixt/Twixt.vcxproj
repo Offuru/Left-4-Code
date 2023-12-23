@@ -70,6 +70,10 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <AllProjectIncludesArePublic>true</AllProjectIncludesArePublic>
+    <AllProjectBMIsArePublic>true</AllProjectBMIsArePublic>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -115,7 +119,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <EnableModules>true</EnableModules>
       <ScanSourceForModuleDependencies>true</ScanSourceForModuleDependencies>
-      <AdditionalIncludeDirectories>..\ObserverPtr;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -147,7 +151,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Board.cpp" />
-    <ClCompile Include="Bridge.cpp" />
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="CrossPylon.cpp" />
     <ClCompile Include="DebuilderBob.cpp" />
@@ -157,14 +160,12 @@
     <ClCompile Include="IPlayer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="HumanPlayer.cpp" />
-    <ClCompile Include="Pylon.cpp" />
     <ClCompile Include="SinglePylon.cpp" />
     <ClCompile Include="SquarePylon.cpp" />
     <ClCompile Include="Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h" />
-    <ClInclude Include="Bridge.h" />
     <ClInclude Include="Card.h" />
     <ClInclude Include="CrossPylon.h" />
     <ClInclude Include="DebuilderBob.h" />
@@ -173,11 +174,14 @@
     <ClInclude Include="GameLoader.h" />
     <ClInclude Include="IPlayer.h" />
     <ClInclude Include="HumanPlayer.h" />
-    <ClInclude Include="observer_test.h" />
-    <ClInclude Include="Pylon.h" />
     <ClInclude Include="SinglePylon.h" />
     <ClInclude Include="SquarePylon.h" />
     <ClInclude Include="Utilities.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ObserverPtr\ObserverPtr.vcxproj">
+      <Project>{8135ff92-e123-4a8b-b38c-eabceea8280d}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

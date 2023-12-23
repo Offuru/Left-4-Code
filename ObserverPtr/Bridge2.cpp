@@ -1,4 +1,4 @@
-#include "Bridge.h"
+#include "Bridge2.h"
 
 using namespace twixt;
 
@@ -6,7 +6,7 @@ Bridge::Bridge() :
 	m_pylonStart{ nullptr }, m_pylonEnd{ nullptr }, m_posStart{ std::make_pair(0,0) }, m_posEnd{ std::make_pair(0,0) } {};
 
 Bridge::Bridge(nonstd::observer_ptr<Pylon> pylonStart, nonstd::observer_ptr<Pylon> pylonEnd, const Position& posStart, const Position& posEnd) :
-	m_pylonStart{ pylonStart }, m_pylonEnd{ pylonEnd}, m_posStart{ posStart }, m_posEnd{ posEnd } {};
+	m_pylonStart{ pylonStart }, m_pylonEnd{ pylonEnd }, m_posStart{ posStart }, m_posEnd{ posEnd } {};
 
 Bridge::Bridge(const Bridge& other)
 {

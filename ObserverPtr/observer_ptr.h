@@ -1,10 +1,6 @@
 #pragma once
 
-#ifdef OBSERVER_PTR_EXPORTS	
-#define OBSERVER_PTR_API __declspec(dllexport)
-#else
-#define OBSERVER_PTR_API __declspec(dllimport)
-#endif
+#define OBSERVER_PTR __declspec(dllexport)
 
 #include <type_traits>
 #include <memory>
@@ -12,7 +8,7 @@
 namespace nonstd
 {
 	template<typename T>
-	class OBSERVER_PTR_API observer_ptr
+	class OBSERVER_PTR observer_ptr
 	{
 	public:
 		constexpr observer_ptr() noexcept {};
@@ -123,25 +119,25 @@ namespace nonstd
 	template<typename T>
 	[[nodiscard]] bool operator==(const observer_ptr<T>& p, std::nullptr_t) noexcept
 	{
-		return static_cast<bool>(p);
+		return !static_cast<bool>(p);
 	}
 
 	template<typename T>
 	[[nodiscard]] bool operator==(std::nullptr_t, const observer_ptr<T>& p) noexcept
 	{
-		return static_cast<bool>(p);
+		return !static_cast<bool>(p);
 	}
 
 	template<typename T>
 	[[nodiscard]] bool operator!=(const observer_ptr<T>& p, std::nullptr_t) noexcept
 	{
-		return !p;
+		return p;
 	}
 
 	template<typename T>
 	[[nodiscard]] bool operator!=(std::nullptr_t, const observer_ptr<T>& p) noexcept
 	{
-		return !p;
+		return p;
 	}
 
 	template<typename T1, typename T2>

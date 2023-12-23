@@ -21,12 +21,6 @@
     <ClCompile Include="Foundation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Pylon.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Bridge.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Board.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -65,12 +59,6 @@
     <ClInclude Include="Foundation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Pylon.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Bridge.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Board.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -102,9 +90,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameLoader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="observer_test.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

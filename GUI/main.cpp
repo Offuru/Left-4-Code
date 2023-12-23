@@ -8,7 +8,8 @@ int main(int argc, char *argv[])
     StartWindow w;
     //w.setWindowState(Qt::WindowMaximized);
     w.show();
-    //test.Run();
+    twixt::Game test(20, 12);
+    test.Run();
 
     return a.exec();
 }

@@ -18,5 +18,22 @@
     <ClInclude Include="observer_ptr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Pylon2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Bridge2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Pylon2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Bridge2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="observer_ptr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

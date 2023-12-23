@@ -9,8 +9,7 @@
 #include <random>
 #include <unordered_set>
 #include <queue>
-//#include "../ObserverPtr/observer_ptr.h"
-#include "observer_test.h"
+#include "observer_ptr.h"
 #include "Utilities.h"
 
 namespace twixt

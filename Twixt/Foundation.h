@@ -1,7 +1,7 @@
 #pragma once
 
 #include <utility>
-#include "Pylon.h"
+#include "../ObserverPtr/Pylon2.h"
 #include "CrossPylon.h"
 #include "SinglePylon.h"
 #include "SquarePylon.h"
