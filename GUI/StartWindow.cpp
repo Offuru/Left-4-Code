@@ -8,19 +8,22 @@ StartWindow::StartWindow(QWidget* parent)
 	m_nameAIWindow = std::make_unique<NameAIWindow>(this, m_game);
 	setWindowFlags(Qt::MSWindowsFixedSizeDialogHint);
 	m_ui->setupUi(this);
+
+	QObject::connect(m_ui->twoPlayersButton, &QPushButton::clicked, this, &StartWindow::openTwoPlayersWindow);
+	QObject::connect(m_ui->aiPlayerButton, &QPushButton::clicked, this, &StartWindow::openAiPlayerWindow);
 }
 
 StartWindow::~StartWindow()
 {}
 
-void StartWindow::on_twoPlayersButton_clicked()
+void StartWindow::openTwoPlayersWindow()
 {
 	this->hide();
 	m_game->setHumanPlayers(true);
 	m_name2PlayersWindow->show();
 }
 
-void StartWindow::on_aiPlayerButton_clicked()
+void StartWindow::openAiPlayerWindow()
 {
 	this->hide();
 	m_game->setHumanPlayers(false);

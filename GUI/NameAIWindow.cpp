@@ -6,12 +6,14 @@ NameAIWindow::NameAIWindow(QWidget* parent, std::shared_ptr<twixt::Game> game)
 	setWindowFlags(Qt::Window | Qt::MSWindowsFixedSizeDialogHint);
 	m_game = game;
 	m_ui->setupUi(this);
+
+	QObject::connect(m_ui->goBackButton, &QPushButton::clicked, this, &NameAIWindow::openParentWindow);
 }
 
 NameAIWindow::~NameAIWindow()
 {}
 
-void NameAIWindow::on_goBackButton_clicked()
+void NameAIWindow::openParentWindow()
 {
 	this->hide();
 	this->parentWidget()->show();

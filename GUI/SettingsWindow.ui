@@ -110,6 +110,9 @@
               <property name="enabled">
                <bool>true</bool>
               </property>
+              <property name="maximum">
+               <number>40</number>
+              </property>
              </widget>
             </item>
            </layout>
@@ -161,7 +164,11 @@
            </widget>
           </item>
           <item row="0" column="3">
-           <widget class="QSpinBox" name="boardSizeSpinBox"/>
+           <widget class="QSpinBox" name="boardSizeSpinBox">
+            <property name="maximum">
+             <number>52</number>
+            </property>
+           </widget>
           </item>
           <item row="0" column="4">
            <spacer name="horizontalSpacer">
@@ -194,6 +201,9 @@
            <widget class="QSpinBox" name="pylonsSpinBox">
             <property name="minimum">
              <number>0</number>
+            </property>
+            <property name="maximum">
+             <number>80</number>
             </property>
            </widget>
           </item>

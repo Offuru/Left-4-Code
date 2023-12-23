@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "ui_GameModeWindow.h"
+#include "SettingsWindow.h"
 #include "Game.h"
 
 class GameModeWindow : public QMainWindow
@@ -16,10 +17,12 @@ public:
 
 	void closeEvent(QCloseEvent* event);
 
-public slots:
-	void on_backButton_clicked();
+private slots:
+	void openParentWindow();
+	void openSettingsWindow();
 
 private:
 	std::unique_ptr<Ui::GameModeWindowClass> m_ui;
 	std::shared_ptr<twixt::Game> m_game;
+	std::unique_ptr<SettingsWindow> m_settingsWindow;
 };
