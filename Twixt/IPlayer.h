@@ -23,8 +23,7 @@ namespace twixt
 			RemovePylon,
 			RemoveBridge,
 			DrawCard,
-			PlayCard,
-
+			PlayCard
 		};
 
 		// optional position in case of add/remove bridge action
