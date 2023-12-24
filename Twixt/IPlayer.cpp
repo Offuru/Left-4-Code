@@ -28,9 +28,7 @@ bool twixt::IPlayer::validMove(const Move& nextMove, uint8_t boardSize) const
 {
 	const auto& [action, pos1, pos2] = nextMove;
 
-	if (action != Action::AddBridge && action != Action::AddCrossPylon &&
-		action != Action::AddSinglePylon && action != Action::AddSquarePylon &&
-		action != Action::RemoveBridge && action != Action::RemovePylon)
+	if (action < Action::AddSinglePylon || action > Action::PlayCard)
 		return false;
 	if (pos1.value().first < 0 || pos1.value().second >= boardSize)
 		return false;
