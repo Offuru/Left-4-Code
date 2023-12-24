@@ -41,6 +41,7 @@ namespace twixt
 		void removeBridge(const nonstd::observer_ptr<Bridge>&);
 
 		void spawnMines();
+		bool addMine(const Position& pos);
 
 		Foundation& operator[](const Position&);
 		const Foundation& operator[](const Position&) const;

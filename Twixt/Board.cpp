@@ -282,6 +282,16 @@ void Board::spawnMines()
 	}
 }
 
+bool twixt::Board::addMine(const Position& pos)
+{
+	Foundation& foundation = (*this)[pos];
+
+	if (foundation.getMined() == true)
+		return false;
+
+	foundation.setMined(true);
+}
+
 Foundation& Board::operator[](const Position& position)
 {
 	return const_cast<Foundation&>(std::as_const(*this)[position]);
