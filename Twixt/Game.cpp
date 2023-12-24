@@ -403,6 +403,14 @@ void Game::printBoard()
 	}
 }
 
+void twixt::Game::printDeck(nonstd::observer_ptr<IPlayer> player)
+{
+	std::cout << std::endl;
+	for (const auto& card : player->getCards())
+		std::cout << card.getTargetString() << ' ' << card.getEffectString() << std::endl;
+	std::cout << std::endl;
+}
+
 bool Game::removeBridge(const Position& start, const Position& end, Pylon::Color color)
 {
 	nonstd::observer_ptr<Bridge> bridgeToRemove = nullptr;
@@ -584,9 +592,6 @@ bool twixt::Game::processTurn(const IPlayer::Move& nextMove, const nonstd::obser
 
 	switch (action)
 	{
-		case IPlayer::Action::DrawCard:
-			return false; //TO DO: need IPlayer shared ptr
-			//TO DO: add play card method
 		case IPlayer::Action::AddSinglePylon:
 			if (!addPylon(pos1.value(), Pylon::Type::Single, currentPlayer->getColor()))
 				return true; //pylon couldn't be placed, so the player gets another chance
@@ -608,6 +613,9 @@ bool twixt::Game::processTurn(const IPlayer::Move& nextMove, const nonstd::obser
 			return false;
 		case IPlayer::Action::RemoveBridge:
 			removeBridge(pos1.value(), pos2.value(), currentPlayer->getColor());
+			return true;
+		case IPlayer::Action::DrawCard:
+			drawCard(currentPlayer);
 			return true;
 	}
 }
@@ -659,6 +667,19 @@ bool twixt::Game::removePylon(nonstd::observer_ptr<IPlayer> target)
 	return true;
 }
 
+bool twixt::Game::removeBridge(nonstd::observer_ptr<IPlayer> target)
+{
+	Position start, end;
+	
+	do
+	{
+		start = getPlayerPosInput();
+		end = getPlayerPosInput();
+	} while (!removeBridge(start, end, target->getColor()));
+
+	return true;
+}
+
 bool twixt::Game::place2Pylons(nonstd::observer_ptr<IPlayer> target)
 {
 	Position position;
@@ -672,11 +693,52 @@ bool twixt::Game::place2Pylons(nonstd::observer_ptr<IPlayer> target)
 	return true;
 }
 
+bool twixt::Game::placeBigPylon(nonstd::observer_ptr<IPlayer> target, Pylon::Type type)
+{
+	Position pos;
+
+	do
+	{
+		pos = getPlayerPosInput();
+	} while (!addPylon(pos, type, target->getColor()));
+
+	return true;
+}
+
 bool twixt::Game::moveBobCard()
 {
 	Position position = getPlayerPosInput();
 
 	m_bob.setPosition(position);
+
+	return true;
+}
+
+bool twixt::Game::placeMine()
+{
+	Position pos;
+
+	do
+	{
+		pos = getPlayerPosInput();
+	} while (!m_board.addMine(pos));
+
+	if (m_board[pos].getPylon() != nullptr)
+		explodePylons(pos);
+
+	return true;
+}
+
+bool twixt::Game::playCard(const Card& card)
+{
+	nonstd::observer_ptr<IPlayer> target;
+	{
+		using enum Card::Target;
+		switch (card.getTarget())
+		{
+
+		}
+	}
 
 	return true;
 }

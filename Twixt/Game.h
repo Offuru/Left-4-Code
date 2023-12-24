@@ -52,7 +52,7 @@ namespace twixt
 		bool getReusableMinedFoundation() const;
 		bool getDebuilderBob() const;
 		bool getCards() const;
-		std::unique_ptr<IPlayer>& getPlayer1();
+		std::unique_ptr<IPlayer>& getPlayer1();//TO DO: change to observer ptr
 		std::unique_ptr<IPlayer>& getPlayer2();
 		Board& getBoard();
 		std::vector<Card> getCardDeck() const;
@@ -68,6 +68,7 @@ namespace twixt
 
 		void moveBob();
 		void printBoard();
+		void printDeck(nonstd::observer_ptr<IPlayer> player);
 
 	private:
 
@@ -111,9 +112,10 @@ namespace twixt
 		bool removePylon(nonstd::observer_ptr<IPlayer> target);
 		bool removeBridge(nonstd::observer_ptr<IPlayer> target);
 		bool place2Pylons(nonstd::observer_ptr<IPlayer> target);
-		bool placeSquare(nonstd::observer_ptr<IPlayer> target);
-		bool placeCross(nonstd::observer_ptr<IPlayer> target);
+		bool placeBigPylon(nonstd::observer_ptr<IPlayer> target, Pylon::Type type);
 		bool moveBobCard();
 		bool placeMine();
+
+		bool playCard(const Card& card);
 	};
 }
