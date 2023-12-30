@@ -5,6 +5,7 @@
 
 #include "ui_GameModeWindow.h"
 #include "SettingsWindow.h"
+#include "GameWindow.h"
 #include "Game.h"
 
 class GameModeWindow : public QMainWindow
@@ -20,9 +21,11 @@ public:
 private slots:
 	void openParentWindow();
 	void openSettingsWindow();
+	void openGameWindow();
 
 private:
 	std::unique_ptr<Ui::GameModeWindowClass> m_ui;
 	std::shared_ptr<twixt::Game> m_game;
 	std::unique_ptr<SettingsWindow> m_settingsWindow;
+	std::unique_ptr<GameWindow> m_gameWindow;
 };

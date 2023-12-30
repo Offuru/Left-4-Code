@@ -112,11 +112,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GameModeWindow.cpp" />
+    <ClCompile Include="GameWindow.cpp" />
     <ClCompile Include="Name2PlayersWindow.cpp" />
     <ClCompile Include="NameAIWindow.cpp" />
     <ClCompile Include="SettingsWindow.cpp" />
     <QtRcc Include="MainWindow.qrc" />
     <QtUic Include="GameModeWindow.ui" />
+    <QtUic Include="GameWindow.ui" />
     <QtUic Include="StartWindow.ui" />
     <QtMoc Include="StartWindow.h" />
     <ClCompile Include="StartWindow.cpp" />
@@ -141,6 +143,9 @@
     <ProjectReference Include="..\ObserverPtr\ObserverPtr.vcxproj">
       <Project>{8135ff92-e123-4a8b-b38c-eabceea8280d}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="GameWindow.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

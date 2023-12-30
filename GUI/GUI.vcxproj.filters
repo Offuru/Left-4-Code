@@ -52,6 +52,9 @@
     <ClCompile Include="SettingsWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GameWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Name2PlayersWindow.h">
@@ -66,6 +69,9 @@
     <QtMoc Include="SettingsWindow.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="GameWindow.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="Name2PlayersWindow.ui">
@@ -78,6 +84,9 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="SettingsWindow.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="GameWindow.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
