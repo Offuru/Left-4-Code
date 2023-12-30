@@ -1,6 +1,8 @@
 #pragma once
 
 #include <QMainWindow>
+#include <QPainter>
+#include <QBrush>
 #include <memory>
 
 #include "ui_GameWindow.h"
@@ -19,4 +21,10 @@ public:
 private:
 	std::unique_ptr<Ui::GameWindowClass> m_ui;
 	std::shared_ptr<twixt::Game> m_game;
+	std::vector<QRect> m_pylons;
+
+	void initializeBoard();
+	void drawBoard();
+	void drawBoardLines();
+	void paintEvent(QPaintEvent* event) override;
 };
