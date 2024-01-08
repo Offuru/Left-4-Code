@@ -162,6 +162,7 @@
     <ClCompile Include="HumanPlayer.cpp" />
     <ClCompile Include="SinglePylon.cpp" />
     <ClCompile Include="SquarePylon.cpp" />
+    <ClCompile Include="GameTree.cpp" />
     <ClCompile Include="Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -176,6 +177,7 @@
     <ClInclude Include="HumanPlayer.h" />
     <ClInclude Include="SinglePylon.h" />
     <ClInclude Include="SquarePylon.h" />
+    <ClInclude Include="GameTree.h" />
     <ClInclude Include="Utilities.h" />
   </ItemGroup>
   <ItemGroup>
