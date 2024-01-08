@@ -136,6 +136,18 @@ void Board::setBridges(const std::unordered_set<std::unique_ptr<Bridge>>& bridge
 void Board::setSize(uint8_t size)
 {
 	m_size = size;
+	Foundation p;
+	m_board = std::vector<std::vector<Foundation>>();
+	m_board.resize(m_size);
+	for (int i = 0; i < m_size; ++i)
+	{
+		m_board[i].resize(m_size);
+		for (int j = 0; j < m_size; ++j)
+		{
+			Foundation p = Foundation(std::make_pair(i, j), false, nullptr);
+			m_board[i][j] = p;
+		}
+	}
 }
 
 void Board::setTotalMines(uint8_t totalMines)
