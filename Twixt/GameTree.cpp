@@ -26,4 +26,31 @@ twixt::NodeRef twixt::GameTree::selection(NodeRef curr_node)
 	return std::reference_wrapper<Node>(selected_child);
 }
 
+twixt::NodeRef twixt::GameTree::expansion(NodeRef curr_node)
+{
+	if (curr_node.get().isLeaf())
+		return curr_node;
+
+	Node selected_node = curr_node.get();
+
+	while (!selected_node.isLeaf())
+	{
+		double maxUCB = -std::numeric_limits<float>::infinity();
+		
+		for (auto child : selected_node.children)
+		{
+			float currUCB = child.UCB();
+			if (currUCB > maxUCB)
+			{
+				maxUCB = currUCB;
+				selected_node = child;
+			}
+		}
+	}
+
+	return std::reference_wrapper<Node>(selected_node);
+}
+
+
+
 

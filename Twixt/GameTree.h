@@ -45,6 +45,7 @@ namespace twixt
 		GameTree(Board rootGame, size_t depth = 0u);
 
 		NodeRef selection(NodeRef curr_node);
+		NodeRef expansion(NodeRef curr_node);
 
 	private:
 		size_t m_depth;
