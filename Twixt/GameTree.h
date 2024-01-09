@@ -22,6 +22,9 @@ namespace twixt
 		int parentVisits{};
 		int currentVisists{};
 
+		std::optional<twixt::Position> position;
+		std::optional<std::pair<twixt::Position, twixt::Position>> bridge; //bridge ends positions
+
 		//upper confidence bound
 		double UCB() const
 		{
@@ -33,6 +36,18 @@ namespace twixt
 		{
 			return children.size() == 0;
 		}
+
+		Node(Board board, NodePtr parent,
+			std::optional<twixt::Position> position = std::nullopt,
+			std::optional<std::pair<twixt::Position, twixt::Position>> bridge = std::nullopt) :
+			currentBoard{ board }, parent{ parent }, children{ children },
+			position{ position }, bridge{ bridge }
+		{
+			children = NodeVec{};
+			winningScore = 0;
+			parentVisits = currentVisists = 0;
+		}
+
 	};
 
 
@@ -40,20 +55,22 @@ namespace twixt
 	{
 	public:
 
-		GameTree(size_t depth = 0u, Pylon::Color color = Pylon::Color::Black);
+		GameTree(size_t depth = 0u);
 
-		GameTree(Board rootGame, size_t depth = 0u, Pylon::Color color);
+		GameTree(Board rootGame, size_t depth = 0u);
 
 		NodeRef selection(NodeRef curr_node);
 		NodeRef expansion(NodeRef curr_node, bool black);
 
 
-		NodeVec generateAllStates(NodeRef curr_node);
+		NodeVec generatePossibleStates(NodeRef curr_node, bool black);
 
 	private:
 		size_t m_depth;
 		Node m_root;
 		Pylon::Color m_color; //helps with generateAllStates so we don't generate ALL possible states because
-							  //there would be too many of them
+		//there would be too many of them
+
+		bool inBounds(size_t posX, size_t posY, size_t boardSize);
 	};
 }
