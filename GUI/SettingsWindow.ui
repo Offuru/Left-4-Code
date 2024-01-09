@@ -168,6 +168,9 @@
           </item>
           <item row="0" column="3">
            <widget class="QSpinBox" name="boardSizeSpinBox">
+            <property name="minimum">
+             <number>5</number>
+            </property>
             <property name="maximum">
              <number>52</number>
             </property>
@@ -206,7 +209,7 @@
           <item row="0" column="2">
            <widget class="QSpinBox" name="pylonsSpinBox">
             <property name="minimum">
-             <number>0</number>
+             <number>5</number>
             </property>
             <property name="maximum">
              <number>80</number>

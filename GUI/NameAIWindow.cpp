@@ -3,7 +3,7 @@
 NameAIWindow::NameAIWindow(QWidget* parent, std::shared_ptr<twixt::Game> game)
 	: QMainWindow{ parent }, m_ui{ std::make_unique<Ui::NameAIWindowClass>() }
 {
-	setWindowFlags(Qt::Window | Qt::MSWindowsFixedSizeDialogHint);
+	setWindowState(Qt::WindowMaximized);
 	m_game = game;
 	m_ui->setupUi(this);
 

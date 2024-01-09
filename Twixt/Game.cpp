@@ -13,7 +13,7 @@ Game::Game(uint8_t boardSize, uint8_t minesNumber) :
 	m_player2 = std::make_unique<HumanPlayer>();
 
 	m_boardSize = boardSize;
-	m_areaLength = 2;
+	m_areaLength = 1;
 }
 
 Game::Game(const Game& other) :
@@ -499,7 +499,7 @@ bool Game::verifyMinedFoundation(const Position& pos)
 	if (!foundation.getExploded())
 	{
 		explodePylons(pos);
-		return true;  //if it gets here it means that the player placed a pylon
+		return false;  //if it gets here it means that the player placed a pylon
 					//on a mine, so their turn should skip
 	} else if (m_reusableMinedFoundation)
 	{

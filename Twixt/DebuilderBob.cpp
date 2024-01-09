@@ -2,13 +2,7 @@
 
 using namespace twixt;
 
-DebuilderBob::DebuilderBob(Board& board) : m_board{ board }, m_lastPosition { {} }
-{
-	std::random_device rd;
-	std::mt19937 gen(rd());
-	std::uniform_int_distribution<> distrib(0, m_board.get().getSize() - 1);
-	m_position = { distrib(gen),  distrib(gen) };
-}
+DebuilderBob::DebuilderBob(Board& board) : m_board{ board }, m_lastPosition{ {} }, m_position{}{}
 
 twixt::DebuilderBob::DebuilderBob(const DebuilderBob& bob) : m_board{ bob.m_board.get() }
 {

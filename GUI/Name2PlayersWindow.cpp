@@ -3,7 +3,7 @@
 Name2PlayersWindow::Name2PlayersWindow(QWidget* parent, std::shared_ptr<twixt::Game> game)
 	: QMainWindow{ parent }, m_ui{std::make_unique<Ui::Name2PlayersWindowClass>()}
 {
-	setWindowFlags(Qt::Window | Qt::MSWindowsFixedSizeDialogHint);
+	setWindowState(Qt::WindowMaximized);
 	m_game = game;
 	m_gameModeWindow = std::make_unique<GameModeWindow>(this, m_game);
 	m_ui->setupUi(this);

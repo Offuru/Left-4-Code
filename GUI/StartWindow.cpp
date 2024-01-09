@@ -6,7 +6,7 @@ StartWindow::StartWindow(QWidget* parent)
 	m_game = std::make_shared<twixt::Game>();
 	m_name2PlayersWindow = std::make_unique<Name2PlayersWindow>(this, m_game);
 	m_nameAIWindow = std::make_unique<NameAIWindow>(this, m_game);
-	setWindowFlags(Qt::MSWindowsFixedSizeDialogHint);
+	setWindowState(Qt::WindowMaximized);
 	m_ui->setupUi(this);
 
 	QObject::connect(m_ui->twoPlayersButton, &QPushButton::clicked, this, &StartWindow::openTwoPlayersWindow);
