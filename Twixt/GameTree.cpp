@@ -135,7 +135,7 @@ twixt::NodeVec twixt::GameTree::generatePossibleStates(NodeRef curr_node, bool b
 		}
 
 		newBoard.addPylon(newBoard[{ posX, posY }],
-			Pylon::Color::Black, Pylon::Type::Single);
+			currentColor, Pylon::Type::Single);
 
 
 		children.emplace_back(std::move(newBoard), &(curr_node.get()),
@@ -157,13 +157,13 @@ twixt::NodeVec twixt::GameTree::generatePossibleStates(NodeRef curr_node, bool b
 			if (foundation.getBob()
 				|| foundation.getExploded()
 				|| foundation.getPylon() != nullptr
-				|| !inBounds(dx[i] + currX, dy[i] + currY, currentBoard.get().size()))
+				|| !inBounds(dx[i] + currX, dy[i] + currY, currentBoard.get().size(), black))
 				continue;
 
 			Board newBoard(curr_node.get().currentBoard);
 
 			newBoard.addPylon(newBoard[{ dx[i], dy[i] }],
-				Pylon::Color::Black, Pylon::Type::Single);
+				currentColor, Pylon::Type::Single);
 
 			children.emplace_back(std::move(newBoard), &(curr_node.get()),
 				std::make_optional<twixt::Position>({ dx[i], dy[i] }),
@@ -187,9 +187,18 @@ twixt::NodeVec twixt::GameTree::generatePossibleStates(NodeRef curr_node, bool b
 	return children;
 }
 
-bool twixt::GameTree::inBounds(size_t posX, size_t posY, size_t boardSize)
+bool twixt::GameTree::inBounds(size_t posX, size_t posY, size_t boardSize, bool black)
 {
-	return posX >= 0 && posX < boardSize && posY >= 0 && posY < boardSize;
+	if (!(posX >= 0 && posX < boardSize && posY >= 0 && posY < boardSize))
+		return false;
+
+	if (black && (posY == 0 || posY == boardSize - 1))
+		return false;
+	
+	if (!black && (posX == 0 || posX == boardSize - 1))
+		return false;
+
+	return true;
 }
 
 
