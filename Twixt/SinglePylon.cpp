@@ -2,8 +2,8 @@
 
 using namespace twixt;
 
-SinglePylon::SinglePylon(const Position& foundation, Color color, Type type) :
-	Pylon{ foundation, color, type }
+SinglePylon::SinglePylon(const Position& foundation, Color color, Type type, uint8_t currentRotation, bool bigConfiguration) :
+	Pylon{ foundation, color, type, currentRotation, bigConfiguration }
 {
 	m_connectionPoints.emplace_back(foundation);
 }

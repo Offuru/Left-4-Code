@@ -10,7 +10,7 @@ namespace twixt
 
 	public:
 		SinglePylon() = delete;
-		SinglePylon(const Position&, Color, Type);
+		SinglePylon(const Position&, Color, Type, uint8_t, bool);
 		SinglePylon(const SinglePylon&);
 		~SinglePylon() = default;
 

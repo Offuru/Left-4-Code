@@ -2,22 +2,29 @@
 
 using namespace twixt;
 
-Pylon::Pylon(const Position& foundation, Color color, Type type) :
+Pylon::Pylon(const Position& foundation, Color color, Type type, uint8_t pylonRotation, bool bigConfiguration) :
 	m_color{ color }, m_connections{ std::vector<nonstd::observer_ptr<Bridge>>() },
 	m_connectionPoints{ std::vector<Position>() },
-	m_type{ type }
+	m_type{ type },
+	m_pylonRotation{pylonRotation},
+	m_bigConfiguration{bigConfiguration}
 {}
 
 Pylon::Pylon(const Pylon& other) :
 	m_color{ other.m_color }, m_connectionPoints{ other.m_connectionPoints },
 	m_foundations{ other.m_foundations }, m_connections{ other.m_connections },
-	m_type{ other.m_type }
+	m_type{ other.m_type },
+	m_pylonRotation{ other.m_pylonRotation },
+	m_bigConfiguration{ other.m_bigConfiguration }
 {}
 
 Pylon& Pylon::operator=(const Pylon& other)
 {
 	m_type = other.m_type;
 	m_color = other.m_color;
+	m_pylonRotation = other.m_pylonRotation;
+	m_bigConfiguration = other.m_bigConfiguration;
+	
 	m_connectionPoints = other.m_connectionPoints;
 	m_foundations = other.m_foundations;
 	m_connections = other.m_connections;
@@ -48,6 +55,16 @@ Pylon::Color Pylon::getColor() const
 Pylon::Type Pylon::getType() const
 {
 	return m_type;
+}
+
+bool twixt::Pylon::getPylonRotation() const
+{
+	return m_pylonRotation;
+}
+
+uint8_t twixt::Pylon::getBigConfiguration() const
+{
+	return m_bigConfiguration;
 }
 
 void Pylon::setFoundations(const std::vector<Position>& foundations)

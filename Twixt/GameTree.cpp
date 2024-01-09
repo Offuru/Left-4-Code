@@ -135,7 +135,7 @@ twixt::NodeVec twixt::GameTree::generatePossibleStates(NodeRef curr_node, bool b
 		}
 
 		newBoard.addPylon(newBoard[{ posX, posY }],
-			currentColor, Pylon::Type::Single);
+			currentColor, Pylon::Type::Single, 0, false);
 
 
 		children.emplace_back(std::move(newBoard), &(curr_node.get()),
@@ -163,7 +163,7 @@ twixt::NodeVec twixt::GameTree::generatePossibleStates(NodeRef curr_node, bool b
 			Board newBoard(curr_node.get().currentBoard);
 
 			newBoard.addPylon(newBoard[{ dx[i], dy[i] }],
-				currentColor, Pylon::Type::Single);
+				currentColor, Pylon::Type::Single, 0, false);
 
 			children.emplace_back(std::move(newBoard), &(curr_node.get()),
 				std::make_optional<twixt::Position>({ dx[i], dy[i] }),
@@ -200,7 +200,3 @@ bool twixt::GameTree::inBounds(size_t posX, size_t posY, size_t boardSize, bool 
 
 	return true;
 }
-
-
-
-

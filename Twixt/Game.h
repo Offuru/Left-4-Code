@@ -58,7 +58,7 @@ namespace twixt
 		std::vector<Card> getCardDeck() const;
 		std::stack<Card> getCardStack() const;
 
-		bool addPylon(const Position&, Pylon::Type, Pylon::Color);
+		bool addPylon(const Position&, Pylon::Type, Pylon::Color, uint8_t pylonRotation, bool bigConfiguration = true); //both square and cross pylons have 2 possible configurations
 		bool addBridge(const Position&, const Position&, Pylon::Color);
 
 		bool removeBridge(const Position&, const Position&, Pylon::Color);
@@ -111,8 +111,8 @@ namespace twixt
 		bool removeOpponentCard(nonstd::observer_ptr<IPlayer> target);
 		bool removePylon(nonstd::observer_ptr<IPlayer> target);
 		bool removeBridge(nonstd::observer_ptr<IPlayer> target);
-		bool place2Pylons(nonstd::observer_ptr<IPlayer> target);
-		bool placeBigPylon(nonstd::observer_ptr<IPlayer> target, Pylon::Type type);
+		bool place2Pylons(nonstd::observer_ptr<IPlayer> target, uint8_t pylonRotation, bool bigConfiguration);
+		bool placeBigPylon(nonstd::observer_ptr<IPlayer> target, Pylon::Type type, uint8_t pylonRotation, bool bigConfiguration);
 		bool moveBobCard();
 		bool placeMine();
 

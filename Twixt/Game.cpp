@@ -248,7 +248,7 @@ std::stack<Card> twixt::Game::getCardStack() const
 	return m_cardStack;
 }
 
-bool Game::addPylon(const Position& pos, Pylon::Type type, Pylon::Color color)
+bool Game::addPylon(const Position& pos, Pylon::Type type, Pylon::Color color, uint8_t pylonRotation, bool bigConfiguration)
 {
 	const auto& [row, col] = pos;
 	switch (type)
@@ -256,7 +256,7 @@ bool Game::addPylon(const Position& pos, Pylon::Type type, Pylon::Color color)
 		case Pylon::Type::Single:
 			if (validFoundation(pos, color))
 			{
-				m_board.addPylon(m_board.getFoundation(pos), color, type);
+				m_board.addPylon(m_board.getFoundation(pos), color, type, pylonRotation, bigConfiguration);
 				return true;
 			}
 			break;
@@ -266,7 +266,7 @@ bool Game::addPylon(const Position& pos, Pylon::Type type, Pylon::Color color)
 				validFoundation({ row + 1, col }, color) &&
 				validFoundation({ row + 1, col + 1 }, color))
 			{
-				m_board.addPylon(m_board.getFoundation(pos), color, type);
+				m_board.addPylon(m_board.getFoundation(pos), color, type, pylonRotation, bigConfiguration);
 				return true;
 			}
 			break;
@@ -277,7 +277,7 @@ bool Game::addPylon(const Position& pos, Pylon::Type type, Pylon::Color color)
 				validFoundation({ row, col + 1 }, color) &&
 				validFoundation({ row, col - 1 }, color))
 			{
-				m_board.addPylon(m_board.getFoundation(pos), color, type);
+				m_board.addPylon(m_board.getFoundation(pos), color, type, pylonRotation, bigConfiguration);
 				return true;
 			}
 			break;
@@ -582,43 +582,43 @@ void Game::explodeArea(const Position& pos)
 	}
 }
 
-bool twixt::Game::processTurn(const IPlayer::Move& nextMove, const nonstd::observer_ptr<IPlayer>& currentPlayer)
-{
-	if (!currentPlayer->validMove(nextMove, m_boardSize))
-	{
-		return true; //bad move, another chance
-	}
-	const auto& [action, pos1, pos2] = nextMove;
-
-	switch (action)
-	{
-		case IPlayer::Action::AddSinglePylon:
-			if (!addPylon(pos1.value(), Pylon::Type::Single, currentPlayer->getColor()))
-				return true; //pylon couldn't be placed, so the player gets another chance
-			return false;
-		case IPlayer::Action::AddSquarePylon:
-			if (!addPylon(pos1.value(), Pylon::Type::Square, currentPlayer->getColor()))
-				return true;
-			return false;
-		case IPlayer::Action::AddCrossPylon:
-			if (!addPylon(pos1.value(), Pylon::Type::Cross, currentPlayer->getColor()))
-				return true;
-			return false;
-		case IPlayer::Action::AddBridge:
-			addBridge(pos1.value(), pos2.value(), currentPlayer->getColor());
-			return true;
-		case IPlayer::Action::RemovePylon:
-			if (!removePylon(pos1.value(), currentPlayer->getColor()))
-				return true;
-			return false;
-		case IPlayer::Action::RemoveBridge:
-			removeBridge(pos1.value(), pos2.value(), currentPlayer->getColor());
-			return true;
-		case IPlayer::Action::DrawCard:
-			drawCard(currentPlayer);
-			return true;
-	}
-}
+//bool twixt::Game::processTurn(const IPlayer::Move& nextMove, const nonstd::observer_ptr<IPlayer>& currentPlayer)
+//{
+//	if (!currentPlayer->validMove(nextMove, m_boardSize))
+//	{
+//		return true; //bad move, another chance
+//	}
+//	const auto& [action, pos1, pos2] = nextMove;
+//
+//	switch (action)
+//	{
+//		case IPlayer::Action::AddSinglePylon:
+//			if (!addPylon(pos1.value(), Pylon::Type::Single, currentPlayer->getColor()))
+//				return true; //pylon couldn't be placed, so the player gets another chance
+//			return false;
+//		case IPlayer::Action::AddSquarePylon:
+//			if (!addPylon(pos1.value(), Pylon::Type::Square, currentPlayer->getColor()))
+//				return true;
+//			return false;
+//		case IPlayer::Action::AddCrossPylon:
+//			if (!addPylon(pos1.value(), Pylon::Type::Cross, currentPlayer->getColor()))
+//				return true;
+//			return false;
+//		case IPlayer::Action::AddBridge:
+//			addBridge(pos1.value(), pos2.value(), currentPlayer->getColor());
+//			return true;
+//		case IPlayer::Action::RemovePylon:
+//			if (!removePylon(pos1.value(), currentPlayer->getColor()))
+//				return true;
+//			return false;
+//		case IPlayer::Action::RemoveBridge:
+//			removeBridge(pos1.value(), pos2.value(), currentPlayer->getColor());
+//			return true;
+//		case IPlayer::Action::DrawCard:
+//			drawCard(currentPlayer);
+//			return true;
+//	}
+//}
 
 Position twixt::Game::getPlayerPosInput() const
 {
@@ -680,27 +680,27 @@ bool twixt::Game::removeBridge(nonstd::observer_ptr<IPlayer> target)
 	return true;
 }
 
-bool twixt::Game::place2Pylons(nonstd::observer_ptr<IPlayer> target)
+bool twixt::Game::place2Pylons(nonstd::observer_ptr<IPlayer> target, uint8_t pylonRotation, bool bigConfiguration)
 {
 	Position position;
 
 	while (m_board[position = getPlayerPosInput()].getPylon() != nullptr);
-	addPylon(position, Pylon::Type::Single, target->getColor());
+	addPylon(position, Pylon::Type::Single, target->getColor(), pylonRotation, bigConfiguration);
 
 	while (m_board[position = getPlayerPosInput()].getPylon() != nullptr);
-	addPylon(position, Pylon::Type::Single, target->getColor());
+	addPylon(position, Pylon::Type::Single, target->getColor(), pylonRotation, bigConfiguration);
 
 	return true;
 }
 
-bool twixt::Game::placeBigPylon(nonstd::observer_ptr<IPlayer> target, Pylon::Type type)
+bool twixt::Game::placeBigPylon(nonstd::observer_ptr<IPlayer> target, Pylon::Type type, uint8_t pylonRotation, bool bigConfiguration)
 {
 	Position pos;
 
 	do
 	{
 		pos = getPlayerPosInput();
-	} while (!addPylon(pos, type, target->getColor()));
+	} while (!addPylon(pos, type, target->getColor(), pylonRotation, bigConfiguration));
 
 	return true;
 }

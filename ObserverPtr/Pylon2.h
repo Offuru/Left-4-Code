@@ -41,10 +41,12 @@ namespace twixt
 		std::vector<Position> m_connectionPoints;
 		Color m_color;
 		Type m_type;
+		uint8_t m_pylonRotation;
+		bool m_bigConfiguration;
 
 	public:
 		__declspec(dllexport) Pylon() = delete;
-		__declspec(dllexport) Pylon(const Position&, Color, Type);
+		__declspec(dllexport) Pylon(const Position&, Color, Type, uint8_t pylonRotation, bool bigConfiguration);
 		__declspec(dllexport) Pylon(const Pylon&);
 		__declspec(dllexport) Pylon& operator=(const Pylon&);
 		__declspec(dllexport) virtual ~Pylon() = default;
@@ -54,6 +56,8 @@ namespace twixt
 		__declspec(dllexport) std::vector<Position> getConnectionPoints() const; //TO DO: change to predefined pylon connection points
 		__declspec(dllexport) Color getColor() const;
 		__declspec(dllexport) Type getType() const;
+		__declspec(dllexport) bool getPylonRotation() const;
+		__declspec(dllexport) uint8_t getBigConfiguration() const;
 
 		__declspec(dllexport) void setFoundations(const std::vector<Position>&);
 		__declspec(dllexport) void setConnections(const std::vector<nonstd::observer_ptr<Bridge>>&);
