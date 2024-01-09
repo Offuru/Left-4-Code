@@ -99,7 +99,7 @@ namespace twixt
 		void explodeCol(const Position&);
 		void explodeRow(const Position&);
 		void explodeArea(const Position&);
-		bool processTurn(const IPlayer::Move&, const nonstd::observer_ptr<IPlayer>&); //it returns true only if the player
+		//bool processTurn(const IPlayer::Move&, const nonstd::observer_ptr<IPlayer>&); //it returns true only if the player
 																//changed their bridges, so they can
 																//modify more of them in the same round,
 																//and returns false if a pylon was added/deleted

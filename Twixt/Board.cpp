@@ -375,7 +375,7 @@ bool Board::checkWinningRoute(std::queue<nonstd::observer_ptr<Pylon>>& nextVisit
 	return false;
 }
 
-bool Board::verifyWinner(const nonstd::observer_ptr<IPlayer>& player)
+bool Board::verifyWinner(const Pylon::Color& color)
 {
 	std::queue<nonstd::observer_ptr<Pylon>> nextVisit;
 	std::unordered_set<nonstd::observer_ptr<Pylon>> visited;
@@ -383,7 +383,7 @@ bool Board::verifyWinner(const nonstd::observer_ptr<IPlayer>& player)
 	for (int i = 0; i < m_board.size(); ++i)
 	{
 		nonstd::observer_ptr<Pylon> currPylon;
-		if (player->getColor() == Pylon::Color::Red)
+		if (color == Pylon::Color::Red)
 			currPylon = m_board[0][i].getPylon();
 		else
 			currPylon = m_board[i][0].getPylon();
@@ -402,7 +402,7 @@ bool Board::verifyWinner(const nonstd::observer_ptr<IPlayer>& player)
 	for (int i = 0; i < m_board.size(); ++i)
 	{
 		nonstd::observer_ptr<Pylon> currPylon;
-		if (player->getColor() == Pylon::Color::Red)
+		if (color == Pylon::Color::Red)
 			currPylon = m_board[m_size - 1][i].getPylon();
 		else
 			currPylon = m_board[i][m_size - 1].getPylon();

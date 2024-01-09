@@ -48,7 +48,7 @@ namespace twixt
 
 		Foundation& getFoundation(const Position&);
 	
-		bool verifyWinner(const nonstd::observer_ptr<IPlayer>&);
+		bool verifyWinner(const Pylon::Color & color);
 	private:
 		uint8_t m_size;
 		uint8_t m_totalMines;

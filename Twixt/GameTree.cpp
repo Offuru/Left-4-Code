@@ -1,11 +1,11 @@
 #include "GameTree.h"
 
-twixt::GameTree::GameTree(size_t depth) :
-	GameTree{ Board{}, depth }
+twixt::GameTree::GameTree(size_t depth, bool black) :
+	GameTree{ Board{}, depth, black}
 {}
 
-twixt::GameTree::GameTree(Board rootGame, size_t depth) :
-	m_depth{ depth }, m_root{ std::move(rootGame), nullptr }
+twixt::GameTree::GameTree(Board rootGame, size_t depth, bool black) :
+	m_depth{ depth }, m_root{ std::move(rootGame), nullptr, black }
 {}
 
 twixt::NodeRef twixt::GameTree::selection(NodeRef curr_node)
@@ -118,7 +118,7 @@ twixt::NodeVec twixt::GameTree::generatePossibleStates(NodeRef curr_node, bool b
 			{
 				if (currentBoard.get()[i][j].getPylon() != nullptr)
 				{
-					if (currentBoard.get()[i][j].getPylon()->getColor() == Pylon::Color::Black)
+					if (currentBoard.get()[i][j].getPylon()->getColor() == Pylon::Color::Red)
 						leftmost = currentBoard.get()[i][j].getPylon();
 				}
 			}
@@ -132,7 +132,7 @@ twixt::NodeVec twixt::GameTree::generatePossibleStates(NodeRef curr_node, bool b
 			{
 				if (currentBoard.get()[i][j].getPylon() != nullptr)
 				{
-					if (currentBoard.get()[i][j].getPylon()->getColor() == Pylon::Color::Black)
+					if (currentBoard.get()[i][j].getPylon()->getColor() == Pylon::Color::Red)
 						rightmost = currentBoard.get()[i][j].getPylon();
 				}
 			}
@@ -169,6 +169,7 @@ twixt::NodeVec twixt::GameTree::generatePossibleStates(NodeRef curr_node, bool b
 
 
 			children.emplace_back(std::move(newBoard), &(curr_node.get()),
+				black, curr_node.get().height,
 				std::make_optional<twixt::Position>({ dx[i], dy[i] }),
 				std::make_optional<std::pair<twixt::Position, twixt::Position>>({ {dx[i], dy[i]}, curr_node.get().position.value() }));
 
@@ -202,6 +203,7 @@ twixt::NodeVec twixt::GameTree::generatePossibleStates(NodeRef curr_node, bool b
 
 
 			children.emplace_back(std::move(newBoard), &(curr_node.get()),
+				black, curr_node.get().height,
 				std::make_optional<twixt::Position>({ rightOrUpDX[i], rightOrUpDY[i] }),
 				std::make_optional<std::pair<twixt::Position, twixt::Position>>({ {rightOrUpDX[i], rightOrUpDY[i]}, curr_node.get().position.value() }));
 
@@ -227,6 +229,7 @@ twixt::NodeVec twixt::GameTree::generatePossibleStates(NodeRef curr_node, bool b
 
 
 			children.emplace_back(std::move(newBoard), &(curr_node.get()),
+				black, curr_node.get().height,
 				std::make_optional<twixt::Position>({ rightOrUpDX[i], rightOrUpDY[i] }),
 				std::make_optional<std::pair<twixt::Position, twixt::Position>>({ {rightOrUpDX[i], rightOrUpDY[i]}, curr_node.get().position.value() }));
 
@@ -256,6 +259,7 @@ twixt::NodeVec twixt::GameTree::generatePossibleStates(NodeRef curr_node, bool b
 
 
 		children.emplace_back(std::move(newBoard), &(curr_node.get()),
+			black, curr_node.get().height,
 			std::make_optional<twixt::Position>({ posX, posY }));
 
 		addedState = true;

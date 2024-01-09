@@ -50,7 +50,7 @@ Game& Game::operator=(const Game& other)
 
 void twixt::Game::Run()
 {
-	nonstd::observer_ptr<IPlayer> currentPlayer = nonstd::make_observer(m_player1.get());
+	/*nonstd::observer_ptr<IPlayer> currentPlayer = nonstd::make_observer(m_player1.get());
 	nonstd::observer_ptr<IPlayer> nextPlayer = nonstd::make_observer(m_player2.get());
 
 	nextPlayer->setColor(Pylon::Color::Black);
@@ -70,7 +70,7 @@ void twixt::Game::Run()
 
 		bool keepRound = processTurn(currentPlayer->getNextMove(), currentPlayer);
 
-		if (m_board.verifyWinner(currentPlayer))
+		if (m_board.verifyWinner(currentPlayer->getColor()))
 		{
 			printBoard();
 			std::cout << currentPlayer->getName() << " won\n";
@@ -83,7 +83,7 @@ void twixt::Game::Run()
 			if (m_debuilderBob)
 				moveBob();
 		}
-	}
+	}*/
 }
 
 void twixt::Game::setHumanPlayers(bool humanPlayers)

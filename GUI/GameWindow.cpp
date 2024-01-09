@@ -22,10 +22,10 @@ void GameWindow::drawBoard(QPainter* painter)
 {
     std::reference_wrapper<twixt::Board> currentBoard{ m_game->getBoard() };
 
-    m_game->addPylon({ 12, 3 }, twixt::Pylon::Type::Square, twixt::Pylon::Color::Red);
+    /*m_game->addPylon({ 12, 3 }, twixt::Pylon::Type::Square, twixt::Pylon::Color::Red);
     m_game->addPylon({ 18, 3 }, twixt::Pylon::Type::Cross, twixt::Pylon::Color::Red);
     m_game->addPylon({ 3, 3 }, twixt::Pylon::Type::Single, twixt::Pylon::Color::Black);
-    m_game->addPylon({ 0, 3 }, twixt::Pylon::Type::Square, twixt::Pylon::Color::Black);
+    m_game->addPylon({ 0, 3 }, twixt::Pylon::Type::Square, twixt::Pylon::Color::Black);*/
 
     int boardSize{ currentBoard.get().getSize() };
 

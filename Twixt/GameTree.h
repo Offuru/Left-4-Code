@@ -19,9 +19,11 @@ namespace twixt
 		NodePtr parent;
 		NodeVec children;
 
-		float winningScore{};
-		int parentVisits{};
-		int currentVisists{};
+		float winningScore;
+		int parentVisits;
+		int currentVisists;
+		bool black;
+		int height;
 
 		std::optional<twixt::Position> position;
 		std::optional<std::pair<twixt::Position, twixt::Position>> bridge; //bridge ends positions
@@ -38,17 +40,16 @@ namespace twixt
 			return children.size() == 0;
 		}
 
-		Node(Board board, NodePtr parent,
+		Node(const Board& board, NodePtr parent, bool black, int height = 0,
 			std::optional<twixt::Position> position = std::nullopt,
 			std::optional<std::pair<twixt::Position, twixt::Position>> bridge = std::nullopt) :
 			currentBoard{ board }, parent{ parent }, children{ children },
-			position{ position }, bridge{ bridge }
+			position{ position }, bridge{ bridge }, black{ black }, height{ height }
 		{
 			children = NodeVec{};
 			winningScore = 0;
 			parentVisits = currentVisists = 0;
 		}
-
 	};
 
 
@@ -56,13 +57,12 @@ namespace twixt
 	{
 	public:
 
-		GameTree(size_t depth = 0u);
+		GameTree(size_t depth = 0u, bool black = true);
 
-		GameTree(Board rootGame, size_t depth = 0u);
+		GameTree(Board rootGame, size_t depth = 0u, bool black = true);
 
 		NodeRef selection(NodeRef curr_node);
 		NodeRef expansion(NodeRef curr_node, bool black);
-
 
 		NodeVec generatePossibleStates(NodeRef curr_node, bool black);
 
