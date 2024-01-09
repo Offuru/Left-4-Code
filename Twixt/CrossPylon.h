@@ -10,7 +10,7 @@ namespace twixt
 	{
 	public:
 		CrossPylon() = delete;
-		CrossPylon(const Position&, Color, Type);
+		CrossPylon(const Position&, Color, Type, uint8_t, bool);
 		CrossPylon(const CrossPylon&);
 		~CrossPylon() = default;
 

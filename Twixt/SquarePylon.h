@@ -8,7 +8,7 @@ namespace twixt
 	{
 	public:
 		SquarePylon() = delete;
-		SquarePylon(const Position&, Color, Type);
+		SquarePylon(const Position&, Color, Type, uint8_t, bool);
 		SquarePylon(const SquarePylon&);
 		~SquarePylon() = default;
 

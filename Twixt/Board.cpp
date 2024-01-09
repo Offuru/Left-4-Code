@@ -37,9 +37,7 @@ Board::Board(const Board& other) :
 
 	for (const auto& [position, pylon] : other.m_pylons)
 	{
-
-		addPylon(m_board[position.first][position.second], pylon->getColor(), pylon->getType());
-
+		addPylon(m_board[position.first][position.second], pylon->getColor(), pylon->getType(), pylon->getPylonRotation(), pylon->getBigConfiguration());
 	}
 
 	for (auto& bridge : other.m_bridges)
@@ -71,9 +69,7 @@ Board& Board::operator=(const Board& other)
 
 	for (const auto& [position, pylon] : other.m_pylons)
 	{
-
-		addPylon(m_board[position.first][position.second], pylon->getColor(), pylon->getType());
-
+		addPylon(m_board[position.first][position.second], pylon->getColor(), pylon->getType(), pylon->getPylonRotation(), pylon->getBigConfiguration());
 	}
 
 	for (auto& bridge : other.m_bridges)
@@ -122,7 +118,7 @@ void Board::setPylons(const std::unordered_map<Position, std::unique_ptr<Pylon>>
 {
 	for (const auto& it : pylons)
 		addPylon(m_board[it.second->getFoundations().at(0).first][it.second->getFoundations().at(0).second],
-			it.second->getColor(), it.second->getType());
+			it.second->getColor(), it.second->getType(), it.second->getPylonRotation(), it.second->getBigConfiguration());
 }
 
 void Board::setBridges(const std::unordered_set<std::unique_ptr<Bridge>>& bridges)
@@ -155,7 +151,7 @@ void Board::setTotalMines(uint8_t totalMines)
 	m_totalMines = totalMines;
 }
 
-void Board::addPylon(Foundation& foundation, Pylon::Color color, Pylon::Type type)
+void Board::addPylon(Foundation& foundation, Pylon::Color color, Pylon::Type type, uint8_t pylonRotation, bool bigConfiguration)
 {
 	std::unique_ptr<Pylon> pylon;
 
@@ -163,14 +159,14 @@ void Board::addPylon(Foundation& foundation, Pylon::Color color, Pylon::Type typ
 	switch (type)
 	{
 	case Pylon::Type::Single:
-		pylon = std::make_unique<SinglePylon>(foundation.getPosition(), color, type);
+		pylon = std::make_unique<SinglePylon>(foundation.getPosition(), color, type, pylonRotation, bigConfiguration);
 		pylon->addFoundation({ x, y });
 
 		foundation.setPylon(nonstd::make_observer<Pylon>(pylon.get()));
 		break;
 
 	case Pylon::Type::Square:
-		pylon = std::make_unique<SquarePylon>(foundation.getPosition(), color, type);
+		pylon = std::make_unique<SquarePylon>(foundation.getPosition(), color, type, pylonRotation, bigConfiguration);
 		pylon->addFoundation({ x, y });
 		pylon->addFoundation({ x + 1, y });
 		pylon->addFoundation({ x + 1, y + 1 });
@@ -183,7 +179,7 @@ void Board::addPylon(Foundation& foundation, Pylon::Color color, Pylon::Type typ
 		break;
 
 	case Pylon::Type::Cross:
-		pylon = std::make_unique<CrossPylon>(foundation.getPosition(), color, type);
+		pylon = std::make_unique<CrossPylon>(foundation.getPosition(), color, type, pylonRotation, bigConfiguration);
 		pylon->addFoundation({ x, y });
 		pylon->addFoundation({ x + 1, y });
 		pylon->addFoundation({ x - 1, y });
@@ -379,7 +375,7 @@ bool Board::checkWinningRoute(std::queue<nonstd::observer_ptr<Pylon>>& nextVisit
 	return false;
 }
 
-bool Board::verifyWinner(const nonstd::observer_ptr<IPlayer>& player)
+bool Board::verifyWinner(const Pylon::Color& color)
 {
 	std::queue<nonstd::observer_ptr<Pylon>> nextVisit;
 	std::unordered_set<nonstd::observer_ptr<Pylon>> visited;
@@ -387,7 +383,7 @@ bool Board::verifyWinner(const nonstd::observer_ptr<IPlayer>& player)
 	for (int i = 0; i < m_board.size(); ++i)
 	{
 		nonstd::observer_ptr<Pylon> currPylon;
-		if (player->getColor() == Pylon::Color::Red)
+		if (color == Pylon::Color::Red)
 			currPylon = m_board[0][i].getPylon();
 		else
 			currPylon = m_board[i][0].getPylon();
@@ -406,7 +402,7 @@ bool Board::verifyWinner(const nonstd::observer_ptr<IPlayer>& player)
 	for (int i = 0; i < m_board.size(); ++i)
 	{
 		nonstd::observer_ptr<Pylon> currPylon;
-		if (player->getColor() == Pylon::Color::Red)
+		if (color == Pylon::Color::Red)
 			currPylon = m_board[m_size - 1][i].getPylon();
 		else
 			currPylon = m_board[i][m_size - 1].getPylon();

@@ -35,7 +35,7 @@ namespace twixt
 		void setSize(uint8_t);
 		void setTotalMines(uint8_t);
 
-		void addPylon(Foundation&, Pylon::Color, Pylon::Type);
+		void addPylon(Foundation&, Pylon::Color, Pylon::Type, uint8_t, bool);
 		void addBridge(Foundation&, Foundation&, Pylon::Color);
 		void removePylon(const Position&);
 		void removeBridge(const nonstd::observer_ptr<Bridge>&);
@@ -48,7 +48,7 @@ namespace twixt
 
 		Foundation& getFoundation(const Position&);
 	
-		bool verifyWinner(const nonstd::observer_ptr<IPlayer>&);
+		bool verifyWinner(const Pylon::Color & color);
 	private:
 		uint8_t m_size;
 		uint8_t m_totalMines;
