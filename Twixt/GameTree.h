@@ -28,7 +28,7 @@ namespace twixt
 		//upper confidence bound
 		double UCB() const
 		{
-			double ans = winningScore + 2 * sqrt((log(parentVisits + std::numbers::e * pow(10.0, -6.0)) / (currentVisists + pow(10., -10.))));
+			double ans = winningScore + 2 * sqrt((log(parentVisits + std::numbers::e * pow(10.f, -6.f)) / (currentVisists + pow(10.f, -10.f))));
 			return ans;
 		}
 
@@ -68,9 +68,7 @@ namespace twixt
 	private:
 		size_t m_depth;
 		Node m_root;
-		Pylon::Color m_color; //helps with generateAllStates so we don't generate ALL possible states because
-		//there would be too many of them
 
-		bool inBounds(size_t posX, size_t posY, size_t boardSize);
+		bool inBounds(size_t posX, size_t posY, size_t boardSize, bool black);
 	};
 }
