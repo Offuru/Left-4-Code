@@ -2,6 +2,7 @@
 #include "Board.h"
 #include <limits>
 #include <numbers>
+#include <array>
 
 namespace twixt
 {
