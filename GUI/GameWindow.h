@@ -28,4 +28,5 @@ private:
 	void paintEvent(QPaintEvent* event) override;
 
 	QPoint matCoordToQPoint(twixt::Position pos);
+	QRect makeSquareBoardSize();
 };
