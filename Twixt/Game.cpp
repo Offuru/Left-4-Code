@@ -7,7 +7,9 @@ Game::Game(uint8_t boardSize, uint8_t minesNumber) :
 {
 	m_reusableMinedFoundation
 		= m_bigPylons = m_minedFundations
-		= m_debuilderBob = m_cards = m_explodeArea = m_explodeCol = m_explodeRow = m_explodeSingleLocation = m_humanPlayers = false;
+		= m_debuilderBob = m_cards = m_explodeArea = m_explodeCol = m_explodeRow = m_humanPlayers = false;
+
+	m_explodeSingleLocation = true;
 
 	m_player1 = std::make_unique<HumanPlayer>();
 	m_player2 = std::make_unique<HumanPlayer>();

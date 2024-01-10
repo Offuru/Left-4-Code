@@ -21,6 +21,7 @@ public:
 	void setFoundationsPoints(std::vector<QPoint> foundationsPoints);
 
 	void closeEvent(QCloseEvent* event);
+	void changeVisibilityBigPylonsButtons(bool state);
 
 private:
 	std::vector<QPoint> m_foundationsPoints;

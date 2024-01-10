@@ -23,6 +23,14 @@ void GameWindow::closeEvent(QCloseEvent * event)
 	QCoreApplication::quit();
 }
 
+void GameWindow::changeVisibilityBigPylonsButtons(bool state)
+{
+    m_ui->crossConfig1Button->setVisible(state);
+    m_ui->crossConfig2Button->setVisible(state);
+    m_ui->squareConfig1Button->setVisible(state);
+    m_ui->squareConfig2Button->setVisible(state);
+}
+
 void GameWindow::drawBoard(QPainter* painter)
 {
     std::reference_wrapper<twixt::Board> currentBoard{ m_game->getBoard() };
@@ -137,7 +145,7 @@ void GameWindow::mousePressEvent(QMouseEvent* event)
         int distance = std::sqrt(std::pow(mousePosition.x() - foundationPos.x(), 2) + std::pow(mousePosition.y() - foundationPos.y(), 2));
 
         if (distance <= circleSize)
-            m_game->addPylon(matPosition, twixt::Pylon::Type::Single, twixt::Pylon::Color::Red);
+            m_game->addPylon(matPosition, twixt::Pylon::Type::Single, twixt::Pylon::Color::Red, 0);
     }
     
     update();
