@@ -18,8 +18,7 @@ GameModeWindow::GameModeWindow(QWidget* parent, std::shared_ptr<twixt::Game> gam
 	QObject::connect(m_ui->bigPylonsGMButton, &QPushButton::clicked,
 					[&]() { m_game->setBigPylons(true); });
 
-	QObject::connect(m_ui->mineGMButton, &QPushButton::clicked,
-					[&]() { m_game->setMinedFoundations(true); m_game->getBoard().spawnMines(); });
+	QObject::connect(m_ui->mineGMButton, &QPushButton::clicked, this, &GameModeWindow::setupMineGameMode);
 
 	QObject::connect(m_ui->debuilderGMButton, &QPushButton::clicked,
 					[&]() { m_game->setDebuilderBob(true); });
@@ -48,6 +47,13 @@ void GameModeWindow::openGameWindow()
 	m_gameWindow->changeVisibilityBigPylonsButtons(m_game->getBigPylons());
 	this->hide();
 	m_gameWindow->show();
+}
+
+void GameModeWindow::setupMineGameMode()
+{
+	m_game->setMinedFoundations(true);
+	m_game->getBoard().spawnMines();
+	m_settingsWindow->enableMineGameModeSettings();
 }
 
 void GameModeWindow::closeEvent(QCloseEvent* event)

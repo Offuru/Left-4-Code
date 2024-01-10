@@ -22,6 +22,7 @@ private slots:
 	void openParentWindow();
 	void openSettingsWindow();
 	void openGameWindow();
+	void setupMineGameMode();
 
 private:
 	std::unique_ptr<Ui::GameModeWindowClass> m_ui;

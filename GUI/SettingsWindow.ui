@@ -56,6 +56,9 @@
          <layout class="QVBoxLayout" name="verticalLayout">
           <item alignment="Qt::AlignLeft">
            <widget class="QCheckBox" name="columnExplotionCheckBox">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>Column explosion</string>
             </property>
@@ -63,6 +66,9 @@
           </item>
           <item>
            <widget class="QCheckBox" name="rowExplotionCheckBox">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>Row explotion</string>
             </property>
@@ -70,6 +76,9 @@
           </item>
           <item>
            <widget class="QCheckBox" name="areaExplotionCheckBox">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>Area explosion</string>
             </property>
@@ -108,7 +117,7 @@
             <item row="0" column="1">
              <widget class="QSpinBox" name="minesSpinBox">
               <property name="enabled">
-               <bool>true</bool>
+               <bool>false</bool>
               </property>
               <property name="maximum">
                <number>40</number>
@@ -124,6 +133,9 @@
         </item>
         <item row="1" column="0">
          <widget class="QCheckBox" name="reusableCheckBox">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="text">
            <string>Reusable mined foundation</string>
           </property>

@@ -36,3 +36,12 @@ SettingsWindow::SettingsWindow(QWidget *parent, std::shared_ptr<twixt::Game> gam
 
 SettingsWindow::~SettingsWindow()
 {}
+
+void SettingsWindow::enableMineGameModeSettings()
+{
+	m_ui->minesSpinBox->setEnabled(true);
+	m_ui->areaExplotionCheckBox->setEnabled(true);
+	m_ui->rowExplotionCheckBox->setEnabled(true);
+	m_ui->columnExplotionCheckBox->setEnabled(true);
+	m_ui->reusableCheckBox->setEnabled(true);
+}
