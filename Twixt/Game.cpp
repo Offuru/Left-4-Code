@@ -250,7 +250,7 @@ std::stack<Card> twixt::Game::getCardStack() const
 	return m_cardStack;
 }
 
-Position twixt::Game::getBob()
+DebuilderBob& twixt::Game::getBob()
 {
 	return m_bob;
 }
