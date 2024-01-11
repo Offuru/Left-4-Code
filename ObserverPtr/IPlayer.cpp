@@ -107,3 +107,43 @@ std::vector<Card> twixt::IPlayer::getCards() const
 {
 	return m_cards;
 }
+
+void twixt::IPlayer::incrementPylon1x1()
+{
+	++m_noPylons1x1;
+}
+
+void twixt::IPlayer::incrementPylon2x2()
+{
+	++m_noPylons2x2;
+}
+
+void twixt::IPlayer::incrementPylonCross()
+{
+	++m_noPylonsCross;
+}
+
+void twixt::IPlayer::incrementBridge()
+{
+	++m_noBridges;
+}
+
+void twixt::IPlayer::decrementPylon1x1()
+{
+	--m_noPylons1x1;
+}
+
+void twixt::IPlayer::decrementPylon2x2()
+{
+	--m_noPylons2x2;
+}
+
+void twixt::IPlayer::decrementPylonCross()
+{
+	--m_noPylonsCross;
+}
+
+void twixt::IPlayer::decrementBridge()
+{
+	--m_noBridges;
+}

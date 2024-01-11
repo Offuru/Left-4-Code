@@ -60,6 +60,17 @@ namespace twixt
 		__declspec(dllexport) std::vector<Card> getCards() const;
 		__declspec(dllexport) virtual std::string getTypeString() = 0;
 
+		__declspec(dllexport) void incrementPylon1x1();
+		__declspec(dllexport) void incrementPylon2x2();
+		__declspec(dllexport) void incrementPylonCross();
+		__declspec(dllexport) void incrementBridge();
+
+		__declspec(dllexport) void decrementPylon1x1();
+		__declspec(dllexport) void decrementPylon2x2();
+		__declspec(dllexport) void decrementPylonCross();
+		__declspec(dllexport) void decrementBridge();
+
+
 	protected:
 
 		std::vector<Card> m_cards;
