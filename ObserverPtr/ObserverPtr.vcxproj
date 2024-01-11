@@ -21,12 +21,12 @@
   <ItemGroup>
     <ClInclude Include="Bridge.h" />
     <ClInclude Include="observer_ptr.h" />
-    <ClInclude Include="Pylon2.h" />
+    <ClInclude Include="Pylon.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bridge.cpp" />
     <ClCompile Include="observer_ptr.cpp" />
-    <ClCompile Include="Pylon2.cpp" />
+    <ClCompile Include="Pylon.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
