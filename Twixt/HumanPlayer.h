@@ -1,6 +1,6 @@
 #pragma once
 #include "../ObserverPtr/Pylon.h"
-#include "IPlayer.h"
+#include "../ObserverPtr/IPlayer.h"
 
 namespace twixt
 {

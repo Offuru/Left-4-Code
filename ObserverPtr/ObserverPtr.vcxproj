@@ -20,11 +20,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bridge.h" />
+    <ClInclude Include="Card.h" />
+    <ClInclude Include="IPlayer.h" />
     <ClInclude Include="observer_ptr.h" />
     <ClInclude Include="Pylon.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bridge.cpp" />
+    <ClCompile Include="Card.cpp" />
+    <ClCompile Include="IPlayer.cpp" />
     <ClCompile Include="observer_ptr.cpp" />
     <ClCompile Include="Pylon.cpp" />
   </ItemGroup>

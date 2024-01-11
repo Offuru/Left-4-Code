@@ -1,6 +1,6 @@
 #include "Card.h"
 
-std::unordered_map<Card::Target,std::string> Card::targets {
+std::unordered_map<Card::Target, std::string> Card::targets{
 		{Target::None, "None"}, {Target::Self, "Self"}, {Target::Opponent, "Opponent"} };
 std::unordered_map<Card::Effect, std::string> Card::effects{
 	{Effect::None, "None"}, { Effect::Draw, "Draw" }, { Effect::RemoveCards, "RemoveCards" },

@@ -3,8 +3,7 @@
 #include "Board.h"
 #include "HumanPlayer.h"
 #include "DebuilderBob.h"
-//#include "observer_ptr.h"
-#include "observer_ptr.h"
+#include "../ObserverPtr/observer_ptr.h"
 #include <array>
 #include <iostream>
 
@@ -91,6 +90,7 @@ namespace twixt
 		DebuilderBob m_bob;
 		std::vector<Card> m_cardDeck;
 		std::stack<Card> m_cardStack;
+
 
 		bool overlappingBridges(const Position&, const Position&, const Position&, const Position&) const;
 		bool validFoundation(const Position&, Pylon::Color);
