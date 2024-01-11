@@ -37,6 +37,7 @@ namespace twixt
 		void setPlayer1(const std::string&, bool aiPlayer = false);
 		void setPlayer2(const nonstd::observer_ptr<IPlayer>&);
 		void setPlayer2(const std::string&, bool aiPlayer = false);
+		void setCurrentPlayer(const nonstd::observer_ptr<IPlayer>&);
 		void setBoard(const Board&);
 		void setCardDeck(const std::vector<Card>&);
 		void setCardStack(const std::stack<Card>&);
@@ -53,6 +54,7 @@ namespace twixt
 		bool getCards() const;
 		std::unique_ptr<IPlayer>& getPlayer1();//TO DO: change to observer ptr
 		std::unique_ptr<IPlayer>& getPlayer2();
+		nonstd::observer_ptr<IPlayer>& getCurrentPlayer();
 		Board& getBoard();
 		std::vector<Card> getCardDeck() const;
 		std::stack<Card> getCardStack() const;
@@ -84,6 +86,7 @@ namespace twixt
 		bool m_cards; //TO DO: change to flag bitset
 		std::unique_ptr<IPlayer> m_player1;//TO DO: change to IPlayer* to allow for human/ai players
 		std::unique_ptr<IPlayer> m_player2;
+		nonstd::observer_ptr<IPlayer> m_currentPlayer;
 		Board m_board;
 		uint8_t m_areaLength;
 		uint8_t m_boardSize;
