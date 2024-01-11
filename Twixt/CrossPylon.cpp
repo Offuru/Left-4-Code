@@ -5,8 +5,8 @@ using namespace twixt;
 CrossPylon::CrossPylon(const Position& foundation, Color color, Type type, uint8_t pylonRotation, bool bigConfiguration) :
 	Pylon{ foundation, color, type, pylonRotation, bigConfiguration }
 {
-	int dx[4] = { 0, 1, 0, -1 };
-	int dy[4] = { 1, 0, -1, 0 };
+	int dx[4] = { -1, 0, 1, 0 };
+	int dy[4] = { 0, 1, 0, -1 };
 	if (!bigConfiguration) // first configuration, first linkPosition is always in center
 	{
 		m_connectionPoints.push_back({ foundation.first, foundation.second });

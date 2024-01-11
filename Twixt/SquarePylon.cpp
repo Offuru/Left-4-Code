@@ -5,8 +5,8 @@ using namespace twixt;
 SquarePylon::SquarePylon(const Position& foundation, Color color, Type type, uint8_t pylonRotation, bool bigConfiguration) :
 	Pylon{ foundation, color, type, pylonRotation, bigConfiguration }
 {
-	int dx[4] = { 0, 1, 1, 0 };
-	int dy[4] = {0, 0, -1, -1};
+	int dx[4] = { 0, 0, 1, 1 };
+	int dy[4] = {0, 1, 1, 0};
 
 	if (bigConfiguration) //both links are on the same side
 	{

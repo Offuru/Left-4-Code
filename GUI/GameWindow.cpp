@@ -8,12 +8,36 @@ GameWindow::GameWindow(QWidget* parent, std::shared_ptr<twixt::Game> game)
 	m_game = game;
 
 	m_ui->setupUi(this);
+
+    m_currentAction = Action::Add_SinglePylon;
+    m_pylonRotation = 0;
+
+    QObject::connect(m_ui->squareConfig1Button, &QPushButton::clicked,
+                    [&]() { 
+                        if (m_currentAction != Action::Add_SquarePylonConfig1) { m_currentAction = Action::Add_SquarePylonConfig1; }
+                        else m_currentAction = Action::Add_SinglePylon;
+                    });
+    QObject::connect(m_ui->squareConfig2Button, &QPushButton::clicked,
+                    [&]() {
+                        if (m_currentAction != Action::Add_SquarePylonConfig2) { m_currentAction = Action::Add_SquarePylonConfig2; }
+                        else m_currentAction = Action::Add_SinglePylon;
+                    });
+    QObject::connect(m_ui->crossConfig1Button, &QPushButton::clicked,
+                    [&]() {
+                        if (m_currentAction != Action::Add_CrossPylonConfig1) { m_currentAction = Action::Add_CrossPylonConfig1; }
+                        else m_currentAction = Action::Add_SinglePylon;
+                    });
+    QObject::connect(m_ui->crossConfig2Button, &QPushButton::clicked,
+                    [&]() {
+                        if (m_currentAction != Action::Add_CrossPylonConfig2) { m_currentAction = Action::Add_CrossPylonConfig2; }
+                        else m_currentAction = Action::Add_SinglePylon;
+                    });
 }
 
 GameWindow::~GameWindow()
 {}
 
-void GameWindow::setFoundationsPoints(std::vector<QPoint> foundationsPoints)
+void GameWindow::setFoundationsPoints(const std::vector<QPoint>& foundationsPoints)
 {
     m_foundationsPoints = foundationsPoints;
 }
@@ -29,6 +53,32 @@ void GameWindow::changeVisibilityBigPylonsButtons(bool state)
     m_ui->crossConfig2Button->setVisible(state);
     m_ui->squareConfig1Button->setVisible(state);
     m_ui->squareConfig2Button->setVisible(state);
+}
+
+void GameWindow::addPylon(const twixt::Position& matPosition)
+{
+    switch (m_currentAction)
+    {
+        case GameWindow::Action::Add_SinglePylon:
+            m_game->addPylon(matPosition, twixt::Pylon::Type::Single, twixt::Pylon::Color::Red, m_pylonRotation);
+            break;
+        case GameWindow::Action::Add_SquarePylonConfig1:
+            m_game->addPylon(matPosition, twixt::Pylon::Type::Square, twixt::Pylon::Color::Red, m_pylonRotation);
+            break;
+        case GameWindow::Action::Add_SquarePylonConfig2:
+            m_game->addPylon(matPosition, twixt::Pylon::Type::Square, twixt::Pylon::Color::Red, m_pylonRotation, false);
+            break;
+        case GameWindow::Action::Add_CrossPylonConfig1:
+            m_game->addPylon(matPosition, twixt::Pylon::Type::Cross, twixt::Pylon::Color::Red, m_pylonRotation);
+            break;
+        case GameWindow::Action::Add_CrossPylonConfig2:
+            m_game->addPylon(matPosition, twixt::Pylon::Type::Cross, twixt::Pylon::Color::Red, m_pylonRotation, false);
+            break;
+        default:
+            break;
+    }
+    m_currentAction = Action::Add_SinglePylon;
+    m_pylonRotation = 0;
 }
 
 void GameWindow::drawBoard(QPainter* painter)
@@ -52,7 +102,8 @@ void GameWindow::drawBoard(QPainter* painter)
     {
         for (size_t j = 0; j < boardSize; ++j)
         {
-            nonstd::observer_ptr<twixt::Pylon> currentPylon{ currentBoard.get().getFoundation({ i, j }).getPylon() };
+            twixt::Position foundationPos = { i, j };
+            nonstd::observer_ptr<twixt::Pylon> currentPylon{ currentBoard.get().getFoundation(foundationPos).getPylon() };
             
             if ((i != 0 || (j != 0 && j != boardSize - 1)) && (i != boardSize - 1 || (j != 0 && j != boardSize - 1)))
             {
@@ -68,24 +119,27 @@ void GameWindow::drawBoard(QPainter* painter)
                     {
                         painter->setPen(Qt::NoPen);
                         painter->setBrush(Qt::cyan);
-                        QRect bgSquare = QRect(matCoordToQPoint({ i, j }), circleSize);
+                        QRect bgSquare = QRect(matCoordToQPoint(foundationPos), circleSize);
                         double padding{ 1.f * circleSize.height() / 2 };
                         bgSquare.adjust(-padding, -padding, padding, padding);
                         painter->drawRect(bgSquare);
 
                     }
+                    if (currentPylon->getType() != twixt::Pylon::Type::Single && (currentPylon->getConnectionPoints()[0] == foundationPos || currentPylon->getConnectionPoints()[1] == foundationPos))
+                        brush = QColor(255, 105, 180);
+
                 }
-                if (currentBoard.get().getFoundation({ i, j }).getBob() == true)
+                if (currentBoard.get().getFoundation(foundationPos).getBob() == true)
                     brush = Qt::yellow;
-                if (currentBoard.get().getFoundation({ i, j }).getMined() == true)
+                if (currentBoard.get().getFoundation(foundationPos).getMined() == true)
                     brush = QColor(75, 0, 130); //purple
-                if (currentBoard.get().getFoundation({ i, j }).getExploded() == true && currentPylon == nullptr)
+                if (currentBoard.get().getFoundation(foundationPos).getExploded() == true && currentPylon == nullptr)
                     brush = QColor(173, 255, 47); //green
                 
                 painter->setPen(Qt::black);
                 painter->setBrush(brush);
-                painter->drawEllipse(QRect(matCoordToQPoint({i, j}), circleSize));
-                m_foundationsPoints[boardSize * i + j] = matCoordToQPoint({ i, j });
+                painter->drawEllipse(QRect(matCoordToQPoint(foundationPos), circleSize));
+                m_foundationsPoints[boardSize * i + j] = matCoordToQPoint(foundationPos);
             }
         }
     }
@@ -145,13 +199,16 @@ void GameWindow::mousePressEvent(QMouseEvent* event)
         int distance = std::sqrt(std::pow(mousePosition.x() - foundationPos.x(), 2) + std::pow(mousePosition.y() - foundationPos.y(), 2));
 
         if (distance <= circleSize)
-            m_game->addPylon(matPosition, twixt::Pylon::Type::Single, twixt::Pylon::Color::Red, 0);
+        {
+            if (m_game->getBoard().getFoundation(matPosition).getPylon() == nullptr)
+                addPylon(matPosition);
+        }
     }
     
     update();
 }
 
-QPoint GameWindow::matCoordToQPoint(twixt::Position pos)
+QPoint GameWindow::matCoordToQPoint(const twixt::Position& pos)
 {
     int boardSize{ m_game->getBoard().getSize() };
     double radius = 2.5;
@@ -168,7 +225,7 @@ QPoint GameWindow::matCoordToQPoint(twixt::Position pos)
     return { x, y };
 }
 
-twixt::Position GameWindow::qPointToMatCoord(QPoint pos)
+twixt::Position GameWindow::qPointToMatCoord(const QPoint& pos)
 {
     int boardSize{ m_game->getBoard().getSize() };
     double radius = 2.5;
