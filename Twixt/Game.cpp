@@ -250,6 +250,11 @@ std::stack<Card> twixt::Game::getCardStack() const
 	return m_cardStack;
 }
 
+Position twixt::Game::getBob()
+{
+	return m_bob;
+}
+
 bool Game::addPylon(const Position& pos, Pylon::Type type, Pylon::Color color, uint8_t pylonRotation, bool bigConfiguration)
 {
 	const auto& [row, col] = pos;

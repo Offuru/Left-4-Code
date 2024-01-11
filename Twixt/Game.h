@@ -57,6 +57,7 @@ namespace twixt
 		Board& getBoard();
 		std::vector<Card> getCardDeck() const;
 		std::stack<Card> getCardStack() const;
+		Position getBob();
 
 		bool addPylon(const Position&, Pylon::Type, Pylon::Color, uint8_t pylonRotation, bool bigConfiguration = true); //both square and cross pylons have 2 possible configurations
 		bool addBridge(const Position&, const Position&, Pylon::Color);
