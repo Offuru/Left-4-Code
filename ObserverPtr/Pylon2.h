@@ -3,7 +3,7 @@
 #include <vector>
 #include <functional>
 #include <unordered_set>
-#include "Bridge2.h"
+#include "Bridge.h"
 #include "observer_ptr.h"
 
 namespace twixt
