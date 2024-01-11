@@ -46,7 +46,10 @@ private:
 	void drawBoardLines(QPainter* painter);
 	void paintEvent(QPaintEvent* event) override;
 	void mousePressEvent(QMouseEvent* event) override;
+	void wheelEvent(QWheelEvent* event) override;
 
+	void rotatePushButtonIcon(QPushButton& button, int rotationFactor);
+	void resetPushButtonIcon();
 	QPoint matCoordToQPoint(const twixt::Position& pos);
 	twixt::Position qPointToMatCoord(const QPoint& pos);
 	QRect makeSquareBoardSize();

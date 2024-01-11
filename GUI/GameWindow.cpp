@@ -14,22 +14,22 @@ GameWindow::GameWindow(QWidget* parent, std::shared_ptr<twixt::Game> game)
 
     QObject::connect(m_ui->squareConfig1Button, &QPushButton::clicked,
                     [&]() { 
-                        if (m_currentAction != Action::Add_SquarePylonConfig1) { m_currentAction = Action::Add_SquarePylonConfig1; }
+                        if (m_currentAction != Action::Add_SquarePylonConfig1) { resetPushButtonIcon(); m_currentAction = Action::Add_SquarePylonConfig1; }
                         else m_currentAction = Action::Add_SinglePylon;
                     });
     QObject::connect(m_ui->squareConfig2Button, &QPushButton::clicked,
                     [&]() {
-                        if (m_currentAction != Action::Add_SquarePylonConfig2) { m_currentAction = Action::Add_SquarePylonConfig2; }
+                        if (m_currentAction != Action::Add_SquarePylonConfig2) { resetPushButtonIcon(); m_currentAction = Action::Add_SquarePylonConfig2; }
                         else m_currentAction = Action::Add_SinglePylon;
                     });
     QObject::connect(m_ui->crossConfig1Button, &QPushButton::clicked,
                     [&]() {
-                        if (m_currentAction != Action::Add_CrossPylonConfig1) { m_currentAction = Action::Add_CrossPylonConfig1; }
+                        if (m_currentAction != Action::Add_CrossPylonConfig1) { resetPushButtonIcon(); m_currentAction = Action::Add_CrossPylonConfig1; }
                         else m_currentAction = Action::Add_SinglePylon;
                     });
     QObject::connect(m_ui->crossConfig2Button, &QPushButton::clicked,
                     [&]() {
-                        if (m_currentAction != Action::Add_CrossPylonConfig2) { m_currentAction = Action::Add_CrossPylonConfig2; }
+                        if (m_currentAction != Action::Add_CrossPylonConfig2) { resetPushButtonIcon(); m_currentAction = Action::Add_CrossPylonConfig2; }
                         else m_currentAction = Action::Add_SinglePylon;
                     });
 }
@@ -42,7 +42,7 @@ void GameWindow::setFoundationsPoints(const std::vector<QPoint>& foundationsPoin
     m_foundationsPoints = foundationsPoints;
 }
 
-void GameWindow::closeEvent(QCloseEvent * event)
+void GameWindow::closeEvent(QCloseEvent* event)
 {
 	QCoreApplication::quit();
 }
@@ -77,6 +77,7 @@ void GameWindow::addPylon(const twixt::Position& matPosition)
         default:
             break;
     }
+    resetPushButtonIcon();
     m_currentAction = Action::Add_SinglePylon;
     m_pylonRotation = 0;
 }
@@ -98,16 +99,16 @@ void GameWindow::drawBoard(QPainter* painter)
     painter->setPen(Qt::NoPen);
     painter->drawRoundedRect(boardBackground, 10, 10);
 
-    for (size_t i = 0; i <  boardSize; ++i)
+    for (size_t i = 0; i < boardSize; ++i)
     {
         for (size_t j = 0; j < boardSize; ++j)
         {
             twixt::Position foundationPos = { i, j };
             nonstd::observer_ptr<twixt::Pylon> currentPylon{ currentBoard.get().getFoundation(foundationPos).getPylon() };
-            
+
             if ((i != 0 || (j != 0 && j != boardSize - 1)) && (i != boardSize - 1 || (j != 0 && j != boardSize - 1)))
             {
-                QBrush brush{ Qt::blue};
+                QBrush brush{ Qt::blue };
                 painter->setBrush(brush);
                 if (currentPylon != nullptr)
                 {
@@ -135,7 +136,7 @@ void GameWindow::drawBoard(QPainter* painter)
                     brush = QColor(75, 0, 130); //purple
                 if (currentBoard.get().getFoundation(foundationPos).getExploded() == true && currentPylon == nullptr)
                     brush = QColor(173, 255, 47); //green
-                
+
                 painter->setPen(Qt::black);
                 painter->setBrush(brush);
                 painter->drawEllipse(QRect(matCoordToQPoint(foundationPos), circleSize));
@@ -206,6 +207,54 @@ void GameWindow::mousePressEvent(QMouseEvent* event)
     }
     
     update();
+}
+
+void GameWindow::wheelEvent(QWheelEvent* event)
+{
+    if (m_currentAction != Action::Add_SinglePylon)
+    {
+        int rotationFactor = (event->angleDelta().y() > 0) ? 1 : -1;
+        m_pylonRotation += rotationFactor;
+        if (m_pylonRotation < 0) m_pylonRotation = 3;
+        m_pylonRotation %= 4;
+
+        switch (m_currentAction)
+        {
+            case GameWindow::Action::Add_SquarePylonConfig1:
+                rotatePushButtonIcon(*m_ui->squareConfig1Button, rotationFactor);
+                break;
+            case GameWindow::Action::Add_SquarePylonConfig2:
+                rotatePushButtonIcon(*m_ui->squareConfig2Button, rotationFactor);
+                break;
+            case GameWindow::Action::Add_CrossPylonConfig1:
+                rotatePushButtonIcon(*m_ui->crossConfig1Button, rotationFactor);
+                break;
+            case GameWindow::Action::Add_CrossPylonConfig2:
+                rotatePushButtonIcon(*m_ui->crossConfig2Button, rotationFactor);
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+void GameWindow::rotatePushButtonIcon(QPushButton& button, int rotationFactor)
+{
+    QIcon buttonIcon{ button.icon() };
+    QPixmap buttonPixmap{ buttonIcon.pixmap(buttonIcon.actualSize(QSize(60, 60))) };
+    button.setIcon(buttonPixmap.transformed(QTransform().rotate(rotationFactor * 90)));
+}
+
+void GameWindow::resetPushButtonIcon()
+{
+    if (m_currentAction != Action::Add_SinglePylon)
+    {
+        m_pylonRotation = 0;
+        m_ui->squareConfig1Button->setIcon(QPixmap("Static files/Images/SquarePylonConfig1.png"));
+        m_ui->squareConfig2Button->setIcon(QPixmap("Static files/Images/SquarePylonConfig2.png"));
+        m_ui->crossConfig1Button->setIcon(QPixmap("Static files/Images/CrossPylonConfig1.png"));
+        m_ui->crossConfig2Button->setIcon(QPixmap("Static files/Images/CrossPylonConfig2.png"));
+    }
 }
 
 QPoint GameWindow::matCoordToQPoint(const twixt::Position& pos)
