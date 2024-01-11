@@ -21,7 +21,9 @@ public:
 		Add_SquarePylonConfig1,
 		Add_SquarePylonConfig2,
 		Add_CrossPylonConfig1,
-		Add_CrossPylonConfig2
+		Add_CrossPylonConfig2, 
+		Add_Bridge,
+		Remove_Bridge
 	};
 
 	GameWindow(QWidget* parent = nullptr, std::shared_ptr<twixt::Game> game = nullptr);
@@ -40,8 +42,12 @@ private:
 
 	Action m_currentAction;
 	int m_pylonRotation;
+	twixt::Position m_currentBridgeStartPos;
+	bool m_pylonPlaced;
 
 	void addPylon(const twixt::Position& matPosition);
+	void addBridge(const twixt::Position& endPosition);
+	void removeBridge(const twixt::Position& endPosition);
 	void drawBoard(QPainter* painter);
 	void drawBoardLines(QPainter* painter);
 	void paintEvent(QPaintEvent* event) override;

@@ -11,6 +11,8 @@ GameWindow::GameWindow(QWidget* parent, std::shared_ptr<twixt::Game> game)
 
     m_currentAction = Action::Add_SinglePylon;
     m_pylonRotation = 0;
+    m_currentBridgeStartPos = { -1,-1 };
+    m_pylonPlaced = false;
 
     QObject::connect(m_ui->squareConfig1Button, &QPushButton::clicked,
                     [&]() { 
@@ -80,6 +82,35 @@ void GameWindow::addPylon(const twixt::Position& matPosition)
     resetPushButtonIcon();
     m_currentAction = Action::Add_SinglePylon;
     m_pylonRotation = 0;
+    m_pylonPlaced = true;
+}
+
+void GameWindow::addBridge(const twixt::Position& endPosition)
+{
+    if (m_currentAction == Action::Add_Bridge)
+    {
+        m_currentAction = Action::Add_SinglePylon;
+        m_game->addBridge(m_currentBridgeStartPos, endPosition, twixt::Pylon::Color::Red);
+    } 
+    else
+    {
+        m_currentAction = Action::Add_Bridge;
+        m_currentBridgeStartPos = endPosition;
+    }
+}
+
+void GameWindow::removeBridge(const twixt::Position& endPosition)
+{
+    if (m_currentAction == Action::Remove_Bridge)
+    {
+        m_currentAction = Action::Add_SinglePylon;
+        m_game->removeBridge(m_currentBridgeStartPos, endPosition, twixt::Pylon::Color::Red);
+    } 
+    else
+    {
+        m_currentAction = Action::Remove_Bridge;
+        m_currentBridgeStartPos = endPosition;
+    }
 }
 
 void GameWindow::drawBoard(QPainter* painter)
@@ -88,9 +119,8 @@ void GameWindow::drawBoard(QPainter* painter)
 
     int boardSize{ currentBoard.get().getSize() };
 
-    QSize circleSize;
-    circleSize.setWidth(std::min((width() / (2.5 * boardSize)), (height() / (2.5 * boardSize))));
-    circleSize.setHeight(circleSize.width());
+    int circleSize{ int(std::min((width() / (2.5 * boardSize)), (height() / (2.5 * boardSize)))) };
+    QSize circleQSize = { circleSize,circleSize };
 
     QRect boardBackground{ makeSquareBoardSize() };
     double padding{ 20.0 };
@@ -98,6 +128,8 @@ void GameWindow::drawBoard(QPainter* painter)
     painter->setBrush(QColor(200, 200, 200));
     painter->setPen(Qt::NoPen);
     painter->drawRoundedRect(boardBackground, 10, 10);
+
+    m_game->addPylon({3, 2}, twixt::Pylon::Type::Single, twixt::Pylon::Color::Red, m_pylonRotation);
 
     for (size_t i = 0; i < boardSize; ++i)
     {
@@ -116,19 +148,32 @@ void GameWindow::drawBoard(QPainter* painter)
                         brush = Qt::black;
                     else if (currentPylon->getColor() == twixt::Pylon::Color::Red)
                         brush = Qt::red;
+
+                    QPen penLine{ Qt::red, 3 };
+                    painter->setPen(penLine);
+                    for (const auto& bridge : currentPylon->getConnections())
+                    {
+                        const auto& [startPosRow, startPosCol] = bridge->getPosStart();
+                        const auto& [endPosRow, endPosCol] = bridge->getPosEnd();
+                        size_t startPoint = boardSize * startPosRow + startPosCol;
+                        size_t endPoint = boardSize * endPosRow + endPosCol;
+                        QPoint startPos{ m_foundationsPoints[startPoint].x() + circleSize/ 2, m_foundationsPoints[startPoint].y() + circleSize / 2 };
+                        QPoint endPos{ m_foundationsPoints[endPoint].x() + circleSize / 2, m_foundationsPoints[endPoint].y() + circleSize / 2 };
+                        painter->drawLine(startPos, endPos);
+                    }
+                    painter->setPen(Qt::NoPen);
                     if (currentPylon->getType() != twixt::Pylon::Type::Single)
                     {
-                        painter->setPen(Qt::NoPen);
                         painter->setBrush(Qt::cyan);
-                        QRect bgSquare = QRect(matCoordToQPoint(foundationPos), circleSize);
-                        double padding{ 1.f * circleSize.height() / 2 };
+                        QRect bgSquare = QRect(matCoordToQPoint(foundationPos), circleQSize);
+                        double padding{ 1.f * circleSize / 2 };
                         bgSquare.adjust(-padding, -padding, padding, padding);
                         painter->drawRect(bgSquare);
 
                     }
                     if (currentPylon->getType() != twixt::Pylon::Type::Single && (currentPylon->getConnectionPoints()[0] == foundationPos || currentPylon->getConnectionPoints()[1] == foundationPos))
                         brush = QColor(255, 105, 180);
-
+                    
                 }
                 if (currentBoard.get().getFoundation(foundationPos).getBob() == true)
                     brush = Qt::yellow;
@@ -137,9 +182,8 @@ void GameWindow::drawBoard(QPainter* painter)
                 if (currentBoard.get().getFoundation(foundationPos).getExploded() == true && currentPylon == nullptr)
                     brush = QColor(173, 255, 47); //green
 
-                painter->setPen(Qt::black);
                 painter->setBrush(brush);
-                painter->drawEllipse(QRect(matCoordToQPoint(foundationPos), circleSize));
+                painter->drawEllipse(QRect(matCoordToQPoint(foundationPos), circleQSize));
                 m_foundationsPoints[boardSize * i + j] = matCoordToQPoint(foundationPos);
             }
         }
@@ -201,8 +245,15 @@ void GameWindow::mousePressEvent(QMouseEvent* event)
 
         if (distance <= circleSize)
         {
-            if (m_game->getBoard().getFoundation(matPosition).getPylon() == nullptr)
-                addPylon(matPosition);
+            if (event->button() == Qt::LeftButton)
+            {
+                if (m_pylonPlaced)
+                    addBridge(matPosition);
+                else
+                    addPylon(matPosition);
+            }
+            else
+                removeBridge(matPosition);
         }
     }
     
@@ -294,16 +345,14 @@ twixt::Position GameWindow::qPointToMatCoord(const QPoint& pos)
 QRect GameWindow::makeSquareBoardSize()
 {
     int boardSize{ m_game->getBoard().getSize() };
-
-    QSize circleSize;
-    circleSize.setWidth(std::min((width() / (2.5 * boardSize)), (height() / (2.5 * boardSize))));
-    circleSize.setHeight(circleSize.width());
+    double radius = 2.5;
+    int circleSize{ int(std::min(width() / (radius * boardSize), height() / (radius * boardSize))) };
 
     QPoint topLeftCorner{ matCoordToQPoint({0, 0}) };
     QPoint bottomRightCorner{ matCoordToQPoint({boardSize - 1, boardSize - 1}) };
 
-    bottomRightCorner.setX(bottomRightCorner.x() + circleSize.width());
-    bottomRightCorner.setY(bottomRightCorner.y() + circleSize.height());
+    bottomRightCorner.setX(bottomRightCorner.x() + circleSize);
+    bottomRightCorner.setY(bottomRightCorner.y() + circleSize);
 
     return { topLeftCorner, bottomRightCorner };
 }
