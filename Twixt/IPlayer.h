@@ -58,6 +58,7 @@ namespace twixt
 		uint8_t getNoPylons2x2() const;
 		uint8_t getNoPylonsCross() const;
 		std::vector<Card> getCards() const;
+		virtual std::string getTypeString() = 0;
 
 	protected:
 

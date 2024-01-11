@@ -18,5 +18,9 @@ namespace twixt
 
 		Move getNextMove() override;
 
+
+		// Inherited via IPlayer
+		std::string getTypeString() override;
+
 	};
 }
