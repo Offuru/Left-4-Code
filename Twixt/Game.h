@@ -63,15 +63,25 @@ namespace twixt
 		bool addPylon(const Position&, Pylon::Type, Pylon::Color, uint8_t pylonRotation, bool bigConfiguration = true); //both square and cross pylons have 2 possible configurations
 		bool addBridge(const Position&, const Position&, Pylon::Color);
 
-		bool removeBridge(const Position&, const Position&, Pylon::Color);
-		bool removePylon(const Position&, Pylon::Color);
+		//cards
+		bool drawCard(const nonstd::observer_ptr<IPlayer>&);
+		void drawMultipleCards(const nonstd::observer_ptr<IPlayer>&, uint8_t);
+		void enemyLoseCards(const nonstd::observer_ptr<IPlayer>&, uint8_t);
 
-		bool drawCard(const nonstd::observer_ptr<IPlayer>&);//TO DO: change to IPlayer shared_ptr later
+		bool removeEnemyPylon(const Position&, const nonstd::observer_ptr<IPlayer>&);
+		bool removeEnemyBridge(const Position&, const Position&, const nonstd::observer_ptr<IPlayer>&);
 
-		void moveBob();
+		bool placeBiggerPylon(const nonstd::observer_ptr<IPlayer>&, const Position&, Pylon::Type, Pylon::Color, uint8_t pylonRotation, bool bigConfiguration = true);
+		bool placeMine(const Position&); //it shouldn't allow for placing mines under pylons
+
+		void moveBob(const std::optional<Position>& = std::nullopt);
+
 		void printBoard();
 		void printDeck(nonstd::observer_ptr<IPlayer> player);
 
+
+		bool removeBridge(const Position&, const Position&, Pylon::Color);
+		bool removePylon(const Position&, Pylon::Color);
 	private:
 
 		bool m_humanPlayers;
@@ -108,18 +118,5 @@ namespace twixt
 																//modify more of them in the same round,
 																//and returns false if a pylon was added/deleted
 																//so the round skips
-
-		Position getPlayerPosInput() const;
-
-		bool draw2Cards(nonstd::observer_ptr<IPlayer> target);
-		bool removeOpponentCard(nonstd::observer_ptr<IPlayer> target);
-		bool removePylon(nonstd::observer_ptr<IPlayer> target);
-		bool removeBridge(nonstd::observer_ptr<IPlayer> target);
-		bool place2Pylons(nonstd::observer_ptr<IPlayer> target, uint8_t pylonRotation, bool bigConfiguration);
-		bool placeBigPylon(nonstd::observer_ptr<IPlayer> target, Pylon::Type type, uint8_t pylonRotation, bool bigConfiguration);
-		bool moveBobCard();
-		bool placeMine();
-
-		bool playCard(const Card& card);
 	};
 }

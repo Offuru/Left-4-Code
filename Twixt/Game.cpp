@@ -358,9 +358,9 @@ bool Game::addBridge(const Position& startPoint, const Position& endPoint, Pylon
 	return false;
 }
 
-void Game::moveBob()
+void Game::moveBob(const std::optional<Position>& position)
 {
-	m_bob.moveToNext();
+	m_bob.moveToNext(position);
 }
 
 void Game::printBoard()
@@ -475,6 +475,90 @@ bool twixt::Game::drawCard(const nonstd::observer_ptr<IPlayer>& player)
 	player->draw(m_cardStack);
 	return true;
 }
+
+void twixt::Game::drawMultipleCards(const nonstd::observer_ptr<IPlayer>& player, uint8_t count)
+{
+	for (size_t i = 0; i < count; ++i)
+		drawCard(player);
+}
+
+void twixt::Game::enemyLoseCards(const nonstd::observer_ptr<IPlayer>& currentPlayer, uint8_t count)
+{
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	nonstd::observer_ptr<IPlayer> enemy = nonstd::make_observer<IPlayer>(m_player1.get());
+	
+	if (currentPlayer == enemy)
+		enemy = nonstd::make_observer<IPlayer>(m_player2.get());
+
+	while(count > 0 && !enemy->getCards().empty())
+	{
+		std::uniform_int_distribution<> distrib(0, enemy->getCards().size() - 1);
+		size_t index = distrib(gen);
+
+		enemy->removeCard(index);
+	}
+}
+
+bool twixt::Game::removeEnemyPylon(const Position& pos, const nonstd::observer_ptr<IPlayer>& currentPlayer)
+{
+	Pylon::Color enemyColor;
+	if (currentPlayer->getColor() == Pylon::Color::Red)
+		enemyColor = Pylon::Color::Black;
+	else
+		enemyColor = Pylon::Color::Red;
+
+	return removePylon(pos, enemyColor);
+}
+
+bool twixt::Game::removeEnemyBridge(const Position& startPos, const Position& endPos, const nonstd::observer_ptr<IPlayer>& currentPlayer)
+{
+	Pylon::Color enemyColor;
+	if (currentPlayer->getColor() == Pylon::Color::Red)
+		enemyColor = Pylon::Color::Black;
+	else
+		enemyColor = Pylon::Color::Red;
+
+	return removeBridge(startPos, endPos, enemyColor);
+}
+
+bool twixt::Game::placeBiggerPylon(const nonstd::observer_ptr<IPlayer>& currentPlayer, const Position& pos, Pylon::Type type, Pylon::Color color,
+	uint8_t pylonRotation, bool bigConfiguration)
+{
+	if (type == Pylon::Type::Cross)
+	{
+		currentPlayer->incrementPylonCross(); //if this player has 0 available pylons, they should be able to place one if they use a card
+		if (!addPylon(pos, type, color, pylonRotation, bigConfiguration))
+		{
+			currentPlayer->decrementPylonCross();
+			return false; //no cross pylon could be placed so repeat
+		}
+
+		return true;
+	}
+
+	currentPlayer->incrementPylon2x2();
+	if (!addPylon(pos, type, color, pylonRotation, bigConfiguration))
+	{
+		currentPlayer->decrementPylon2x2();
+		return false; //no square pylon could be placed so repeat
+	}
+
+	return true;
+}
+
+bool twixt::Game::placeMine(const Position& pos)
+{
+	if (m_board[pos].getPylon() == nullptr)
+	{
+		m_board[pos].setMined(true);
+		return true;
+	}
+
+	return false;
+}
+
+
 
 bool twixt::Game::overlappingBridges(const Position& bridge1Start, const Position& bridge1End, const Position& bridge2Start, const Position& bridge2End) const
 {
@@ -642,129 +726,6 @@ void Game::explodeArea(const Position& pos)
 //			return true;
 //	}
 //}
-
-Position twixt::Game::getPlayerPosInput() const
-{
-	uint8_t x = -1, y = -1;
-
-	while (x < 0 || x >= m_boardSize)
-		std::cin >> x;
-	while (y < 0 || y >= m_boardSize)
-		std::cin >> y;
-
-	return { x,y };
-}
-
-bool twixt::Game::draw2Cards(nonstd::observer_ptr<IPlayer> target)
-{
-	if (m_cardStack.size() < 2)
-		return false;
-	target->draw(m_cardStack);
-	target->draw(m_cardStack);
-	return true;
-}
-
-bool twixt::Game::removeOpponentCard(nonstd::observer_ptr<IPlayer> target)
-{
-	if (target->getCards().empty())
-		return false;
-	
-	std::random_device rd;
-	std::mt19937 gen(rd());
-	std::uniform_int_distribution<> distrib(0, target->getCards().size() - 1);
-	size_t index = distrib(gen);
-
-	target->removeCard(index);
-
-	return true;
-}
-
-bool twixt::Game::removePylon(nonstd::observer_ptr<IPlayer> target)
-{
-	Position position = getPlayerPosInput();
-	if (m_board[position].getPylon() == nullptr || m_board[position].getPylon()->getColor() != target->getColor())
-		return false;
-
-	removePylon(position, target->getColor());
-
-	return true;
-}
-
-bool twixt::Game::removeBridge(nonstd::observer_ptr<IPlayer> target)
-{
-	Position start, end;
-	
-	do
-	{
-		start = getPlayerPosInput();
-		end = getPlayerPosInput();
-	} while (!removeBridge(start, end, target->getColor()));
-
-	return true;
-}
-
-bool twixt::Game::place2Pylons(nonstd::observer_ptr<IPlayer> target, uint8_t pylonRotation, bool bigConfiguration)
-{
-	Position position;
-
-	while (m_board[position = getPlayerPosInput()].getPylon() != nullptr);
-	addPylon(position, Pylon::Type::Single, target->getColor(), pylonRotation, bigConfiguration);
-
-	while (m_board[position = getPlayerPosInput()].getPylon() != nullptr);
-	addPylon(position, Pylon::Type::Single, target->getColor(), pylonRotation, bigConfiguration);
-
-	return true;
-}
-
-bool twixt::Game::placeBigPylon(nonstd::observer_ptr<IPlayer> target, Pylon::Type type, uint8_t pylonRotation, bool bigConfiguration)
-{
-	Position pos;
-
-	do
-	{
-		pos = getPlayerPosInput();
-	} while (!addPylon(pos, type, target->getColor(), pylonRotation, bigConfiguration));
-
-	return true;
-}
-
-bool twixt::Game::moveBobCard()
-{
-	Position position = getPlayerPosInput();
-
-	m_bob.setPosition(position);
-
-	return true;
-}
-
-bool twixt::Game::placeMine()
-{
-	Position pos;
-
-	do
-	{
-		pos = getPlayerPosInput();
-	} while (!m_board.addMine(pos));
-
-	if (m_board[pos].getPylon() != nullptr)
-		explodePylons(pos);
-
-	return true;
-}
-
-bool twixt::Game::playCard(const Card& card)
-{
-	nonstd::observer_ptr<IPlayer> target;
-	{
-		using enum Card::Target;
-		switch (card.getTarget())
-		{
-
-		}
-	}
-
-	return true;
-}
 
 bool Game::getCards() const
 {
