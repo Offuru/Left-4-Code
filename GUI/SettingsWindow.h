@@ -14,6 +14,11 @@ public:
 	~SettingsWindow();
 
 	void enableMineGameModeSettings();
+	void enableBigPylonsGameModeSettings();
+
+private slots:
+	void setNoSquarePylons();
+	void setNoCrossPylons();
 
 private:
 	std::unique_ptr<Ui::SettingsWindowClass> m_ui;

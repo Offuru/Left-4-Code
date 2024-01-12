@@ -19,6 +19,7 @@ class GameWindow : public QMainWindow
 public:
 	enum class Action
 	{
+		None,
 		Add_SinglePylon,
 		Add_SquarePylonConfig1,
 		Add_SquarePylonConfig2,
