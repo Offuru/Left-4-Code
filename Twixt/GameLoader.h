@@ -1,5 +1,7 @@
 #pragma once
-#include <iostream>
+#include <fstream>
+#include <ranges>
+
 #include "Game.h"
 #include "Utilities.h"
 
@@ -9,8 +11,8 @@ namespace twixt
 	{
 	public:
 		GameLoader(Game&);
-		void saveGame(std::ostream&);
-		void loadGame(std::istream&);
+		void saveGame(const std::string&);
+		void loadGame(const std::string&);
 
 	private:
 		std::reference_wrapper<Game> m_game;
