@@ -69,6 +69,12 @@
        <layout class="QGridLayout" name="gridLayout_2">
         <item row="0" column="3">
          <widget class="QPushButton" name="aiPlayerButton">
+          <property name="minimumSize">
+           <size>
+            <width>300</width>
+            <height>40</height>
+           </size>
+          </property>
           <property name="text">
            <string>AI Player</string>
           </property>
@@ -80,11 +86,11 @@
            <enum>Qt::Horizontal</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Fixed</enum>
+           <enum>QSizePolicy::Maximum</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
-            <width>200</width>
+            <width>300</width>
             <height>20</height>
            </size>
           </property>
@@ -92,6 +98,12 @@
         </item>
         <item row="0" column="1">
          <widget class="QPushButton" name="twoPlayersButton">
+          <property name="minimumSize">
+           <size>
+            <width>300</width>
+            <height>40</height>
+           </size>
+          </property>
           <property name="text">
            <string>2 Players</string>
           </property>
@@ -103,7 +115,7 @@
            <enum>Qt::Horizontal</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Fixed</enum>
+           <enum>QSizePolicy::Expanding</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -119,11 +131,11 @@
            <enum>Qt::Horizontal</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Fixed</enum>
+           <enum>QSizePolicy::Maximum</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
-            <width>200</width>
+            <width>300</width>
             <height>20</height>
            </size>
           </property>

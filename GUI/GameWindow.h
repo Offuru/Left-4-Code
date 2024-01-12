@@ -19,6 +19,7 @@ class GameWindow : public QMainWindow
 public:
 	enum class Action
 	{
+		None,
 		Add_SinglePylon,
 		Add_SquarePylonConfig1,
 		Add_SquarePylonConfig2,
@@ -39,6 +40,7 @@ public:
 	void changeVisibilityBigPylonsButtons(bool state);
 
 private slots:
+	void swapButtonAction();
 	void nextRoundAction();
 
 private:
@@ -49,9 +51,11 @@ private:
 	std::shared_ptr<twixt::Game> m_game;
 
 	Action m_currentAction;
-	int m_pylonRotation;
 	twixt::Position m_currentBridgeStartPos;
+	uint8_t m_round;
+	int m_pylonRotation;
 	bool m_pylonPlaced;
+
 	nonstd::observer_ptr<twixt::IPlayer> m_currentPlayer;
 
 	void addPylon(const twixt::Position& matPosition);
