@@ -458,6 +458,7 @@ bool twixt::Game::drawCard(const nonstd::observer_ptr<IPlayer>& player)
 
 bool twixt::Game::overlappingBridges(const Position& bridge1Start, const Position& bridge1End, const Position& bridge2Start, const Position& bridge2End) const
 {
+	if (bridge1Start == bridge2Start || bridge1End == bridge2End || bridge1Start == bridge2End || bridge2Start == bridge1End) return false;
 	return counterclockwiseOrder(bridge1Start, bridge2Start, bridge2End) != counterclockwiseOrder(bridge1End, bridge2Start, bridge2End) &&
 		counterclockwiseOrder(bridge1Start, bridge1End, bridge2Start) != counterclockwiseOrder(bridge1Start, bridge1End, bridge2End);
 }

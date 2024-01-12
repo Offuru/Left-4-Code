@@ -13,6 +13,10 @@ GameWindow::GameWindow(QWidget* parent, std::shared_ptr<twixt::Game> game)
     m_pylonRotation = 0;
     m_currentBridgeStartPos = { -1,-1 };
     m_pylonPlaced = false;
+    m_winDialog = nullptr;
+    
+    m_currentPlayer = m_game->getPlayer1().get();
+    m_ui->player1NameLabel->setStyleSheet("QLabel { background-color : red; color : green; }");
 
     QObject::connect(m_ui->squareConfig1Button, &QPushButton::clicked,
                     [&]() { 
@@ -34,14 +38,45 @@ GameWindow::GameWindow(QWidget* parent, std::shared_ptr<twixt::Game> game)
                         if (m_currentAction != Action::Add_CrossPylonConfig2) { resetPushButtonIcon(); m_currentAction = Action::Add_CrossPylonConfig2; }
                         else m_currentAction = Action::Add_SinglePylon;
                     });
+    QObject::connect(m_ui->nextRoundButton, &QPushButton::clicked, this, &GameWindow::nextRoundAction);
 }
 
 GameWindow::~GameWindow()
 {}
 
+void GameWindow::nextRoundAction()
+{
+    m_pylonPlaced = false;
+
+    if (m_currentPlayer == m_game->getPlayer2().get())
+    {
+        m_currentPlayer = m_game->getPlayer1().get();
+        m_ui->player1NameLabel->setStyleSheet("QLabel { background-color : red; color : green; }");
+        m_ui->player2NameLabel->setStyleSheet("QLabel { background-color : transparent; color : black; }");
+    }
+    else
+    {
+        m_currentPlayer = m_game->getPlayer2().get();
+        m_ui->player1NameLabel->setStyleSheet("QLabel { background-color : transparent; color : black; }");
+        m_ui->player2NameLabel->setStyleSheet("QLabel { background-color : red; color : green; }");
+    }
+}
+
 void GameWindow::setFoundationsPoints(const std::vector<QPoint>& foundationsPoints)
 {
     m_foundationsPoints = foundationsPoints;
+}
+
+void GameWindow::setPlayersNameLabel()
+{
+    m_ui->player1NameLabel->setText(m_game->getPlayer1()->getName().c_str());
+    m_ui->player2NameLabel->setText(m_game->getPlayer2()->getName().c_str());
+}
+
+void GameWindow::updateNumberPylonsPlayersLabel()
+{
+    m_ui->noPylonsPlayer1Label->setText(std::to_string(m_game->getPlayer1()->getNoPylons1x1()).c_str());
+    m_ui->noPylonsPlayer2Label->setText(std::to_string(m_game->getPlayer2()->getNoPylons1x1()).c_str());
 }
 
 void GameWindow::closeEvent(QCloseEvent* event)
@@ -59,30 +94,36 @@ void GameWindow::changeVisibilityBigPylonsButtons(bool state)
 
 void GameWindow::addPylon(const twixt::Position& matPosition)
 {
+    bool result = false;
     switch (m_currentAction)
     {
         case GameWindow::Action::Add_SinglePylon:
-            m_game->addPylon(matPosition, twixt::Pylon::Type::Single, twixt::Pylon::Color::Red, m_pylonRotation);
+            result = m_game->addPylon(matPosition, twixt::Pylon::Type::Single, m_currentPlayer->getColor(), m_pylonRotation);
             break;
         case GameWindow::Action::Add_SquarePylonConfig1:
-            m_game->addPylon(matPosition, twixt::Pylon::Type::Square, twixt::Pylon::Color::Red, m_pylonRotation);
+            result = m_game->addPylon(matPosition, twixt::Pylon::Type::Square, m_currentPlayer->getColor(), m_pylonRotation);
             break;
         case GameWindow::Action::Add_SquarePylonConfig2:
-            m_game->addPylon(matPosition, twixt::Pylon::Type::Square, twixt::Pylon::Color::Red, m_pylonRotation, false);
+            result = m_game->addPylon(matPosition, twixt::Pylon::Type::Square, m_currentPlayer->getColor(), m_pylonRotation, false);
             break;
         case GameWindow::Action::Add_CrossPylonConfig1:
-            m_game->addPylon(matPosition, twixt::Pylon::Type::Cross, twixt::Pylon::Color::Red, m_pylonRotation);
+            result = m_game->addPylon(matPosition, twixt::Pylon::Type::Cross, m_currentPlayer->getColor(), m_pylonRotation);
             break;
         case GameWindow::Action::Add_CrossPylonConfig2:
-            m_game->addPylon(matPosition, twixt::Pylon::Type::Cross, twixt::Pylon::Color::Red, m_pylonRotation, false);
+            result = m_game->addPylon(matPosition, twixt::Pylon::Type::Cross, m_currentPlayer->getColor(), m_pylonRotation, false);
             break;
         default:
             break;
     }
-    resetPushButtonIcon();
-    m_currentAction = Action::Add_SinglePylon;
-    m_pylonRotation = 0;
-    m_pylonPlaced = true;
+    if (result)
+    {
+        resetPushButtonIcon();
+        m_currentAction = Action::Add_SinglePylon;
+        m_pylonRotation = 0;
+        m_pylonPlaced = true;
+        if (m_currentAction == Action::Add_SinglePylon)
+            updateNumberPylonsPlayersLabel();
+    }
 }
 
 void GameWindow::addBridge(const twixt::Position& endPosition)
@@ -90,12 +131,18 @@ void GameWindow::addBridge(const twixt::Position& endPosition)
     if (m_currentAction == Action::Add_Bridge)
     {
         m_currentAction = Action::Add_SinglePylon;
-        m_game->addBridge(m_currentBridgeStartPos, endPosition, twixt::Pylon::Color::Red);
-    } 
+        bool result = m_game->addBridge(m_currentBridgeStartPos, endPosition, m_currentPlayer->getColor());
+        std::cout << "";
+    }
     else
     {
         m_currentAction = Action::Add_Bridge;
         m_currentBridgeStartPos = endPosition;
+    }
+    if (m_game->getBoard().verifyWinner(m_currentPlayer->getColor()))
+    {
+        m_winDialog = std::make_unique<WinDialog>(this, m_currentPlayer->getName().c_str());
+        m_winDialog->show();
     }
 }
 
@@ -104,7 +151,7 @@ void GameWindow::removeBridge(const twixt::Position& endPosition)
     if (m_currentAction == Action::Remove_Bridge)
     {
         m_currentAction = Action::Add_SinglePylon;
-        m_game->removeBridge(m_currentBridgeStartPos, endPosition, twixt::Pylon::Color::Red);
+        m_game->removeBridge(m_currentBridgeStartPos, endPosition, m_currentPlayer->getColor());
     } 
     else
     {
@@ -129,8 +176,6 @@ void GameWindow::drawBoard(QPainter* painter)
     painter->setPen(Qt::NoPen);
     painter->drawRoundedRect(boardBackground, 10, 10);
 
-    m_game->addPylon({3, 2}, twixt::Pylon::Type::Single, twixt::Pylon::Color::Red, m_pylonRotation);
-
     for (size_t i = 0; i < boardSize; ++i)
     {
         for (size_t j = 0; j < boardSize; ++j)
@@ -149,7 +194,7 @@ void GameWindow::drawBoard(QPainter* painter)
                     else if (currentPylon->getColor() == twixt::Pylon::Color::Red)
                         brush = Qt::red;
 
-                    QPen penLine{ Qt::red, 3 };
+                    QPen penLine{ brush, 3 };
                     painter->setPen(penLine);
                     for (const auto& bridge : currentPylon->getConnections())
                     {
@@ -247,10 +292,10 @@ void GameWindow::mousePressEvent(QMouseEvent* event)
         {
             if (event->button() == Qt::LeftButton)
             {
-                if (m_pylonPlaced)
-                    addBridge(matPosition);
-                else
+                if (!m_pylonPlaced)
                     addPylon(matPosition);
+                else if (m_game->getBoard().getFoundation(matPosition).getPylon() != nullptr)
+                    addBridge(matPosition);
             }
             else
                 removeBridge(matPosition);

@@ -45,6 +45,8 @@ void GameModeWindow::openGameWindow()
 {
 	m_gameWindow->setFoundationsPoints(std::vector<QPoint>(pow(m_game.get()->getBoard().getSize(), 2)));
 	m_gameWindow->changeVisibilityBigPylonsButtons(m_game->getBigPylons());
+	m_gameWindow->setPlayersNameLabel();
+	m_gameWindow->updateNumberPylonsPlayersLabel();
 	this->hide();
 	m_gameWindow->show();
 }

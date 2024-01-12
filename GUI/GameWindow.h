@@ -7,6 +7,7 @@
 #include <functional>
 #include <memory>
 
+#include "WinDialog.h"
 #include "ui_GameWindow.h"
 #include "Game.h"
 
@@ -30,13 +31,19 @@ public:
 	~GameWindow();
 
 	void setFoundationsPoints(const std::vector<QPoint>& foundationsPoints);
+	void setPlayersNameLabel();
+	void updateNumberPylonsPlayersLabel();
 
 	void closeEvent(QCloseEvent* event);
 	void changeVisibilityBigPylonsButtons(bool state);
 
+private slots:
+	void nextRoundAction();
+
 private:
 	std::vector<QPoint> m_foundationsPoints;
 
+	std::unique_ptr<WinDialog> m_winDialog;
 	std::unique_ptr<Ui::GameWindowClass> m_ui;
 	std::shared_ptr<twixt::Game> m_game;
 
@@ -44,6 +51,7 @@ private:
 	int m_pylonRotation;
 	twixt::Position m_currentBridgeStartPos;
 	bool m_pylonPlaced;
+	twixt::IPlayer* m_currentPlayer;
 
 	void addPylon(const twixt::Position& matPosition);
 	void addBridge(const twixt::Position& endPosition);
