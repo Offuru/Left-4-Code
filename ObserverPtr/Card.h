@@ -30,13 +30,14 @@ private:
 	Target m_target;
 	Effect m_effect;
 
-	static std::unordered_map<Target, std::string> targets;
-	static std::unordered_map<Effect, std::string> effects;
 	//TO DO: move key_val pairs to file and add methods for reading
 
 public:
+	static std::unordered_map<Target, std::string> targets;
+	static std::unordered_map<Effect, std::string> effects;
 
 	__declspec(dllexport) Card(Target target = Card::Target::None, Effect effect = Card::Effect::None);
+	__declspec(dllexport) Card(Effect effect);
 	__declspec(dllexport) Card(const Card& other);
 	__declspec(dllexport) ~Card() = default;
 	__declspec(dllexport) Card& operator=(const Card& other);

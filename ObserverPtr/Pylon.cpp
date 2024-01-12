@@ -87,6 +87,11 @@ void Pylon::setColor(const Color& color)
 	m_color = color;
 }
 
+void twixt::Pylon::setBigConfiguration(const uint8_t& bigConfiguration)
+{
+	m_bigConfiguration = bigConfiguration;
+}
+
 void Pylon::addFoundation(const Position& foundation)
 {
 	m_foundations.emplace_back(foundation);
