@@ -4,6 +4,7 @@
 #include <QPainter>
 #include <QBrush>
 #include <QMouseEvent>
+
 #include <functional>
 #include <memory>
 
@@ -51,7 +52,7 @@ private:
 	int m_pylonRotation;
 	twixt::Position m_currentBridgeStartPos;
 	bool m_pylonPlaced;
-	twixt::IPlayer* m_currentPlayer;
+	nonstd::observer_ptr<twixt::IPlayer> m_currentPlayer;
 
 	void addPylon(const twixt::Position& matPosition);
 	void addBridge(const twixt::Position& endPosition);

@@ -271,9 +271,10 @@ bool Game::addPylon(const Position& pos, Pylon::Type type, Pylon::Color color, u
 	switch (type)
 	{
 		case Pylon::Type::Single:
-			if (validFoundation(pos, color))
+			if (validFoundation(pos, color) && m_currentPlayer->getNoPylons1x1() > 0)
 			{
 				m_board.addPylon(m_board.getFoundation(pos), color, type, pylonRotation, bigConfiguration);
+				m_currentPlayer->decrementPylon1x1();
 				return true;
 			}
 			break;
@@ -281,9 +282,10 @@ bool Game::addPylon(const Position& pos, Pylon::Type type, Pylon::Color color, u
 			if (validFoundation(pos, color) &&
 				validFoundation({ row,col + 1 }, color) &&
 				validFoundation({ row + 1, col }, color) &&
-				validFoundation({ row + 1, col + 1 }, color))
+				validFoundation({ row + 1, col + 1 }, color) && m_currentPlayer->getNoPylons2x2() > 0)
 			{
 				m_board.addPylon(m_board.getFoundation(pos), color, type, pylonRotation, bigConfiguration);
+				m_currentPlayer->decrementPylon2x2();
 				return true;
 			}
 			break;
@@ -292,9 +294,10 @@ bool Game::addPylon(const Position& pos, Pylon::Type type, Pylon::Color color, u
 				validFoundation({ row + 1, col }, color) &&
 				validFoundation({ row - 1, col }, color) &&
 				validFoundation({ row, col + 1 }, color) &&
-				validFoundation({ row, col - 1 }, color))
+				validFoundation({ row, col - 1 }, color) && m_currentPlayer->getNoPylonsCross() > 0)
 			{
 				m_board.addPylon(m_board.getFoundation(pos), color, type, pylonRotation, bigConfiguration);
+				m_currentPlayer->decrementPylonCross();
 				return true;
 			}
 			break;
@@ -348,6 +351,7 @@ bool Game::addBridge(const Position& startPoint, const Position& endPoint, Pylon
 					return false;
 			}
 			m_board.addBridge(m_board.getFoundation(startPoint), m_board.getFoundation(endPoint), startPylon->getColor());
+			m_currentPlayer->decrementBridge();
 			return true;
 		}
 	}
@@ -450,6 +454,7 @@ bool Game::removeBridge(const Position& start, const Position& end, Pylon::Color
 		return false;
 
 	m_board.removeBridge(bridgeToRemove);
+	m_currentPlayer->incrementBridge();
 	return true;
 }
 

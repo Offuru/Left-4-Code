@@ -13,9 +13,7 @@ GameWindow::GameWindow(QWidget* parent, std::shared_ptr<twixt::Game> game)
     m_pylonRotation = 0;
     m_currentBridgeStartPos = { -1,-1 };
     m_pylonPlaced = false;
-    m_winDialog = nullptr;
-    
-    m_currentPlayer = m_game->getPlayer1().get();
+
     m_ui->player1NameLabel->setStyleSheet("QLabel { background-color : red; color : green; }");
 
     QObject::connect(m_ui->squareConfig1Button, &QPushButton::clicked,
@@ -46,18 +44,21 @@ GameWindow::~GameWindow()
 
 void GameWindow::nextRoundAction()
 {
+    if (m_game->getDebuilderBob()) m_game->moveBob();
     m_pylonPlaced = false;
     m_currentAction = Action::Add_SinglePylon;
 
-    if (m_currentPlayer == m_game->getPlayer2().get())
+    if (m_currentPlayer->getColor() == m_game->getPlayer2()->getColor())
     {
-        m_currentPlayer = m_game->getPlayer1().get();
+        m_game->setCurrentPlayer(nonstd::make_observer<twixt::IPlayer>(m_game->getPlayer1().get()));
+        m_currentPlayer = m_game->getCurrentPlayer();
         m_ui->player1NameLabel->setStyleSheet("QLabel { background-color : red; color : green; }");
         m_ui->player2NameLabel->setStyleSheet("QLabel { background-color : transparent; color : black; }");
     }
     else
     {
-        m_currentPlayer = m_game->getPlayer2().get();
+        m_game->setCurrentPlayer(nonstd::make_observer<twixt::IPlayer>(m_game->getPlayer2().get()));
+        m_currentPlayer = m_game->getCurrentPlayer();
         m_ui->player1NameLabel->setStyleSheet("QLabel { background-color : transparent; color : black; }");
         m_ui->player2NameLabel->setStyleSheet("QLabel { background-color : red; color : green; }");
     }
@@ -95,6 +96,7 @@ void GameWindow::changeVisibilityBigPylonsButtons(bool state)
 
 void GameWindow::addPylon(const twixt::Position& matPosition)
 {
+    m_currentPlayer = m_game->getCurrentPlayer();
     bool result = false;
     switch (m_currentAction)
     {
@@ -122,8 +124,7 @@ void GameWindow::addPylon(const twixt::Position& matPosition)
         m_currentAction = Action::Add_SinglePylon;
         m_pylonRotation = 0;
         m_pylonPlaced = true;
-        if (m_currentAction == Action::Add_SinglePylon)
-            updateNumberPylonsPlayersLabel();
+        updateNumberPylonsPlayersLabel();
     }
 }
 
