@@ -151,6 +151,18 @@
         </item>
         <item>
          <widget class="QPushButton" name="nextRoundButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+            <horstretch>1</horstretch>
+            <verstretch>1</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>200</width>
+            <height>120</height>
+           </size>
+          </property>
           <property name="text">
            <string>Next Round</string>
           </property>

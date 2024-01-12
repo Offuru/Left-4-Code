@@ -47,6 +47,7 @@ GameWindow::~GameWindow()
 void GameWindow::nextRoundAction()
 {
     m_pylonPlaced = false;
+    m_currentAction = Action::Add_SinglePylon;
 
     if (m_currentPlayer == m_game->getPlayer2().get())
     {
@@ -130,9 +131,9 @@ void GameWindow::addBridge(const twixt::Position& endPosition)
 {
     if (m_currentAction == Action::Add_Bridge)
     {
-        m_currentAction = Action::Add_SinglePylon;
         bool result = m_game->addBridge(m_currentBridgeStartPos, endPosition, m_currentPlayer->getColor());
-        std::cout << "";
+        if (result)
+            m_currentAction = Action::Add_SinglePylon;
     }
     else
     {
