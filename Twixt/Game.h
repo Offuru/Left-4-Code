@@ -41,6 +41,7 @@ namespace twixt
 		void setBoard(const Board&);
 		void setCardDeck(const std::vector<Card>&);
 		void setCardStack(const std::stack<Card>&);
+		void swapPlayers();
 
 		bool getHumanPlayers() const;
 		bool getBigPylons() const;

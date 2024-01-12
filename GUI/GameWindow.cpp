@@ -9,8 +9,11 @@ GameWindow::GameWindow(QWidget* parent, std::shared_ptr<twixt::Game> game)
 
 	m_ui->setupUi(this);
 
+    m_currentPlayer = m_game->getCurrentPlayer();
+
     m_currentAction = Action::None;
     m_pylonRotation = 0;
+    m_round = 0;
     m_currentBridgeStartPos = { -1,-1 };
     m_pylonPlaced = false;
 
@@ -37,13 +40,25 @@ GameWindow::GameWindow(QWidget* parent, std::shared_ptr<twixt::Game> game)
                         else m_currentAction = Action::Add_SinglePylon;
                     });
     QObject::connect(m_ui->nextRoundButton, &QPushButton::clicked, this, &GameWindow::nextRoundAction);
+
+    QObject::connect(m_ui->swapPlayersButton, &QPushButton::clicked, this, &GameWindow::swapButtonAction);
 }
 
 GameWindow::~GameWindow()
 {}
 
+void GameWindow::swapButtonAction()
+{
+    if (m_round != 1) return;
+    m_game->swapPlayers();
+    m_currentPlayer = m_game->getCurrentPlayer();
+    m_ui->swapPlayersButton->hide();
+}
+
 void GameWindow::nextRoundAction()
 {
+    if (!m_pylonPlaced) return;
+    ++m_round;
     if (m_game->getDebuilderBob()) { m_game->moveBob(); update(); };
     m_pylonPlaced = false;
     m_currentAction = Action::None;

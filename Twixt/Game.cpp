@@ -16,6 +16,7 @@ Game::Game(uint8_t boardSize, uint8_t minesNumber) :
 
 	m_boardSize = boardSize;
 	m_areaLength = 1;
+	m_currentPlayer = nonstd::make_observer<IPlayer>(m_player1.get());
 }
 
 Game::Game(const Game& other) :
@@ -183,6 +184,15 @@ void twixt::Game::setCardDeck(const std::vector<Card>& cardDeck)
 void twixt::Game::setCardStack(const std::stack<Card>& cardStack)
 {
 	m_cardStack = cardStack;
+}
+
+void twixt::Game::swapPlayers()
+{
+	if (m_currentPlayer->getColor() == Pylon::Color::Black)
+	{
+		m_currentPlayer = nonstd::make_observer<IPlayer>(m_player1.get());
+		std::swap(m_player1, m_player2);
+	}
 }
 
 bool twixt::Game::getHumanPlayers() const
