@@ -1,6 +1,6 @@
 #pragma once
-#include "../ObserverPtr/Pylon2.h"
-#include "IPlayer.h"
+#include "../ObserverPtr/Pylon.h"
+#include "../ObserverPtr/IPlayer.h"
 
 namespace twixt
 {
@@ -17,6 +17,10 @@ namespace twixt
 		HumanPlayer& operator=(const HumanPlayer&);
 
 		Move getNextMove() override;
+
+
+		// Inherited via IPlayer
+		std::string getTypeString() override;
 
 	};
 }

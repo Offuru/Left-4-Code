@@ -18,21 +18,33 @@
     <ClInclude Include="observer_ptr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Pylon2.h">
+    <ClInclude Include="Pylon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Bridge2.h">
+    <ClInclude Include="Bridge.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Card.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IPlayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Pylon2.cpp">
+    <ClCompile Include="Pylon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Bridge2.cpp">
+    <ClCompile Include="Bridge.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="observer_ptr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Card.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IPlayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

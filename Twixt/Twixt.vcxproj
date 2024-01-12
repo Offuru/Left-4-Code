@@ -151,13 +151,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Board.cpp" />
-    <ClCompile Include="Card.cpp" />
     <ClCompile Include="CrossPylon.cpp" />
     <ClCompile Include="DebuilderBob.cpp" />
     <ClCompile Include="Foundation.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameLoader.cpp" />
-    <ClCompile Include="IPlayer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="HumanPlayer.cpp" />
     <ClCompile Include="SinglePylon.cpp" />
@@ -167,13 +165,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h" />
-    <ClInclude Include="Card.h" />
     <ClInclude Include="CrossPylon.h" />
     <ClInclude Include="DebuilderBob.h" />
     <ClInclude Include="Foundation.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameLoader.h" />
-    <ClInclude Include="IPlayer.h" />
     <ClInclude Include="HumanPlayer.h" />
     <ClInclude Include="SinglePylon.h" />
     <ClInclude Include="SquarePylon.h" />

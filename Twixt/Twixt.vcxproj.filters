@@ -42,13 +42,7 @@
     <ClCompile Include="DebuilderBob.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="IPlayer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Utilities.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Card.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameLoader.cpp">
@@ -83,13 +77,7 @@
     <ClInclude Include="DebuilderBob.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="IPlayer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Utilities.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Card.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameLoader.h">

@@ -1,13 +1,18 @@
 #pragma once
-#include <fstream>
+#include <iostream>
+#include "Game.h"
+#include "Utilities.h"
 
 namespace twixt
 {
 	class GameLoader
 	{
 	public:
-		static void saveGame();
-		static void loadeGame(std::ofstream&);
+		GameLoader(Game&);
+		void saveGame(std::ostream&);
+		void loadGame(std::istream&);
 
+	private:
+		std::reference_wrapper<Game> m_game;
 	};
 }

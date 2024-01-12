@@ -59,3 +59,8 @@ HumanPlayer::Move twixt::HumanPlayer::getNextMove()
 		break;
 	}
 }
+
+std::string twixt::HumanPlayer::getTypeString()
+{
+	return "human";
+}

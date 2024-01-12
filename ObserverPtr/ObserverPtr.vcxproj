@@ -19,14 +19,18 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Bridge2.h" />
+    <ClInclude Include="Bridge.h" />
+    <ClInclude Include="Card.h" />
+    <ClInclude Include="IPlayer.h" />
     <ClInclude Include="observer_ptr.h" />
-    <ClInclude Include="Pylon2.h" />
+    <ClInclude Include="Pylon.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Bridge2.cpp" />
+    <ClCompile Include="Bridge.cpp" />
+    <ClCompile Include="Card.cpp" />
+    <ClCompile Include="IPlayer.cpp" />
     <ClCompile Include="observer_ptr.cpp" />
-    <ClCompile Include="Pylon2.cpp" />
+    <ClCompile Include="Pylon.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

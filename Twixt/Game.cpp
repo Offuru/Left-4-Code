@@ -165,6 +165,11 @@ void twixt::Game::setPlayer2(const std::string& name, bool aiPlayer)
 		m_player2 = std::make_unique<HumanPlayer>(name);
 }
 
+void twixt::Game::setCurrentPlayer(const nonstd::observer_ptr<IPlayer>& currentPlayer)
+{
+	m_currentPlayer.reset(currentPlayer.get());
+}
+
 void Game::setBoard(const Board& board)
 {
 	m_board = board;
@@ -235,6 +240,11 @@ std::unique_ptr<IPlayer>& Game::getPlayer2()
 	return m_player2;
 }
 
+nonstd::observer_ptr<IPlayer>& twixt::Game::getCurrentPlayer()
+{
+	return m_currentPlayer;
+}
+
 Board& Game::getBoard()
 {
 	return m_board;
@@ -248,6 +258,11 @@ std::vector<Card> twixt::Game::getCardDeck() const
 std::stack<Card> twixt::Game::getCardStack() const
 {
 	return m_cardStack;
+}
+
+DebuilderBob& twixt::Game::getBob()
+{
+	return m_bob;
 }
 
 bool Game::addPylon(const Position& pos, Pylon::Type type, Pylon::Color color, uint8_t pylonRotation, bool bigConfiguration)
