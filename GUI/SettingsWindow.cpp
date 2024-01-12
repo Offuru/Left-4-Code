@@ -32,6 +32,14 @@ SettingsWindow::SettingsWindow(QWidget *parent, std::shared_ptr<twixt::Game> gam
 	QObject::connect(m_ui->pylonsSpinBox, &QSpinBox::valueChanged,
 					[&]() { m_game->getPlayer1()->setNoPylons1x1(m_ui->pylonsSpinBox->value());
 							m_game->getPlayer2()->setNoPylons1x1(m_ui->pylonsSpinBox->value()); });
+
+	QObject::connect(m_ui->pylonsSqSpinBox, &QSpinBox::valueChanged, this, &SettingsWindow::setNoSquarePylons);
+
+	QObject::connect(m_ui->pylonsCsSpinBox, &QSpinBox::valueChanged, this, &SettingsWindow::setNoCrossPylons);
+
+	QObject::connect(m_ui->bridgeSpinBox, &QSpinBox::valueChanged,
+					[&]() { m_game->getPlayer1()->setNoBridges(m_ui->bridgeSpinBox->value());
+							m_game->getPlayer2()->setNoBridges(m_ui->bridgeSpinBox->value()); });
 }
 
 SettingsWindow::~SettingsWindow()
@@ -44,4 +52,24 @@ void SettingsWindow::enableMineGameModeSettings()
 	m_ui->rowExplotionCheckBox->setEnabled(true);
 	m_ui->columnExplotionCheckBox->setEnabled(true);
 	m_ui->reusableCheckBox->setEnabled(true);
+}
+
+void SettingsWindow::enableBigPylonsGameModeSettings()
+{
+	m_ui->pylonsSqSpinBox->setEnabled(true);
+	m_ui->pylonsCsSpinBox->setEnabled(true);
+}
+
+void SettingsWindow::setNoSquarePylons()
+{
+	m_ui->pylonsSqSpinBox->setEnabled(true);
+	m_game->getPlayer1()->setNoPylons2x2(m_ui->pylonsSqSpinBox->value());
+	m_game->getPlayer2()->setNoPylons2x2(m_ui->pylonsSqSpinBox->value());
+}
+
+void SettingsWindow::setNoCrossPylons()
+{
+	m_ui->pylonsSqSpinBox->setEnabled(true);
+	m_game->getPlayer1()->setNoPylonsCross(m_ui->pylonsCsSpinBox->value());
+	m_game->getPlayer2()->setNoPylonsCross(m_ui->pylonsCsSpinBox->value());
 }

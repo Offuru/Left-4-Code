@@ -9,7 +9,7 @@ GameWindow::GameWindow(QWidget* parent, std::shared_ptr<twixt::Game> game)
 
 	m_ui->setupUi(this);
 
-    m_currentAction = Action::Add_SinglePylon;
+    m_currentAction = Action::None;
     m_pylonRotation = 0;
     m_currentBridgeStartPos = { -1,-1 };
     m_pylonPlaced = false;
@@ -44,9 +44,10 @@ GameWindow::~GameWindow()
 
 void GameWindow::nextRoundAction()
 {
-    if (m_game->getDebuilderBob()) m_game->moveBob();
+    if (m_game->getDebuilderBob()) { m_game->moveBob(); update(); };
     m_pylonPlaced = false;
-    m_currentAction = Action::Add_SinglePylon;
+    m_currentAction = Action::None;
+    resetPushButtonIcon();
 
     if (m_currentPlayer->getColor() == m_game->getPlayer2()->getColor())
     {
@@ -79,6 +80,28 @@ void GameWindow::updateNumberPylonsPlayersLabel()
 {
     m_ui->noPylonsPlayer1Label->setText(std::to_string(m_game->getPlayer1()->getNoPylons1x1()).c_str());
     m_ui->noPylonsPlayer2Label->setText(std::to_string(m_game->getPlayer2()->getNoPylons1x1()).c_str());
+    m_ui->noBridgesPlayer1Label->setText(std::to_string(m_game->getPlayer1()->getNoBridges()).c_str());
+    m_ui->noBridgesPlayer2Label->setText(std::to_string(m_game->getPlayer2()->getNoBridges()).c_str());
+    if (m_game->getBigPylons())
+    {
+        m_ui->noSqPylonsPlayer1Label->setText(std::to_string(m_game->getPlayer1()->getNoPylons2x2()).c_str());
+        m_ui->noSqPylonsPlayer2Label->setText(std::to_string(m_game->getPlayer2()->getNoPylons2x2()).c_str());
+        m_ui->noCsPylonsPlayer1Label->setText(std::to_string(m_game->getPlayer1()->getNoPylonsCross()).c_str());
+        m_ui->noCsPylonsPlayer2Label->setText(std::to_string(m_game->getPlayer2()->getNoPylonsCross()).c_str());
+    }
+    else
+    {
+        m_ui->noSqPylons1Label->hide();
+        m_ui->noSqPylonsPlayer1Label->hide();
+
+        m_ui->noSqPylons2Label->hide();
+        m_ui->noSqPylonsPlayer2Label->hide();
+
+        m_ui->noCsPylons1Label->hide();
+        m_ui->noCsPylonsPlayer1Label->hide();
+        m_ui->noCsPylons2Label->hide();
+        m_ui->noCsPylonsPlayer2Label->hide();
+    }
 }
 
 void GameWindow::closeEvent(QCloseEvent* event)
@@ -121,7 +144,7 @@ void GameWindow::addPylon(const twixt::Position& matPosition)
     if (result)
     {
         resetPushButtonIcon();
-        m_currentAction = Action::Add_SinglePylon;
+        m_currentAction = Action::None;
         m_pylonRotation = 0;
         m_pylonPlaced = true;
         updateNumberPylonsPlayersLabel();
@@ -133,8 +156,9 @@ void GameWindow::addBridge(const twixt::Position& endPosition)
     if (m_currentAction == Action::Add_Bridge)
     {
         bool result = m_game->addBridge(m_currentBridgeStartPos, endPosition, m_currentPlayer->getColor());
+        updateNumberPylonsPlayersLabel();
         if (result)
-            m_currentAction = Action::Add_SinglePylon;
+            m_currentAction = Action::None;
     }
     else
     {
@@ -152,7 +176,7 @@ void GameWindow::removeBridge(const twixt::Position& endPosition)
 {
     if (m_currentAction == Action::Remove_Bridge)
     {
-        m_currentAction = Action::Add_SinglePylon;
+        m_currentAction = Action::None;
         m_game->removeBridge(m_currentBridgeStartPos, endPosition, m_currentPlayer->getColor());
     } 
     else
@@ -295,7 +319,10 @@ void GameWindow::mousePressEvent(QMouseEvent* event)
             if (event->button() == Qt::LeftButton)
             {
                 if (!m_pylonPlaced)
+                {
+                    if (m_currentAction == Action::None) m_currentAction = Action::Add_SinglePylon;
                     addPylon(matPosition);
+                }
                 else if (m_game->getBoard().getFoundation(matPosition).getPylon() != nullptr)
                     addBridge(matPosition);
             }
@@ -345,7 +372,7 @@ void GameWindow::rotatePushButtonIcon(QPushButton& button, int rotationFactor)
 
 void GameWindow::resetPushButtonIcon()
 {
-    if (m_currentAction != Action::Add_SinglePylon)
+    if (m_currentAction == Action::None || m_currentAction != Action::Add_SinglePylon)
     {
         m_pylonRotation = 0;
         m_ui->squareConfig1Button->setIcon(QPixmap("Static files/Images/SquarePylonConfig1.png"));
