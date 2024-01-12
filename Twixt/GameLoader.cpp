@@ -152,6 +152,8 @@ void twixt::GameLoader::loadGame(const std::string& path)
 	{
 		m_game.get().setCurrentPlayer(nonstd::make_observer<IPlayer>(m_game.get().getPlayer2().get()));
 	}
+	in >> tmp;
+	m_game.get().setRound(tmp);
 	in.close();
 }
 
@@ -275,5 +277,6 @@ void twixt::GameLoader::saveGame(const std::string& path)
 	}
 
 	out << static_cast<int>(m_game.get().getCurrentPlayer().get()->getColor()) << '\n';
+	out << m_game.get().getRound() << '\n';
 	out.close();
 }
