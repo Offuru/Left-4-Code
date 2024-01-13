@@ -55,7 +55,7 @@
     <ClCompile Include="GameWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WinDialog.cpp">
+    <ClCompile Include="EndDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -75,7 +75,7 @@
     <QtMoc Include="GameWindow.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="WinDialog.h">
+    <QtMoc Include="EndDialog.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
@@ -95,7 +95,7 @@
     <QtUic Include="GameWindow.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-    <QtUic Include="WinDialog.ui">
+    <QtUic Include="EndDialog.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
