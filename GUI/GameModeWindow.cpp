@@ -46,6 +46,7 @@ void GameModeWindow::openGameWindow()
 	m_game->setCurrentPlayer(nonstd::make_observer<twixt::IPlayer>(m_game->getPlayer1().get()));
 	m_gameWindow->setFoundationsPoints(std::vector<QPoint>(pow(m_game.get()->getBoard().getSize(), 2)));
 	m_gameWindow->changeVisibilityBigPylonsButtons(m_game->getBigPylons());
+	m_gameWindow->changeVisibilityCards(m_game->getCards());
 	m_gameWindow->setPlayersNameLabel();
 	m_gameWindow->updateNumberPylonsPlayersLabel();
 	if (m_game->getDebuilderBob()) m_game->moveBob();

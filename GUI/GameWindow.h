@@ -13,6 +13,7 @@
 #include "ui_GameWindow.h"
 //#include "GameLoader.h"
 #include "Game.h"
+#include "CardQListWidgetItem.h"
 
 class GameWindow : public QMainWindow
 {
@@ -41,12 +42,15 @@ public:
 
 	void closeEvent(QCloseEvent* event);
 	void changeVisibilityBigPylonsButtons(bool state);
+	void changeVisibilityCards(bool state);
 
 private slots:
 	void swapButtonAction();
 	void nextRoundAction();
 	void saveGameAction();
 	void loadGameAction();
+	void drawCardAction();
+	void useCardAction(QListWidgetItem* item);
 
 private:
 	std::vector<QPoint> m_foundationsPoints;
@@ -58,8 +62,11 @@ private:
 	Action m_currentAction;
 	twixt::Position m_currentBridgeStartPos;
 	twixt::Game::GameStatus m_currentStatus;
+	Card::Effect m_currentEffect;
 	int m_pylonRotation;
 	bool m_pylonPlaced;
+	bool m_cardDrawn;
+	bool m_cardUsed;
 	bool m_gameEnded;
 
 	nonstd::observer_ptr<twixt::IPlayer> m_currentPlayer;

@@ -22,6 +22,7 @@
     <ClInclude Include="Bridge.h" />
     <ClInclude Include="Card.h" />
     <ClInclude Include="IPlayer.h" />
+    <ClInclude Include="Node.h" />
     <ClInclude Include="observer_ptr.h" />
     <ClInclude Include="Pylon.h" />
   </ItemGroup>
@@ -29,6 +30,7 @@
     <ClCompile Include="Bridge.cpp" />
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="IPlayer.cpp" />
+    <ClCompile Include="Node.cpp" />
     <ClCompile Include="observer_ptr.cpp" />
     <ClCompile Include="Pylon.cpp" />
   </ItemGroup>
@@ -122,7 +124,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

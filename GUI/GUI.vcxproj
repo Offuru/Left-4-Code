@@ -111,6 +111,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CardQListWidgetItem.cpp" />
     <ClCompile Include="EndDialog.cpp" />
     <ClCompile Include="GameModeWindow.cpp" />
     <ClCompile Include="GameWindow.cpp" />
@@ -151,6 +152,9 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="EndDialog.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CardQListWidgetItem.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
