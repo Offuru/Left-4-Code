@@ -416,6 +416,30 @@ bool twixt::Game::placingPylonOnMine(const Position& position, Pylon::Type type)
 	return false;
 }
 
+twixt::Game::GameStatus twixt::Game::getCurrentGameStatus(Pylon::Color currentPlayerColor)
+{
+	//verify for draw
+	if (!m_player1->getNoPylons1x1() && !m_player2->getNoPylons1x1())
+	{
+		if (m_bigPylons)
+		{
+			if (!m_player1->getNoPylons2x2() && !m_player2->getNoPylons2x2()
+				&& !m_player1->getNoPylonsCross() && !m_player2->getNoPylonsCross())
+				return GameStatus::Draw;
+		}
+		else
+		{
+			return GameStatus::Draw;
+		}
+	}
+
+	//verify if current player won
+	if (m_board.verifyWinner(currentPlayerColor))
+		return GameStatus::Won;
+
+	return GameStatus::None;
+}
+
 void Game::moveBob(const std::optional<Position>& position)
 {
 	m_bob.moveToNext(position);

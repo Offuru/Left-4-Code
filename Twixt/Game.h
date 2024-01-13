@@ -12,6 +12,12 @@ namespace twixt
 	class Game
 	{
 	public:
+		enum class GameStatus {
+			None,
+			Won,
+			Draw
+		};
+
 		Game(uint8_t = 24, uint8_t = 12);
 		Game(const Game&);
 		Game& operator=(const Game&);
@@ -64,6 +70,9 @@ namespace twixt
 
 		bool addPylon(const Position&, Pylon::Type, Pylon::Color, uint8_t pylonRotation, bool bigConfiguration = true); //both square and cross pylons have 2 possible configurations
 		bool addBridge(const Position&, const Position&, Pylon::Color);
+		bool placingPylonOnMine(const Position&, Pylon::Type);
+
+		GameStatus getCurrentGameStatus(Pylon::Color);
 
 		//cards
 		bool drawCard(const nonstd::observer_ptr<IPlayer>&);
