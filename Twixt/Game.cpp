@@ -18,6 +18,15 @@ Game::Game(uint8_t boardSize, uint8_t minesNumber) :
 	m_areaLength = 1;
 	m_currentPlayer = nonstd::make_observer<IPlayer>(m_player1.get());
 	m_round = 0;
+
+	m_cardEffects = {
+	{ Card::Effect::None, "None"}, { Card::Effect::Draw, "Draw" }, { Card::Effect::RemoveCards, "RemoveCards" },
+	{ Card::Effect::RemovePylon, "RemovePylon" }, { Card::Effect::RemoveBridge, "RemoveBridge" },
+	{ Card::Effect::Place2Pylons, "Place2Pylons" }, { Card::Effect::PlaceSquare, "PlaceSquare" }, { Card::Effect::PlaceCross,"PlaceCross" },
+	{ Card::Effect::MoveBob, "MoveBob" }, { Card::Effect::PlaceMine, "PlaceMine" } };
+
+	m_deckSize = 10;
+	addCardsToDeck();
 }
 
 Game::Game(const Game& other) :
@@ -37,21 +46,10 @@ Game::Game(const Game& other) :
 	m_explodeSingleLocation = other.m_explodeSingleLocation;
 	m_boardSize = other.m_boardSize;
 	m_round = other.m_round;
-}
-
-Game& Game::operator=(const Game& other)
-{
-	m_humanPlayers = other.m_humanPlayers;
-	m_reusableMinedFoundation = other.m_reusableMinedFoundation;
-	m_bigPylons = other.m_bigPylons;
-	m_minedFundations = other.m_minedFundations;
-	m_debuilderBob = other.m_debuilderBob;
-	m_cards = other.m_cards;
-	m_areaLength = other.m_areaLength;
-	m_boardSize = other.m_boardSize;
-	m_bob = other.m_bob;
-	m_round = other.m_round;
-	return *this;
+	m_cardEffects = other.m_cardEffects;
+	m_deckSize = other.m_deckSize;
+	m_cardDeck = other.m_cardDeck;
+	m_cardStack = other.m_cardStack;
 }
 
 void twixt::Game::Run()
@@ -187,6 +185,12 @@ void twixt::Game::setCardDeck(const std::vector<Card>& cardDeck)
 void twixt::Game::setCardStack(const std::stack<Card>& cardStack)
 {
 	m_cardStack = cardStack;
+}
+
+void twixt::Game::setDeckSize(uint8_t deckSize)
+{
+	m_deckSize = deckSize;
+	addCardsToDeck();
 }
 
 void twixt::Game::setRound(uint8_t round)
@@ -513,7 +517,7 @@ void twixt::Game::printDeck(nonstd::observer_ptr<IPlayer> player)
 {
 	std::cout << std::endl;
 	for (const auto& card : player->getCards())
-		std::cout << card.getTargetString() << ' ' << card.getEffectString() << std::endl;
+		std::cout << static_cast<int>(card.getEffect()) << std::endl;
 	std::cout << std::endl;
 }
 
@@ -551,6 +555,19 @@ bool twixt::Game::removePylon(const Position& position, Pylon::Color color)
 
 	m_board.removePylon(position);
 	return true;
+}
+
+void twixt::Game::shuffleDeck()
+{
+	m_cardStack = std::stack<Card>();
+	
+	std::random_device rd;
+	std::mt19937 g(rd());
+
+	std::shuffle(m_cardDeck.begin(), m_cardDeck.end(), g);
+
+	for (const auto& card : m_cardDeck)
+		m_cardStack.push(card);
 }
 
 bool twixt::Game::drawCard(const nonstd::observer_ptr<IPlayer>& player)
@@ -775,6 +792,23 @@ void Game::explodeArea(const Position& pos)
 	}
 }
 
+void twixt::Game::addCardsToDeck()
+{
+	m_cardDeck.clear();
+
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<> distrib(0, m_cardEffects.size() - 1);
+
+	for (int i = 0; i < m_deckSize; ++i)
+	{
+		int currentCard = distrib(gen);
+		m_cardDeck.push_back(static_cast<Card::Effect>(currentCard));
+	}
+
+	shuffleDeck();
+}
+
 //bool twixt::Game::processTurn(const IPlayer::Move& nextMove, const nonstd::observer_ptr<IPlayer>& currentPlayer)
 //{
 //	if (!currentPlayer->validMove(nextMove, m_boardSize))
@@ -816,4 +850,9 @@ void Game::explodeArea(const Position& pos)
 bool Game::getCards() const
 {
 	return m_cards;
+}
+
+uint8_t twixt::Game::getDeckSize() const
+{
+	return m_deckSize;
 }

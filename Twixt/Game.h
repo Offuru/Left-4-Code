@@ -20,7 +20,7 @@ namespace twixt
 
 		Game(uint8_t = 24, uint8_t = 12);
 		Game(const Game&);
-		Game& operator=(const Game&);
+		Game& operator=(const Game&) = delete;
 		~Game() = default;
 
 		void Run(); //TO DO: modularize function
@@ -46,6 +46,7 @@ namespace twixt
 		void setBoard(const Board&);
 		void setCardDeck(const std::vector<Card>&);
 		void setCardStack(const std::stack<Card>&);
+		void setDeckSize(uint8_t);
 		void setRound(uint8_t);
 		void swapPlayers();
 
@@ -59,6 +60,7 @@ namespace twixt
 		bool getReusableMinedFoundation() const;
 		bool getDebuilderBob() const;
 		bool getCards() const;
+		uint8_t getDeckSize() const;
 		std::unique_ptr<IPlayer>& getPlayer1();//TO DO: change to observer ptr
 		std::unique_ptr<IPlayer>& getPlayer2();
 		nonstd::observer_ptr<IPlayer>& getCurrentPlayer();
@@ -75,6 +77,7 @@ namespace twixt
 		GameStatus getCurrentGameStatus(Pylon::Color);
 
 		//cards
+		void shuffleDeck();
 		bool drawCard(const nonstd::observer_ptr<IPlayer>&);
 		void drawMultipleCards(const nonstd::observer_ptr<IPlayer>&, uint8_t);
 		void enemyLoseCards(const nonstd::observer_ptr<IPlayer>&, uint8_t);
@@ -112,9 +115,11 @@ namespace twixt
 		uint8_t m_areaLength;
 		uint8_t m_boardSize;
 		uint8_t m_round;
+		uint8_t m_deckSize;
 		DebuilderBob m_bob;
 		std::vector<Card> m_cardDeck;
 		std::stack<Card> m_cardStack;
+		std::unordered_map<Card::Effect, std::string> m_cardEffects;
 
 
 		bool overlappingBridges(const Position&, const Position&, const Position&, const Position&) const;
@@ -125,6 +130,7 @@ namespace twixt
 		void explodeCol(const Position&);
 		void explodeRow(const Position&);
 		void explodeArea(const Position&);
+		void addCardsToDeck();
 		//bool processTurn(const IPlayer::Move&, const nonstd::observer_ptr<IPlayer>&); //it returns true only if the player
 																//changed their bridges, so they can
 																//modify more of them in the same round,
