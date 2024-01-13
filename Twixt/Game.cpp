@@ -20,7 +20,7 @@ Game::Game(uint8_t boardSize, uint8_t minesNumber) :
 	m_round = 0;
 
 	m_cardEffects = {
-	{ Card::Effect::None, "None"}, { Card::Effect::Draw, "Draw" }, { Card::Effect::RemoveCards, "RemoveCards" },
+	{ Card::Effect::Draw, "Draw" }, { Card::Effect::RemoveCards, "RemoveCards" },
 	{ Card::Effect::RemovePylon, "RemovePylon" }, { Card::Effect::RemoveBridge, "RemoveBridge" },
 	{ Card::Effect::Place2Pylons, "Place2Pylons" }, { Card::Effect::PlaceSquare, "PlaceSquare" }, { Card::Effect::PlaceCross,"PlaceCross" },
 	{ Card::Effect::MoveBob, "MoveBob" }, { Card::Effect::PlaceMine, "PlaceMine" } };
@@ -559,10 +559,217 @@ bool twixt::Game::removePylon(const Position& position, Pylon::Color color)
 	return true;
 }
 
+void twixt::Game::saveGame(const std::string& path)
+{
+	std::ofstream out(path);
+	//game flags
+	out << m_humanPlayers << ' ';
+	out << m_bigPylons << ' ';
+	out << m_minedFundations << ' ';
+	out << m_explodeSingleLocation << ' ';
+	out << m_explodeCol << ' ';
+	out << m_explodeRow << ' ';
+	out << m_explodeArea << ' ';
+	out << m_reusableMinedFoundation << ' ';
+	out << m_debuilderBob << ' ';
+	out << m_cards << '\n';
+	//player details
+	out << m_player1.get()->getName() << '\n';
+	out << m_player1.get()->getTypeString() << '\n';
+	out << static_cast<int>(m_player1.get()->getColor()) << '\n';
+	out << m_player2.get()->getName() << '\n';
+	out << m_player2.get()->getTypeString() << '\n';
+	out << static_cast<int>(m_player2.get()->getColor()) << '\n';
+	out << static_cast<int>(m_player1.get()->getNoPylons1x1()) << '\n';
+	out << static_cast<int>(m_player2.get()->getNoPylons1x1()) << '\n';
+	if (m_bigPylons)
+	{
+		out << static_cast<int>(m_player1.get()->getNoPylons2x2()) << '\n';
+		out << static_cast<int>(m_player1.get()->getNoPylonsCross()) << '\n';
+		out << static_cast<int>(m_player2.get()->getNoPylons2x2()) << '\n';
+		out << static_cast<int>(m_player2.get()->getNoPylonsCross()) << '\n';
+	}
+	out << static_cast<int>(m_player1.get()->getNoBridges()) << '\n';
+	out << static_cast<int>(m_player2.get()->getNoBridges()) << '\n';
+
+	//cards
+	if (m_cards)
+	{
+		out << m_player1.get()->getCards().size() << ' ';
+		for (const auto& card : m_player1.get()->getCards())
+		{
+			out << static_cast<int>(card.getEffect()) << ' ';
+		}
+		out << '\n';
+
+		out << m_player2.get()->getCards().size() << ' ';
+		for (const auto& card : m_player1.get()->getCards())
+		{
+			out << static_cast<int>(card.getEffect()) << ' ';
+		}
+		out << '\n';
+
+		out << m_cardDeck.size() << ' ';
+		for (const auto& card : m_cardDeck)
+		{
+			out << static_cast<int>(card.getEffect()) << ' ';
+		}
+		out << '\n';
+	}
+
+	if (m_debuilderBob)
+	{
+		out << m_bob.getPosition().first << ' ' << m_bob.getPosition().second << '\n';
+	}
+	//board
+	out << m_board.getSize() << '\n';
+	if (m_minedFundations)
+	{
+		for (const auto& line : m_board.getBoard())
+		{
+			for (const auto& foundation : line)
+			{
+				out << foundation.getMined() << ' ' << foundation.getExploded() << '\n';
+			}
+		}
+	}
+	//pylons
+	out << m_board.getPylons().size() << '\n';
+	for (const auto& pylon : m_board.getPylons())
+	{
+		out << static_cast<int>(pylon.first.first) << ' ' << static_cast<int>(pylon.first.second) << ' ' << static_cast<int>(pylon.second.get()->getColor()) << ' ' << static_cast<int>(pylon.second.get()->getType()) << ' ' << pylon.second.get()->getPylonRotation() << ' ' << static_cast<int>(pylon.second.get()->getBigConfiguration()) << '\n';
+	}
+	//bridges
+	out << m_board.getBridges().size() << '\n';
+	for (const auto& bridge : m_board.getBridges())
+	{
+		out << static_cast<int>(bridge.get()->getPosStart().first) << ' ' << static_cast<int>(bridge.get()->getPosStart().second) << ' ' << static_cast<int>(bridge.get()->getPosEnd().first) << ' ' << static_cast<int>(bridge.get()->getPosEnd().second) <<' '<< static_cast<bool>(bridge.get()->getPylonStart().get()->getColor()) << '\n';
+	}
+
+	out << static_cast<bool>(m_currentPlayer.get()->getColor()) << '\n';
+	out << static_cast<int>(m_round) << '\n';
+	out.close();
+}
+
+void twixt::Game::loadGame(const std::string& path)
+{
+	std::ifstream in(path);
+	std::string tmpString1, tmpString2;
+	int tmp;
+	in >> m_humanPlayers >> m_bigPylons >> m_minedFundations >> m_explodeSingleLocation >> m_explodeCol >> m_explodeRow >> m_explodeArea >> m_reusableMinedFoundation >> m_debuilderBob >> m_cards;
+
+	in >> tmpString1 >> tmpString2;
+	setPlayer1(tmpString1, tmpString2 != "human");
+	in >> tmp;
+	m_player1.get()->setColor(static_cast<twixt::Pylon::Color>(tmp));
+	in >> tmpString1 >> tmpString2;
+	setPlayer2(tmpString1, tmpString2 != "human");
+	in >> tmp;
+	m_player2.get()->setColor(static_cast<twixt::Pylon::Color>(tmp));
+	in >> tmp;
+	m_player1.get()->setNoPylons1x1(tmp);
+	in >> tmp;
+	m_player2.get()->setNoPylons1x1(tmp);
+	if (m_bigPylons)
+	{
+		in >> tmp;
+		m_player1.get()->setNoPylons2x2(tmp);
+		in >> tmp;
+		m_player1.get()->setNoPylonsCross(tmp);
+		in >> tmp;
+		m_player2.get()->setNoPylons2x2(tmp);
+		in >> tmp;
+		m_player2.get()->setNoPylonsCross(tmp);
+	}
+	in >> tmp;
+	m_player1.get()->setNoBridges(tmp);
+	in >> tmp;
+	m_player2.get()->setNoBridges(tmp);
+	if (m_cards)
+	{
+		Card tmpCard(twixt::Card::Effect::Draw);
+		std::vector<Card>cards;
+		int tmpEffect;
+		in >> tmp;
+		cards.resize(tmp);
+		for (int i = 0; i < tmp; ++i)
+		{
+			in >> tmpEffect;
+			cards.push_back(static_cast<Card::Effect>(tmpEffect));
+		}
+		m_player1.get()->setCards(cards);
+		cards.clear();
+		in >> tmp;
+		cards.resize(tmp);
+		for (int i = 0; i < tmp; ++i)
+		{
+			in >> tmpEffect;
+			cards.push_back(static_cast<Card::Effect>(tmpEffect));
+		}
+		m_player2.get()->setCards(cards);
+		cards.clear();
+		in >> tmp;
+		cards.resize(tmp);
+		for (int i = 0; i < tmp; ++i)
+		{
+			in >> tmpEffect;
+			cards.push_back(static_cast<Card::Effect>(tmpEffect));
+		}
+		m_cardDeck = cards;
+		cards.clear();
+	}
+	if (m_debuilderBob)
+	{
+		int x, y;
+		in >> x >> y;
+		m_bob.setPosition({ x,y });
+	}
+	in >> tmp;
+	m_board.setSize(tmp);
+	if(m_minedFundations)
+	{
+		for (auto& line : m_board.getBoard())
+		{
+			for (auto foundation : line)
+			{
+				in >> tmp;
+				foundation.setMined(tmp);
+				in >> tmp;
+				foundation.setExploded(tmp);
+			}
+		}
+	}
+	in >> tmp;
+	for (int i = 0; i < tmp; ++i)
+	{
+		int x, y, color, type, rotation, config;
+		in >> x >> y >> color >> type >> rotation >> config;
+		addPylon({ x,y }, static_cast<twixt::Pylon::Type>(type), static_cast<twixt::Pylon::Color>(color), rotation, config);
+	}
+	in >> tmp;
+	for (int i = 0; i < tmp; ++i)
+	{
+		int x1, y1, x2, y2, color;
+		in >> x1 >> y1 >> x2 >> y2 >> color;
+		addBridge({ x1,y1 }, { x2,y2 }, static_cast<twixt::Pylon::Color>(color));
+	}
+	in >> tmp;
+	if (static_cast<twixt::Pylon::Color>(tmp) == m_player1.get()->getColor())
+	{
+		setCurrentPlayer(nonstd::make_observer(m_player1.get()));
+	}
+	else
+	{
+		setCurrentPlayer(nonstd::make_observer(m_player2.get()));
+	}
+	in >> m_round;
+	in.close();
+}
+
 void twixt::Game::shuffleDeck()
 {
 	m_cardStack = std::stack<Card>();
-	
+
 	std::random_device rd;
 	std::mt19937 g(rd());
 

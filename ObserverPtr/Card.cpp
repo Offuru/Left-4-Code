@@ -1,5 +1,12 @@
 #include "Card.h"
 
+using namespace twixt;
+
+twixt::Card::Card()
+{
+	m_effect = Effect::Draw;
+}
+
 Card::Card(Effect effect)
 {
 	m_effect = effect;
