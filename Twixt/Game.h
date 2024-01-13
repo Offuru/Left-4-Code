@@ -6,6 +6,7 @@
 #include "../ObserverPtr/observer_ptr.h"
 #include <array>
 #include <iostream>
+#include <fstream>
 
 namespace twixt
 {
@@ -96,6 +97,9 @@ namespace twixt
 
 		bool removeBridge(const Position&, const Position&, Pylon::Color);
 		bool removePylon(const Position&, Pylon::Color);
+
+		void saveGame(const std::string&);
+		void loadGame(const std::string&);
 	private:
 
 		bool m_humanPlayers;

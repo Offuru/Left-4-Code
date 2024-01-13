@@ -155,7 +155,6 @@
     <ClCompile Include="DebuilderBob.cpp" />
     <ClCompile Include="Foundation.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="GameLoader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="HumanPlayer.cpp" />
     <ClCompile Include="SinglePylon.cpp" />
@@ -169,7 +168,6 @@
     <ClInclude Include="DebuilderBob.h" />
     <ClInclude Include="Foundation.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="GameLoader.h" />
     <ClInclude Include="HumanPlayer.h" />
     <ClInclude Include="SinglePylon.h" />
     <ClInclude Include="SquarePylon.h" />

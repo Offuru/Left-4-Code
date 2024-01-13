@@ -103,7 +103,7 @@ uint8_t twixt::IPlayer::getNoPylonsCross() const
 	return m_noPylonsCross;
 }
 
-std::vector<Card> twixt::IPlayer::getCards() const
+std::vector<twixt::Card> twixt::IPlayer::getCards() const
 {
 	return m_cards;
 }
