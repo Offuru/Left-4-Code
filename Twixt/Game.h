@@ -12,7 +12,6 @@ namespace twixt
 	class Game
 	{
 	public:
-
 		Game(uint8_t = 24, uint8_t = 12);
 		Game(const Game&);
 		Game& operator=(const Game&);
@@ -41,6 +40,8 @@ namespace twixt
 		void setBoard(const Board&);
 		void setCardDeck(const std::vector<Card>&);
 		void setCardStack(const std::stack<Card>&);
+		void setRound(uint8_t);
+		void swapPlayers();
 
 		bool getHumanPlayers() const;
 		bool getBigPylons() const;
@@ -59,6 +60,7 @@ namespace twixt
 		std::vector<Card> getCardDeck() const;
 		std::stack<Card> getCardStack() const;
 		DebuilderBob& getBob();
+		uint8_t getRound() const;
 
 		bool addPylon(const Position&, Pylon::Type, Pylon::Color, uint8_t pylonRotation, bool bigConfiguration = true); //both square and cross pylons have 2 possible configurations
 		bool addBridge(const Position&, const Position&, Pylon::Color);
@@ -100,6 +102,7 @@ namespace twixt
 		Board m_board;
 		uint8_t m_areaLength;
 		uint8_t m_boardSize;
+		uint8_t m_round;
 		DebuilderBob m_bob;
 		std::vector<Card> m_cardDeck;
 		std::stack<Card> m_cardStack;

@@ -8,9 +8,37 @@ std::unordered_map<Card::Effect, std::string> Card::effects{
 	{ Effect::Place2Pylons, "Place2Pylons" }, { Effect::PlaceSquare, "PlaceSquare" }, { Effect::PlaceCross,"PlaceCross" },
 	{ Effect::MoveBob, "MoveBob" }, { Effect::PlaceMine, "PlaceMine" } }; //TO DO: move to txt file
 
+
 Card::Card(Target target, Effect effect)
 {
 	m_target = target;
+	m_effect = effect;
+}
+
+Card::Card(Effect effect)
+{
+	switch (effect)
+	{
+	case Card::Effect::None:
+	case Card::Effect::PlaceMine:
+	case Card::Effect::MoveBob:
+		m_target = Target::None;
+		break;
+
+	case Card::Effect::RemoveCards:
+	case Card::Effect::RemovePylon:
+	case Card::Effect::RemoveBridge:
+		m_target = Target::Opponent;
+		break;
+	case Card::Effect::Draw:
+	case Card::Effect::Place2Pylons:
+	case Card::Effect::PlaceSquare:
+	case Card::Effect::PlaceCross:
+		m_target = Target::Self;
+		break;
+	default:
+		break;
+	}
 	m_effect = effect;
 }
 

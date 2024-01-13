@@ -16,6 +16,8 @@ Game::Game(uint8_t boardSize, uint8_t minesNumber) :
 
 	m_boardSize = boardSize;
 	m_areaLength = 1;
+	m_currentPlayer = nonstd::make_observer<IPlayer>(m_player1.get());
+	m_round = 0;
 }
 
 Game::Game(const Game& other) :
@@ -34,6 +36,7 @@ Game::Game(const Game& other) :
 	m_explodeRow = other.m_explodeRow;
 	m_explodeSingleLocation = other.m_explodeSingleLocation;
 	m_boardSize = other.m_boardSize;
+	m_round = other.m_round;
 }
 
 Game& Game::operator=(const Game& other)
@@ -47,6 +50,7 @@ Game& Game::operator=(const Game& other)
 	m_areaLength = other.m_areaLength;
 	m_boardSize = other.m_boardSize;
 	m_bob = other.m_bob;
+	m_round = other.m_round;
 	return *this;
 }
 
@@ -185,6 +189,20 @@ void twixt::Game::setCardStack(const std::stack<Card>& cardStack)
 	m_cardStack = cardStack;
 }
 
+void twixt::Game::setRound(uint8_t round)
+{
+	m_round = round;
+}
+
+void twixt::Game::swapPlayers()
+{
+	if (m_currentPlayer->getColor() == Pylon::Color::Black)
+	{
+		m_currentPlayer = nonstd::make_observer<IPlayer>(m_player1.get());
+		std::swap(m_player1, m_player2);
+	}
+}
+
 bool twixt::Game::getHumanPlayers() const
 {
 	return m_humanPlayers;
@@ -263,6 +281,11 @@ std::stack<Card> twixt::Game::getCardStack() const
 DebuilderBob& twixt::Game::getBob()
 {
 	return m_bob;
+}
+
+uint8_t twixt::Game::getRound() const
+{
+	return m_round;
 }
 
 bool Game::addPylon(const Position& pos, Pylon::Type type, Pylon::Color color, uint8_t pylonRotation, bool bigConfiguration)

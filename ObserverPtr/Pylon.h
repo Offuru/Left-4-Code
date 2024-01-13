@@ -63,7 +63,7 @@ namespace twixt
 		__declspec(dllexport) void setConnections(const std::vector<nonstd::observer_ptr<Bridge>>&);
 		__declspec(dllexport) void setConnectionPoints(const std::vector<Position>&); //TO DO: change to predefined pylon connection points
 		__declspec(dllexport) void setColor(const Color&);
-
+		__declspec(dllexport) void setBigConfiguration(const uint8_t&);
 		__declspec(dllexport) void addFoundation(const Position&);
 
 		__declspec(dllexport) virtual bool canAddBridge(const Position&) const = 0;
