@@ -2,8 +2,10 @@
 
 #include <QMainWindow>
 #include <memory>
+#include <regex>
 #include "ui_NameAIWindow.h"
 #include "Game.h"
+#include "GameModeWindow.h"
 
 class NameAIWindow : public QMainWindow
 {
@@ -17,8 +19,13 @@ public:
 
 private slots:
 	void openParentWindow();
+	void openGameModeWindow();
 
 private:
 	std::unique_ptr<Ui::NameAIWindowClass> m_ui;
 	std::shared_ptr<twixt::Game> m_game;
+	std::unique_ptr<GameModeWindow> m_gameModeWindow;
+
+	void setPlayersName();
+	bool verifyPlayerName();
 };

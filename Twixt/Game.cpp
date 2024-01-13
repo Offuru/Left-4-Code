@@ -155,6 +155,7 @@ void twixt::Game::setPlayer1(const std::string& name, bool aiPlayer)
 	m_player1.release();
 	if (!aiPlayer)
 		m_player1 = std::make_unique<HumanPlayer>(name);
+	m_player1->setColor(twixt::Pylon::Color::Red);
 }
 
 //void Game::setPlayer2(const nonstd::observer_ptr<IPlayer>& player)
@@ -167,6 +168,7 @@ void twixt::Game::setPlayer2(const std::string& name, bool aiPlayer)
 	m_player2.release();
 	if (!aiPlayer)
 		m_player2 = std::make_unique<HumanPlayer>(name);
+	m_player2->setColor(twixt::Pylon::Color::Black);
 }
 
 void twixt::Game::setCurrentPlayer(const nonstd::observer_ptr<IPlayer>& currentPlayer)

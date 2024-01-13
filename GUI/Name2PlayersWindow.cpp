@@ -24,6 +24,7 @@ void Name2PlayersWindow::openParentWindow()
 void Name2PlayersWindow::openGameModeWindow()
 {
 	setPlayersName();
+	if (!verifyPlayersNames()) return;
 	this->hide();
 	m_gameModeWindow->show();
 }
@@ -34,7 +35,14 @@ void Name2PlayersWindow::setPlayersName()
 	std::string name2 = m_ui->player2NameLineEdit->text().toStdString();
 	m_game->setPlayer1(name1);
 	m_game->setPlayer2(name2);
-	m_game->getPlayer2()->setColor(twixt::Pylon::Color::Black);
+}
+
+bool Name2PlayersWindow::verifyPlayersNames()
+{
+	std::regex nameRegex("[A-Z]+[a-z]*\d*");
+	if (std::regex_match(m_game->getPlayer1()->getName(), nameRegex) 
+	&& std::regex_match(m_game->getPlayer2()->getName(), nameRegex)) return true;
+	return false;
 }
 
 void Name2PlayersWindow::closeEvent(QCloseEvent* event)

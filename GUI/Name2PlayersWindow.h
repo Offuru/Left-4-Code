@@ -2,6 +2,7 @@
 
 #include <QMainWindow>
 #include <memory>
+#include <regex>
 #include "ui_Name2PlayersWindow.h"
 #include "Game.h"
 #include "GameModeWindow.h"
@@ -26,4 +27,5 @@ private:
 	std::unique_ptr<GameModeWindow> m_gameModeWindow;
 
 	void setPlayersName();
+	bool verifyPlayersNames();
 };
