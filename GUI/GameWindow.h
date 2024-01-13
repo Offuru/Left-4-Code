@@ -9,7 +9,7 @@
 #include <functional>
 #include <memory>
 
-#include "WinDialog.h"
+#include "EndDialog.h"
 #include "ui_GameWindow.h"
 //#include "GameLoader.h"
 #include "Game.h"
@@ -51,14 +51,16 @@ private slots:
 private:
 	std::vector<QPoint> m_foundationsPoints;
 
-	std::unique_ptr<WinDialog> m_winDialog;
+	std::unique_ptr<EndDialog> m_endDialog;
 	std::unique_ptr<Ui::GameWindowClass> m_ui;
 	std::shared_ptr<twixt::Game> m_game;
 
 	Action m_currentAction;
 	twixt::Position m_currentBridgeStartPos;
+	twixt::Game::GameStatus m_currentStatus;
 	int m_pylonRotation;
 	bool m_pylonPlaced;
+	bool m_gameEnded;
 
 	nonstd::observer_ptr<twixt::IPlayer> m_currentPlayer;
 

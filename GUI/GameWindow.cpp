@@ -15,6 +15,8 @@ GameWindow::GameWindow(QWidget* parent, std::shared_ptr<twixt::Game> game)
     m_pylonRotation = 0;
     m_currentBridgeStartPos = { -1,-1 };
     m_pylonPlaced = false;
+    m_gameEnded = false;
+    m_currentStatus = twixt::Game::GameStatus::None;
 
     m_ui->player1NameLabel->setStyleSheet("QLabel { background-color : red; color : green; }");
 
@@ -62,7 +64,7 @@ void GameWindow::swapButtonAction()
 
 void GameWindow::nextRoundAction()
 {
-    if (!m_pylonPlaced) return;
+    if (!m_pylonPlaced || m_gameEnded) return;
 
     m_game->setRound(m_game->getRound() + 1);
 
@@ -70,6 +72,14 @@ void GameWindow::nextRoundAction()
     m_pylonPlaced = false;
     m_currentAction = Action::None;
     resetPushButtonIcon();
+    m_currentStatus = m_game->getCurrentGameStatus(m_currentPlayer->getColor());
+
+    if (m_currentStatus == twixt::Game::GameStatus::Draw)
+    {
+        m_endDialog = std::make_unique<EndDialog>(this, "It's a draw!");
+        m_gameEnded = true;
+        m_endDialog->show();
+    }
 
     if (m_currentPlayer->getColor() == m_game->getPlayer2()->getColor())
     {
@@ -210,10 +220,13 @@ void GameWindow::addBridge(const twixt::Position& endPosition)
         m_currentAction = Action::Add_Bridge;
         m_currentBridgeStartPos = endPosition;
     }
-    if (m_game->getBoard().verifyWinner(m_currentPlayer->getColor()))
+    m_currentStatus = m_game->getCurrentGameStatus(m_currentPlayer->getColor());
+    if (m_currentStatus == twixt::Game::GameStatus::Won)
     {
-        m_winDialog = std::make_unique<WinDialog>(this, m_currentPlayer->getName().c_str());
-        m_winDialog->show();
+        m_gameEnded = true;
+        std::string message = m_currentPlayer->getName() + " won!";
+        m_endDialog = std::make_unique<EndDialog>(this, message.c_str());
+        m_endDialog->show();
     }
 }
 
@@ -347,6 +360,7 @@ void GameWindow::paintEvent(QPaintEvent* event)
 
 void GameWindow::mousePressEvent(QMouseEvent* event)
 {
+    if (m_gameEnded) return;
     int boardSize{ m_game->getBoard().getSize() };
     double radius = 2.5;
     double circleSize{ std::min(width() / (radius * boardSize), height() / (radius * boardSize)) };
