@@ -2,6 +2,7 @@
 #include <utility>
 #include <random>
 #include <optional>
+#include <array>
 #include "Board.h"
 #include "Utilities.h"
 

@@ -101,14 +101,14 @@ void GameWindow::saveGameAction()
 {
     QString fileName = QFileDialog::getSaveFileName(this, "Save File", "", "Text file (*.txt)");
 
-    //m_game->saveGame(fileName.toStdString());
+    m_game->saveGame(fileName.toStdString());
 }
 
 void GameWindow::loadGameAction()
 {
     QString fileName = QFileDialog::getOpenFileName(this, "Open File", "", "Text file (*.txt)");
 
-    //m_game->loadGame(fileName.toStdString());
+    m_game->loadGame(fileName.toStdString());
     update();
 }
 

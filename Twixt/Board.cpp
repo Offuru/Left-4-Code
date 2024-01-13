@@ -131,8 +131,17 @@ void Board::setBridges(const std::unordered_set<std::unique_ptr<Bridge>>& bridge
 
 void Board::setSize(uint8_t size)
 {
+	for (int i = 0; i < m_size; ++i)
+	{
+		for (int j = 0; j < m_size; ++j)
+		{
+			removePylon({ i, j });
+		}
+	}
+
 	m_size = size;
 	Foundation p;
+
 	m_board = std::vector<std::vector<Foundation>>();
 	m_board.resize(m_size);
 	for (int i = 0; i < m_size; ++i)

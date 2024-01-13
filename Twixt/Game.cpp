@@ -617,12 +617,13 @@ void twixt::Game::saveGame(const std::string& path)
 		out << '\n';
 	}
 
+	//board
+	out << static_cast<int>(m_board.getSize()) << '\n';
+
 	if (m_debuilderBob)
 	{
-		out << m_bob.getPosition().first << ' ' << m_bob.getPosition().second << '\n';
+		out << static_cast<int>(m_bob.getPosition().first) << ' ' << static_cast<int>(m_bob.getPosition().second) << '\n';
 	}
-	//board
-	out << m_board.getSize() << '\n';
 	if (m_minedFundations)
 	{
 		for (const auto& line : m_board.getBoard())
@@ -643,7 +644,7 @@ void twixt::Game::saveGame(const std::string& path)
 	out << m_board.getBridges().size() << '\n';
 	for (const auto& bridge : m_board.getBridges())
 	{
-		out << static_cast<int>(bridge.get()->getPosStart().first) << ' ' << static_cast<int>(bridge.get()->getPosStart().second) << ' ' << static_cast<int>(bridge.get()->getPosEnd().first) << ' ' << static_cast<int>(bridge.get()->getPosEnd().second) <<' '<< static_cast<bool>(bridge.get()->getPylonStart().get()->getColor()) << '\n';
+		out << static_cast<int>(bridge.get()->getPosStart().first) << ' ' << static_cast<int>(bridge.get()->getPosStart().second) << ' ' << static_cast<int>(bridge.get()->getPosEnd().first) << ' ' << static_cast<int>(bridge.get()->getPosEnd().second) << ' ' << static_cast<bool>(bridge.get()->getPylonStart().get()->getColor()) << '\n';
 	}
 
 	out << static_cast<bool>(m_currentPlayer.get()->getColor()) << '\n';
@@ -718,19 +719,20 @@ void twixt::Game::loadGame(const std::string& path)
 		m_cardDeck = cards;
 		cards.clear();
 	}
+	in >> tmp;
+	m_board.setSize(tmp);
 	if (m_debuilderBob)
 	{
 		int x, y;
 		in >> x >> y;
-		m_bob.setPosition({ x,y });
+		m_bob.moveToNext(std::make_optional<Position>(x, y));
 	}
-	in >> tmp;
-	m_board.setSize(tmp);
-	if(m_minedFundations)
+	
+	if (m_minedFundations)
 	{
 		for (auto& line : m_board.getBoard())
 		{
-			for (auto foundation : line)
+			for (auto& foundation : line)
 			{
 				in >> tmp;
 				foundation.setMined(tmp);
@@ -739,6 +741,12 @@ void twixt::Game::loadGame(const std::string& path)
 			}
 		}
 	}
+
+	m_currentPlayer->setNoPylons1x1(200);
+	m_currentPlayer->setNoPylons2x2(200);
+	m_currentPlayer->setNoPylonsCross(200);
+	m_currentPlayer->setNoBridges(200);
+
 	in >> tmp;
 	for (int i = 0; i < tmp; ++i)
 	{

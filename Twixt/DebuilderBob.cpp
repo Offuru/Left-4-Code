@@ -40,7 +40,7 @@ void DebuilderBob::moveToNext(const std::optional<Position>& nextPos)
 		std::mt19937 gen(rd());
 		std::uniform_int_distribution<> distrib(0, m_board.get().getSize() - 1);
 
-		std::bernoulli_distribution d(0.2);
+		std::bernoulli_distribution d(0.1);
 
 		bool killerBob = d(gen);
 
@@ -61,16 +61,21 @@ void DebuilderBob::moveToNext(const std::optional<Position>& nextPos)
 					m_board.get().removePylon(itr->first);
 					break;
 				}
-			
+
 			}
 		}
 
 		else
 		{
+			std::array<Position, 4> corners { std::make_pair(0, 0), {0, m_board.get().getSize() - 1},
+				{m_board.get().getSize() - 1, 0}, {m_board.get().getSize() - 1, m_board.get().getSize() - 1} };
+
 			while (true)
 			{
 				position = { distrib(gen),  distrib(gen) };
-				if (!m_board.get()[position].getMined() && !(m_lastPosition.has_value() && m_lastPosition.value() == position) && m_board.get()[position].getPylon() == nullptr)
+				if (!m_board.get()[position].getMined() && !(m_lastPosition.has_value() && m_lastPosition.value() == position) 
+					&& m_board.get()[position].getPylon() == nullptr
+					&& std::ranges::find(corners, position) == corners.end())
 					break;
 			}
 		}
