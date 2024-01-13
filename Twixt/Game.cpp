@@ -643,7 +643,7 @@ void twixt::Game::saveGame(const std::string& path)
 	out << m_board.getBridges().size() << '\n';
 	for (const auto& bridge : m_board.getBridges())
 	{
-		out << static_cast<int>(bridge.get()->getPosStart().first) << ' ' << static_cast<int>(bridge.get()->getPosStart().second) << ' ' << static_cast<int>(bridge.get()->getPosEnd().first) << ' ' << static_cast<int>(bridge.get()->getPosEnd().second) << static_cast<bool>(bridge.get()->getPylonStart().get()->getColor()) << '\n';
+		out << static_cast<int>(bridge.get()->getPosStart().first) << ' ' << static_cast<int>(bridge.get()->getPosStart().second) << ' ' << static_cast<int>(bridge.get()->getPosEnd().first) << ' ' << static_cast<int>(bridge.get()->getPosEnd().second) <<' '<< static_cast<bool>(bridge.get()->getPylonStart().get()->getColor()) << '\n';
 	}
 
 	out << static_cast<bool>(m_currentPlayer.get()->getColor()) << '\n';
@@ -726,14 +726,17 @@ void twixt::Game::loadGame(const std::string& path)
 	}
 	in >> tmp;
 	m_board.setSize(tmp);
-	for (auto& line : m_board.getBoard())
+	if(m_minedFundations)
 	{
-		for (auto foundation : line)
+		for (auto& line : m_board.getBoard())
 		{
-			in >> tmp;
-			foundation.setMined(tmp);
-			in >> tmp;
-			foundation.setExploded(tmp);
+			for (auto foundation : line)
+			{
+				in >> tmp;
+				foundation.setMined(tmp);
+				in >> tmp;
+				foundation.setExploded(tmp);
+			}
 		}
 	}
 	in >> tmp;
