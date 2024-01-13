@@ -3,6 +3,7 @@
 #include <QMainWindow>
 #include <QPainter>
 #include <QBrush>
+#include <QFileDialog>
 #include <QMouseEvent>
 
 #include <functional>
@@ -10,6 +11,7 @@
 
 #include "WinDialog.h"
 #include "ui_GameWindow.h"
+//#include "GameLoader.h"
 #include "Game.h"
 
 class GameWindow : public QMainWindow
@@ -25,6 +27,7 @@ public:
 		Add_SquarePylonConfig2,
 		Add_CrossPylonConfig1,
 		Add_CrossPylonConfig2, 
+		Add_Mine,
 		Add_Bridge,
 		Remove_Bridge
 	};
@@ -42,6 +45,8 @@ public:
 private slots:
 	void swapButtonAction();
 	void nextRoundAction();
+	void saveGameAction();
+	void loadGameAction();
 
 private:
 	std::vector<QPoint> m_foundationsPoints;
@@ -52,7 +57,6 @@ private:
 
 	Action m_currentAction;
 	twixt::Position m_currentBridgeStartPos;
-	uint8_t m_round;
 	int m_pylonRotation;
 	bool m_pylonPlaced;
 

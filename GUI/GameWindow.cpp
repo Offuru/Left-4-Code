@@ -13,7 +13,6 @@ GameWindow::GameWindow(QWidget* parent, std::shared_ptr<twixt::Game> game)
 
     m_currentAction = Action::None;
     m_pylonRotation = 0;
-    m_round = 0;
     m_currentBridgeStartPos = { -1,-1 };
     m_pylonPlaced = false;
 
@@ -42,6 +41,10 @@ GameWindow::GameWindow(QWidget* parent, std::shared_ptr<twixt::Game> game)
     QObject::connect(m_ui->nextRoundButton, &QPushButton::clicked, this, &GameWindow::nextRoundAction);
 
     QObject::connect(m_ui->swapPlayersButton, &QPushButton::clicked, this, &GameWindow::swapButtonAction);
+
+    QObject::connect(m_ui->saveGameButton, &QPushButton::clicked, this, &GameWindow::saveGameAction);
+
+    QObject::connect(m_ui->loadGameButton, &QPushButton::clicked, this, &GameWindow::loadGameAction);
 }
 
 GameWindow::~GameWindow()
@@ -49,16 +52,20 @@ GameWindow::~GameWindow()
 
 void GameWindow::swapButtonAction()
 {
-    if (m_round != 1) return;
+    if (m_game->getRound() != 1) return;
     m_game->swapPlayers();
     m_currentPlayer = m_game->getCurrentPlayer();
     m_ui->swapPlayersButton->hide();
+    m_pylonPlaced = true;
+    updateNumberPylonsPlayersLabel();
 }
 
 void GameWindow::nextRoundAction()
 {
     if (!m_pylonPlaced) return;
-    ++m_round;
+
+    m_game->setRound(m_game->getRound() + 1);
+
     if (m_game->getDebuilderBob()) { m_game->moveBob(); update(); };
     m_pylonPlaced = false;
     m_currentAction = Action::None;
@@ -78,6 +85,21 @@ void GameWindow::nextRoundAction()
         m_ui->player1NameLabel->setStyleSheet("QLabel { background-color : transparent; color : black; }");
         m_ui->player2NameLabel->setStyleSheet("QLabel { background-color : red; color : green; }");
     }
+}
+
+void GameWindow::saveGameAction()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, "Save File", "", "Text file (*.txt)");
+
+    //m_game->saveGame(fileName.toStdString());
+}
+
+void GameWindow::loadGameAction()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, "Open File", "", "Text file (*.txt)");
+
+    //m_game->loadGame(fileName.toStdString());
+    update();
 }
 
 void GameWindow::setFoundationsPoints(const std::vector<QPoint>& foundationsPoints)
@@ -135,22 +157,28 @@ void GameWindow::changeVisibilityBigPylonsButtons(bool state)
 void GameWindow::addPylon(const twixt::Position& matPosition)
 {
     m_currentPlayer = m_game->getCurrentPlayer();
+
     bool result = false;
     switch (m_currentAction)
     {
         case GameWindow::Action::Add_SinglePylon:
+            if (m_game->getMinedFoundations() && m_game->placingPylonOnMine(matPosition, twixt::Pylon::Type::Single)) m_currentAction = Action::Add_Mine, m_pylonPlaced = true;
             result = m_game->addPylon(matPosition, twixt::Pylon::Type::Single, m_currentPlayer->getColor(), m_pylonRotation);
             break;
         case GameWindow::Action::Add_SquarePylonConfig1:
+            if (m_game->getMinedFoundations() && m_game->placingPylonOnMine(matPosition, twixt::Pylon::Type::Square)) m_currentAction = Action::Add_Mine, m_pylonPlaced = true;
             result = m_game->addPylon(matPosition, twixt::Pylon::Type::Square, m_currentPlayer->getColor(), m_pylonRotation);
             break;
         case GameWindow::Action::Add_SquarePylonConfig2:
+            if (m_game->getMinedFoundations() && m_game->placingPylonOnMine(matPosition, twixt::Pylon::Type::Square)) m_currentAction = Action::Add_Mine, m_pylonPlaced = true;
             result = m_game->addPylon(matPosition, twixt::Pylon::Type::Square, m_currentPlayer->getColor(), m_pylonRotation, false);
             break;
         case GameWindow::Action::Add_CrossPylonConfig1:
+            if (m_game->getMinedFoundations() && m_game->placingPylonOnMine(matPosition, twixt::Pylon::Type::Cross)) m_currentAction = Action::Add_Mine, m_pylonPlaced = true;
             result = m_game->addPylon(matPosition, twixt::Pylon::Type::Cross, m_currentPlayer->getColor(), m_pylonRotation);
             break;
         case GameWindow::Action::Add_CrossPylonConfig2:
+            if (m_game->getMinedFoundations() && m_game->placingPylonOnMine(matPosition, twixt::Pylon::Type::Cross)) m_currentAction = Action::Add_Mine, m_pylonPlaced = true;
             result = m_game->addPylon(matPosition, twixt::Pylon::Type::Cross, m_currentPlayer->getColor(), m_pylonRotation, false);
             break;
         default:
@@ -158,6 +186,8 @@ void GameWindow::addPylon(const twixt::Position& matPosition)
     }
     if (result)
     {
+        if (m_game->getRound() == 1) m_ui->swapPlayersButton->hide();
+
         resetPushButtonIcon();
         m_currentAction = Action::None;
         m_pylonRotation = 0;
@@ -333,7 +363,8 @@ void GameWindow::mousePressEvent(QMouseEvent* event)
         {
             if (event->button() == Qt::LeftButton)
             {
-                if (!m_pylonPlaced)
+                if (m_currentAction == Action::Add_Mine) m_game->placeMine(matPosition) ? (m_currentAction = Action::None) : (m_currentAction = Action::Add_Mine);
+                else if (!m_pylonPlaced)
                 {
                     if (m_currentAction == Action::None) m_currentAction = Action::Add_SinglePylon;
                     addPylon(matPosition);
