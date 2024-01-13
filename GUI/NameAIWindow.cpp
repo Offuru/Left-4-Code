@@ -44,7 +44,7 @@ void NameAIWindow::setPlayersName()
 
 bool NameAIWindow::verifyPlayerName()
 {
-	std::regex nameRegex("[A-Z]+[a-z]*\d*");
+	std::regex nameRegex("[a-zA-Z]([a-z]*\d*)*");
 	if (std::regex_match(m_game->getPlayer1()->getName(), nameRegex)) return true;
 	return false;
 }

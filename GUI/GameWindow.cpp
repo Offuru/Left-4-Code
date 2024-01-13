@@ -8,6 +8,7 @@ GameWindow::GameWindow(QWidget* parent, std::shared_ptr<twixt::Game> game)
 	m_game = game;
 
 	m_ui->setupUi(this);
+    m_ui->cardsPlayer2ListWidget->hide();
 
     m_currentPlayer = m_game->getCurrentPlayer();
 
@@ -15,8 +16,11 @@ GameWindow::GameWindow(QWidget* parent, std::shared_ptr<twixt::Game> game)
     m_pylonRotation = 0;
     m_currentBridgeStartPos = { -1,-1 };
     m_pylonPlaced = false;
+    m_cardDrawn = false;
+    m_cardUsed = false;
     m_gameEnded = false;
     m_currentStatus = twixt::Game::GameStatus::None;
+    m_currentEffect = Card::Effect::None;
 
     m_ui->player1NameLabel->setStyleSheet("QLabel { background-color : red; color : green; }");
 
@@ -47,6 +51,12 @@ GameWindow::GameWindow(QWidget* parent, std::shared_ptr<twixt::Game> game)
     QObject::connect(m_ui->saveGameButton, &QPushButton::clicked, this, &GameWindow::saveGameAction);
 
     QObject::connect(m_ui->loadGameButton, &QPushButton::clicked, this, &GameWindow::loadGameAction);
+
+    QObject::connect(m_ui->drawCardButton, &QPushButton::clicked, this, &GameWindow::drawCardAction);
+
+    QObject::connect(m_ui->cardsPlayer1ListWidget, &QListWidget::itemClicked, this, &GameWindow::useCardAction);
+
+    QObject::connect(m_ui->cardsPlayer2ListWidget, &QListWidget::itemClicked, this, &GameWindow::useCardAction);
 }
 
 GameWindow::~GameWindow()
@@ -59,17 +69,22 @@ void GameWindow::swapButtonAction()
     m_currentPlayer = m_game->getCurrentPlayer();
     m_ui->swapPlayersButton->hide();
     m_pylonPlaced = true;
+    m_cardDrawn = true;
+    m_cardUsed = true;
+    std::swap(m_ui->cardsPlayer1ListWidget, m_ui->cardsPlayer2ListWidget);
     updateNumberPylonsPlayersLabel();
 }
 
 void GameWindow::nextRoundAction()
 {
-    if (!m_pylonPlaced || m_gameEnded) return;
+    if ((!m_pylonPlaced && !m_cardDrawn && !m_cardUsed)|| m_gameEnded) return;
 
     m_game->setRound(m_game->getRound() + 1);
 
     if (m_game->getDebuilderBob()) { m_game->moveBob(); update(); };
     m_pylonPlaced = false;
+    m_cardDrawn = false;
+    m_cardUsed = false;
     m_currentAction = Action::None;
     resetPushButtonIcon();
     m_currentStatus = m_game->getCurrentGameStatus(m_currentPlayer->getColor());
@@ -87,6 +102,8 @@ void GameWindow::nextRoundAction()
         m_currentPlayer = m_game->getCurrentPlayer();
         m_ui->player1NameLabel->setStyleSheet("QLabel { background-color : red; color : green; }");
         m_ui->player2NameLabel->setStyleSheet("QLabel { background-color : transparent; color : black; }");
+        m_ui->cardsPlayer1ListWidget->setVisible(true);
+        m_ui->cardsPlayer2ListWidget->setVisible(false);
     }
     else
     {
@@ -94,6 +111,8 @@ void GameWindow::nextRoundAction()
         m_currentPlayer = m_game->getCurrentPlayer();
         m_ui->player1NameLabel->setStyleSheet("QLabel { background-color : transparent; color : black; }");
         m_ui->player2NameLabel->setStyleSheet("QLabel { background-color : red; color : green; }");
+        m_ui->cardsPlayer1ListWidget->setVisible(false);
+        m_ui->cardsPlayer2ListWidget->setVisible(true);
     }
 }
 
@@ -110,6 +129,70 @@ void GameWindow::loadGameAction()
 
     //m_game->loadGame(fileName.toStdString());
     update();
+}
+
+void GameWindow::drawCardAction()
+{
+    if (m_game->getRound() == 1) m_ui->swapPlayersButton->hide();
+    if (m_game->drawCard(m_currentPlayer) && (!m_pylonPlaced && !m_cardUsed && !m_cardDrawn))
+    {
+        if (m_game->getCardStack().empty()) m_game->shuffleDeck();
+        QListWidget* currentList = m_ui->cardsPlayer1ListWidget;
+
+        if (m_currentPlayer->getColor() != m_game->getPlayer1()->getColor())
+            currentList = m_ui->cardsPlayer2ListWidget;
+
+        size_t cardsNumber = m_currentPlayer->getCards().size();
+        m_currentEffect = m_currentPlayer->getCards().at(cardsNumber - 1).getEffect();
+
+        if (m_currentEffect == Card::Effect::None) return;
+
+        QListWidgetItem* newItem = new CardQListWidgetItem(m_currentEffect);
+        currentList->insertItem(cardsNumber, newItem);
+        m_cardDrawn = true;
+    }
+}
+
+void GameWindow::useCardAction(QListWidgetItem* item)
+{
+    if (m_game->getRound() == 1) m_ui->swapPlayersButton->hide();
+    if (m_pylonPlaced || m_cardDrawn || m_cardUsed) return;
+    CardQListWidgetItem* receivedItem = dynamic_cast<CardQListWidgetItem*>(item);
+
+    if (!receivedItem) return;
+    Card::Effect cardEffect = receivedItem->getEffect();
+    QListWidget* currentList = m_ui->cardsPlayer1ListWidget;
+
+    if (m_currentPlayer->getColor() != m_game->getPlayer1()->getColor())
+        currentList = m_ui->cardsPlayer2ListWidget;
+
+    switch (cardEffect)
+    {
+        case Card::Effect::Draw:
+            break;
+        case Card::Effect::RemoveCards:
+            break;
+        case Card::Effect::RemovePylon:
+            break;
+        case Card::Effect::RemoveBridge:
+            break;
+        case Card::Effect::Place2Pylons:
+            break;
+        case Card::Effect::PlaceSquare:
+            break;
+        case Card::Effect::PlaceCross:
+            break;
+        case Card::Effect::MoveBob:
+            break;
+        case Card::Effect::PlaceMine:
+            break;
+        default:
+            break;
+    }
+
+    m_cardUsed = true;
+    currentList->removeItemWidget(receivedItem);
+    delete item;
 }
 
 void GameWindow::setFoundationsPoints(const std::vector<QPoint>& foundationsPoints)
@@ -164,6 +247,14 @@ void GameWindow::changeVisibilityBigPylonsButtons(bool state)
     m_ui->squareConfig2Button->setVisible(state);
 }
 
+void GameWindow::changeVisibilityCards(bool state)
+{
+    m_ui->cardsPlayer1ListWidget->setVisible(state);
+    m_ui->cardsLabel->setVisible(state);
+    m_ui->drawCardButton->setVisible(state);
+    m_ui->cardsPlayer2ListWidget->setVisible(false);
+}
+
 void GameWindow::addPylon(const twixt::Position& matPosition)
 {
     m_currentPlayer = m_game->getCurrentPlayer();
@@ -199,7 +290,7 @@ void GameWindow::addPylon(const twixt::Position& matPosition)
         if (m_game->getRound() == 1) m_ui->swapPlayersButton->hide();
 
         resetPushButtonIcon();
-        m_currentAction = Action::None;
+        //m_currentAction = Action::None;
         m_pylonRotation = 0;
         m_pylonPlaced = true;
         updateNumberPylonsPlayersLabel();
@@ -212,8 +303,8 @@ void GameWindow::addBridge(const twixt::Position& endPosition)
     {
         bool result = m_game->addBridge(m_currentBridgeStartPos, endPosition, m_currentPlayer->getColor());
         updateNumberPylonsPlayersLabel();
-        if (result)
-            m_currentAction = Action::None;
+        //if (result)
+            //m_currentAction = Action::None;
     }
     else
     {
@@ -234,7 +325,7 @@ void GameWindow::removeBridge(const twixt::Position& endPosition)
 {
     if (m_currentAction == Action::Remove_Bridge)
     {
-        m_currentAction = Action::None;
+        //m_currentAction = Action::None;
         m_game->removeBridge(m_currentBridgeStartPos, endPosition, m_currentPlayer->getColor());
     } 
     else
@@ -377,10 +468,10 @@ void GameWindow::mousePressEvent(QMouseEvent* event)
         {
             if (event->button() == Qt::LeftButton)
             {
-                if (m_currentAction == Action::Add_Mine) m_game->placeMine(matPosition) ? (m_currentAction = Action::None) : (m_currentAction = Action::Add_Mine);
-                else if (!m_pylonPlaced)
+                if (m_currentAction == Action::Add_Mine) m_game->placeMine(matPosition), m_currentAction = Action::Add_Mine;
+                else if (!m_pylonPlaced && !m_cardUsed && !m_cardDrawn)
                 {
-                    if (m_currentAction == Action::None) m_currentAction = Action::Add_SinglePylon;
+                    m_currentAction = Action::Add_SinglePylon;
                     addPylon(matPosition);
                 }
                 else if (m_game->getBoard().getFoundation(matPosition).getPylon() != nullptr)
@@ -445,11 +536,16 @@ void GameWindow::resetPushButtonIcon()
 QPoint GameWindow::matCoordToQPoint(const twixt::Position& pos)
 {
     int boardSize{ m_game->getBoard().getSize() };
+    double marginLeft = 0;
     double radius = 2.5;
     double circleSize{ std::min(width() / (radius * boardSize), height() / (radius * boardSize)) };
 
     double offsetX{ (width() - boardSize * circleSize * 2) / 2 };
     double offsetY{ (height() - boardSize * circleSize * 2) / 2 };
+
+    if (m_game->getCards()) marginLeft = 100;
+
+    offsetX -= marginLeft;
 
     const auto& [row, col] = pos;
 
@@ -462,11 +558,16 @@ QPoint GameWindow::matCoordToQPoint(const twixt::Position& pos)
 twixt::Position GameWindow::qPointToMatCoord(const QPoint& pos)
 {
     int boardSize{ m_game->getBoard().getSize() };
+    double marginLeft = 0;
     double radius = 2.5;
     double circleSize{ std::min(width() / (radius * boardSize), height() / (radius * boardSize)) };
 
     double offsetX{ (width() - boardSize * circleSize * 2) / 2 };
     double offsetY{ (height() - boardSize * circleSize * 2) / 2 };
+
+    if (m_game->getCards()) marginLeft = 100;
+
+    offsetX -= marginLeft;
 
     const auto& [x, y] = pos;
 
