@@ -26,6 +26,6 @@ namespace twixt
 		Position getPosition() const;
 		void setPosition(const Position&);
 
-		void moveToNext();
+		void moveToNext(const std::optional<Position>&);
 	};
 }

@@ -2,7 +2,7 @@
 
 using namespace twixt;
 
-DebuilderBob::DebuilderBob(Board& board) : m_board{ board }, m_lastPosition{ {} }, m_position{}{}
+DebuilderBob::DebuilderBob(Board& board) : m_board{ board }, m_lastPosition{ {} }, m_position{} {}
 
 twixt::DebuilderBob::DebuilderBob(const DebuilderBob& bob) : m_board{ bob.m_board.get() }
 {
@@ -30,18 +30,53 @@ void DebuilderBob::setPosition(const Position& position)
 	m_position = position;
 }
 
-void DebuilderBob::moveToNext()
+void DebuilderBob::moveToNext(const std::optional<Position>& nextPos)
 {
-	std::random_device rd;
-	std::mt19937 gen(rd());
-	std::uniform_int_distribution<> distrib(0, m_board.get().getSize() - 1);
 	Position position;
 
-	while (true)
+	if (!nextPos.has_value())
 	{
-		position = { distrib(gen),  distrib(gen) };
-		if (!m_board.get()[position].getMined() && !(m_lastPosition.has_value() && m_lastPosition.value() == position))
-			break;
+		std::random_device rd;
+		std::mt19937 gen(rd());
+		std::uniform_int_distribution<> distrib(0, m_board.get().getSize() - 1);
+
+		std::bernoulli_distribution d(0.2);
+
+		bool killerBob = d(gen);
+
+		if (killerBob)
+		{
+			uint8_t size = 0;
+			for (const auto& it : m_board.get().getPylons())
+			{
+				++size;
+			}
+			std::uniform_int_distribution<> randomPylon(0, size);
+			int index = randomPylon(gen);
+
+			for (auto itr = m_board.get().getPylons().begin(); itr != m_board.get().getPylons().end(); ++itr, --index)
+			{
+				if (index == 0)
+				{
+					m_board.get().removePylon(itr->first);
+					break;
+				}
+			
+			}
+		}
+
+		else
+		{
+			while (true)
+			{
+				position = { distrib(gen),  distrib(gen) };
+				if (!m_board.get()[position].getMined() && !(m_lastPosition.has_value() && m_lastPosition.value() == position) && m_board.get()[position].getPylon() == nullptr)
+					break;
+			}
+		}
+	}
+	else {
+		position = nextPos.value();
 	}
 
 	m_lastPosition = m_position;
