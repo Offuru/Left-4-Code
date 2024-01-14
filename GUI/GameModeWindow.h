@@ -23,6 +23,7 @@ private slots:
 	void openSettingsWindow();
 	void openGameWindow();
 	void setupMineGameMode();
+	void debuilderGameModeButtonAction();
 
 private:
 	std::unique_ptr<Ui::GameModeWindowClass> m_ui;

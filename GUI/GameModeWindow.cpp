@@ -20,8 +20,7 @@ GameModeWindow::GameModeWindow(QWidget* parent, std::shared_ptr<twixt::Game> gam
 
 	QObject::connect(m_ui->mineGMButton, &QPushButton::clicked, this, &GameModeWindow::setupMineGameMode);
 
-	QObject::connect(m_ui->debuilderGMButton, &QPushButton::clicked,
-					[&]() { m_game->setDebuilderBob(true); m_ui->debuilderGMButton->setStyleSheet("background-color: #6A6B83;");});
+	QObject::connect(m_ui->debuilderGMButton, &QPushButton::clicked, this, &GameModeWindow::debuilderGameModeButtonAction);
 
 	QObject::connect(m_ui->cardsGMButton, &QPushButton::clicked,
 					[&]() { m_game->setCards(true); m_ui->cardsGMButton->setStyleSheet("background-color: #6A6B83;"); });
@@ -51,9 +50,10 @@ void GameModeWindow::openGameWindow()
 	m_gameWindow->setPlayersNameLabel();
 	m_gameWindow->updateNumberPylonsPlayersLabel(); 
 	m_gameWindow->resetPushButtonIcon();
-	m_gameWindow->scaleDebuilderImage();
+	m_gameWindow->scaleImages();
 	if (m_game->getDebuilderBob()) m_game->moveBob();
 	if (m_game->getCards()) m_game->addCardsToDeck();
+	if (m_game->getMinedFoundations()) m_game->getBoard().spawnMines();
 	this->hide();
 	m_gameWindow->show();
 }
@@ -62,8 +62,14 @@ void GameModeWindow::setupMineGameMode()
 {
 	m_ui->mineGMButton->setStyleSheet("background-color: #6A6B83;");
 	m_game->setMinedFoundations(true);
-	m_game->getBoard().spawnMines();
 	m_settingsWindow->enableMineGameModeSettings();
+}
+
+void GameModeWindow::debuilderGameModeButtonAction()
+{
+	m_game->setDebuilderBob(true); 
+	m_ui->debuilderGMButton->setStyleSheet("background-color: #6A6B83;");
+	m_ui->debuilderImageLabel->setPixmap(QPixmap("Static files/Images/Game modes images/Bob The Debuilder.png"));
 }
 
 void GameModeWindow::closeEvent(QCloseEvent* event)

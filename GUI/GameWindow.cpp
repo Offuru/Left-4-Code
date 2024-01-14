@@ -95,7 +95,11 @@ void GameWindow::nextRoundAction()
 	else
 		m_ui->swapPlayersButton->setVisible(false);
 
-	if (m_game->getDebuilderBob()) { m_game->moveBob(); update(); };
+	if (m_game->getDebuilderBob()) 
+	{ 
+		m_game->moveBob(); 
+		update(); 
+	}
 	m_pylonPlaced = false;
 	m_cardDrawn = false;
 	m_cardUsed = false;
@@ -572,16 +576,19 @@ void GameWindow::drawBoard(QPainter* painter)
 					if (currentPylon->getType() != twixt::Pylon::Type::Single && (currentPylon->getConnectionPoints()[0] != foundationPos && currentPylon->getConnectionPoints()[1] != foundationPos))
 						brush = QColor(154, 170, 180);
 
-				}
-				else if (currentBoard.get().getFoundation(foundationPos).getBob() == true)
+				} else if (currentBoard.get().getFoundation(foundationPos).getBob() == true)
 				{
 					QPoint bobPos = matCoordToQPoint(foundationPos);
 					bobPos.setX(bobPos.x() - m_bobImage.width() / 4);
 					bobPos.setY(bobPos.y() - m_bobImage.width() / 4);
 					painter->drawPixmap(bobPos, m_bobImage);
+				} else if (currentBoard.get().getFoundation(foundationPos).getExploded() == true)
+				{
+					QPoint expltionPos = matCoordToQPoint(foundationPos);
+					expltionPos.setX(expltionPos.x() - m_bobImage.width() / 4);
+					expltionPos.setY(expltionPos.y() - m_bobImage.width() / 4);
+					painter->drawPixmap(expltionPos, m_explotionImage);
 				}
-				else if (currentBoard.get().getFoundation(foundationPos).getExploded() == true && currentPylon == nullptr)
-					brush = QColor(191, 94, 61);
 				else if (m_aiHintPos == foundationPos)
 				{
 					brush = QColor(101, 183, 65);
@@ -775,13 +782,15 @@ void GameWindow::resetPushButtonIcon()
 	}
 }
 
-void GameWindow::scaleDebuilderImage()
+void GameWindow::scaleImages()
 {
 	int boardSize{ m_game->getBoard().getSize() };
 	QPixmap image("Static Files/Images/Bob.png");
 	double scaleFactor = std::min(width() / boardSize, height() / boardSize);
 	scaleFactor /= 0.9;
 	m_bobImage = image.scaled(QSize(scaleFactor, scaleFactor), Qt::KeepAspectRatio);
+	image = { "Static Files/Images/explosion.png" };
+	m_explotionImage = image.scaled(QSize(scaleFactor, scaleFactor), Qt::KeepAspectRatio);
 }
 
 QPoint GameWindow::matCoordToQPoint(const twixt::Position& pos)

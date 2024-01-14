@@ -49,7 +49,7 @@ public:
 	void changeVisibilityBigPylonsButtons(bool state);
 	void changeVisibilityCards(bool state);
 	void resetPushButtonIcon();
-	void scaleDebuilderImage();
+	void scaleImages();
 
 private slots:
 	void swapButtonAction();
@@ -73,6 +73,7 @@ private:
 	twixt::Card::Effect m_currentEffect;
 	twixt::Position m_aiHintPos;
 	QPixmap m_bobImage;
+	QPixmap m_explotionImage;
 	int m_pylonRotation;
 	int m_countPylonsSpecialCard;
 	bool m_pylonPlaced;

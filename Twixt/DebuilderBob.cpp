@@ -58,6 +58,7 @@ void DebuilderBob::moveToNext(const std::optional<Position>& nextPos)
 			{
 				if (index == 0)
 				{
+					position = itr->first;
 					m_board.get().removePylon(itr->first);
 					break;
 				}
