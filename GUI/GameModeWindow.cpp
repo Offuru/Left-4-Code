@@ -16,15 +16,15 @@ GameModeWindow::GameModeWindow(QWidget* parent, std::shared_ptr<twixt::Game> gam
 	QObject::connect(m_ui->startButton, &QPushButton::clicked, this, &GameModeWindow::openGameWindow);
 
 	QObject::connect(m_ui->bigPylonsGMButton, &QPushButton::clicked,
-					[&]() { m_game->setBigPylons(true); m_settingsWindow->enableBigPylonsGameModeSettings(); });
+					[&]() { m_game->setBigPylons(true); m_settingsWindow->enableBigPylonsGameModeSettings(); m_ui->bigPylonsGMButton->setStyleSheet("background-color: #6A6B83;");});
 
 	QObject::connect(m_ui->mineGMButton, &QPushButton::clicked, this, &GameModeWindow::setupMineGameMode);
 
 	QObject::connect(m_ui->debuilderGMButton, &QPushButton::clicked,
-					[&]() { m_game->setDebuilderBob(true); });
+					[&]() { m_game->setDebuilderBob(true); m_ui->debuilderGMButton->setStyleSheet("background-color: #6A6B83;");});
 
 	QObject::connect(m_ui->cardsGMButton, &QPushButton::clicked,
-					[&]() { m_game->setCards(true); }); 
+					[&]() { m_game->setCards(true); m_ui->cardsGMButton->setStyleSheet("background-color: #6A6B83;"); });
 }
 
 GameModeWindow::~GameModeWindow()
@@ -38,6 +38,7 @@ void GameModeWindow::openParentWindow()
 
 void GameModeWindow::openSettingsWindow()
 {
+	m_settingsWindow->setWindowModality(Qt::ApplicationModal);
 	m_settingsWindow->show();
 }
 
@@ -48,7 +49,9 @@ void GameModeWindow::openGameWindow()
 	m_gameWindow->changeVisibilityBigPylonsButtons(m_game->getBigPylons());
 	m_gameWindow->changeVisibilityCards(m_game->getCards());
 	m_gameWindow->setPlayersNameLabel();
-	m_gameWindow->updateNumberPylonsPlayersLabel();
+	m_gameWindow->updateNumberPylonsPlayersLabel(); 
+	m_gameWindow->resetPushButtonIcon();
+	m_gameWindow->scaleDebuilderImage();
 	if (m_game->getDebuilderBob()) m_game->moveBob();
 	if (m_game->getCards()) m_game->addCardsToDeck();
 	this->hide();
@@ -57,6 +60,7 @@ void GameModeWindow::openGameWindow()
 
 void GameModeWindow::setupMineGameMode()
 {
+	m_ui->mineGMButton->setStyleSheet("background-color: #6A6B83;");
 	m_game->setMinedFoundations(true);
 	m_game->getBoard().spawnMines();
 	m_settingsWindow->enableMineGameModeSettings();

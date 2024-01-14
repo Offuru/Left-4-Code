@@ -22,8 +22,17 @@
      <height>181</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <family>Gill Sans MT</family>
+     <pointsize>30</pointsize>
+    </font>
+   </property>
    <property name="text">
     <string/>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
    </property>
   </widget>
  </widget>

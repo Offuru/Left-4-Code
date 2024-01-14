@@ -48,6 +48,8 @@ public:
 	void closeEvent(QCloseEvent* event);
 	void changeVisibilityBigPylonsButtons(bool state);
 	void changeVisibilityCards(bool state);
+	void resetPushButtonIcon();
+	void scaleDebuilderImage();
 
 private slots:
 	void swapButtonAction();
@@ -70,6 +72,7 @@ private:
 	twixt::Game::GameStatus m_currentStatus;
 	twixt::Card::Effect m_currentEffect;
 	twixt::Position m_aiHintPos;
+	QPixmap m_bobImage;
 	int m_pylonRotation;
 	int m_countPylonsSpecialCard;
 	bool m_pylonPlaced;
@@ -91,7 +94,6 @@ private:
 	void wheelEvent(QWheelEvent* event) override;
 
 	void rotatePushButtonIcon(QPushButton& button, int rotationFactor);
-	void resetPushButtonIcon();
 	QPoint matCoordToQPoint(const twixt::Position& pos);
 	twixt::Position qPointToMatCoord(const QPoint& pos);
 	QRect makeSquareBoardSize();

@@ -1,0 +1,85 @@
+QMainWindow{
+  background-color: #5F506B;
+  color: #F9F8F8;
+}
+
+QLabel{
+  color: #F9F8F8;
+}
+
+#titleLabel{
+  color: #F9F8F8;
+}
+
+QPushButton{
+  background-color: #76949F;
+  color: #F9F8F8;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 10px;
+  font-size: 20px;
+}
+
+QPushButton:hover{
+  background-color: #86BBBD;
+}
+
+QLineEdit{
+  border-radius: 7px;
+  color: #533747;
+  font-size: 15px;
+  height: 40px;
+  padding: 0px 15px 0px 15px;
+}
+
+#player1NameLabel, #player2NameLabel{
+  color: #F9F8F8;
+  text-align: center;
+  font-size: 20px;
+  width: 100%;
+}
+
+#startButton{
+  background-color: #995957;
+}
+
+#startButton:hover{
+  background-color: #A16B69;
+}
+
+#SettingsWindowClass{
+  background-color: #533747;
+}
+
+QCheckBox{
+  color: #AAAAAA;
+}
+
+QCheckBox:enabled{
+  color: #F9F8F8;
+}
+
+#saveGameButton, #loadGameButton, #helpButton, #swapPlayersButton, #nextRoundButton{
+  font-size: 15px;
+}
+
+QListWidget{
+  background-color: #F9F8F8;
+  border-radius: 5px;
+}
+
+QLabel{
+  color: #F9F8F8;
+}
+
+#cardsLabel{
+  font-size: 25px;
+}
+
+#player1Label, #noPylons1Label, #noPylonsPlayer1Label, #noBridges1Label, #noBridgesPlayer1Label, #noSqPylons1Label, #noSqPylonsPlayer1Label, #noCsPylons1Label, #noCsPylonsPlayer1Label, #player2Label, #noPylons2Label, #noPylonsPlayer2Label, #noBridges2Label, #noBridgesPlayer2Label, #noSqPylons2Label, #noSqPylonsPlayer2Label, #noCsPylons2Label, #noCsPylonsPlayer2Label{
+  font-size: 15px;
+}
+
+#EndDialogClass{
+  background-color: #76949F;
+}
