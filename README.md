@@ -6,3 +6,5 @@ Membrii echipei:
 - Stănică Dragoș-Dumitru - stdragos
 - Tankó Szilárd - TankoSzilard
 - Voicu Constantin - CostiVoicu
+
+Link video: https://clipchamp.com/watch/3XjjvjJZbgt
