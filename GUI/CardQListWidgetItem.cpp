@@ -1,35 +1,35 @@
 #include "CardQListWidgetItem.h"
 
-CardQListWidgetItem::CardQListWidgetItem(Card::Effect effect)
+CardQListWidgetItem::CardQListWidgetItem(twixt::Card::Effect effect)
 {
 	m_cardEffect = effect;
 	switch (m_cardEffect)
 	{
-		case Card::Effect::Draw:
-			setText("Draw a card");
+		case twixt::Card::Effect::Draw:
+			setText("Draw two cards");
 			break;
-		case Card::Effect::RemoveCards:
-			setText("Remove cards");
+		case twixt::Card::Effect::RemoveCards:
+			setText("Remove enemy cards");
 			break;
-		case Card::Effect::RemovePylon:
-			setText("Remove pylons");
+		case twixt::Card::Effect::RemovePylon:
+			setText("Remove enemy pylon");
 			break;
-		case Card::Effect::RemoveBridge:
-			setText("Remove bridges");
+		case twixt::Card::Effect::RemoveBridge:
+			setText("Remove enemy bridge");
 			break;
-		case Card::Effect::Place2Pylons:
+		case twixt::Card::Effect::Place2Pylons:
 			setText("Place 2 pylons");
 			break;
-		case Card::Effect::PlaceSquare:
+		case twixt::Card::Effect::PlaceSquare:
 			setText("Place square pylon");
 			break;
-		case Card::Effect::PlaceCross:
+		case twixt::Card::Effect::PlaceCross:
 			setText("Place cross pylon");
 			break;
-		case Card::Effect::MoveBob:
+		case twixt::Card::Effect::MoveBob:
 			setText("Move Bob");
 			break;
-		case Card::Effect::PlaceMine:
+		case twixt::Card::Effect::PlaceMine:
 			setText("Place mine");
 			break;
 		default:
@@ -37,12 +37,12 @@ CardQListWidgetItem::CardQListWidgetItem(Card::Effect effect)
 	}
 }
 
-Card::Effect CardQListWidgetItem::getEffect()
+twixt::Card::Effect CardQListWidgetItem::getEffect()
 {
 	return m_cardEffect;
 }
 
-void CardQListWidgetItem::setEffect(const Card::Effect& effect)
+void CardQListWidgetItem::setEffect(const twixt::Card::Effect& effect)
 {
 	m_cardEffect = effect;
 }

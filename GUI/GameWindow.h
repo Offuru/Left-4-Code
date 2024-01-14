@@ -11,7 +11,6 @@
 
 #include "EndDialog.h"
 #include "ui_GameWindow.h"
-//#include "GameLoader.h"
 #include "Game.h"
 #include "CardQListWidgetItem.h"
 
@@ -24,13 +23,18 @@ public:
 	{
 		None,
 		Add_SinglePylon,
+		Add_TwoSinglePylons,
 		Add_SquarePylonConfig1,
 		Add_SquarePylonConfig2,
 		Add_CrossPylonConfig1,
 		Add_CrossPylonConfig2, 
 		Add_Mine,
+		Add_MineCard,
 		Add_Bridge,
-		Remove_Bridge
+		Remove_Bridge,
+		Remove_EnemyBridge,
+		Remove_EnemyPylon,
+		Move_Bob
 	};
 
 	GameWindow(QWidget* parent = nullptr, std::shared_ptr<twixt::Game> game = nullptr);
@@ -62,15 +66,18 @@ private:
 	Action m_currentAction;
 	twixt::Position m_currentBridgeStartPos;
 	twixt::Game::GameStatus m_currentStatus;
-	Card::Effect m_currentEffect;
+	twixt::Card::Effect m_currentEffect;
 	int m_pylonRotation;
+	int m_countPylonsSpecialCard;
 	bool m_pylonPlaced;
 	bool m_cardDrawn;
 	bool m_cardUsed;
 	bool m_gameEnded;
+	bool m_removeEnemyBridge;
 
 	nonstd::observer_ptr<twixt::IPlayer> m_currentPlayer;
 
+	void resetCardsList();
 	void addPylon(const twixt::Position& matPosition);
 	void addBridge(const twixt::Position& endPosition);
 	void removeBridge(const twixt::Position& endPosition);

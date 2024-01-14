@@ -24,7 +24,7 @@ GameModeWindow::GameModeWindow(QWidget* parent, std::shared_ptr<twixt::Game> gam
 					[&]() { m_game->setDebuilderBob(true); });
 
 	QObject::connect(m_ui->cardsGMButton, &QPushButton::clicked,
-					[&]() { m_game->setCards(true); });
+					[&]() { m_game->setCards(true); }); 
 }
 
 GameModeWindow::~GameModeWindow()
@@ -50,6 +50,7 @@ void GameModeWindow::openGameWindow()
 	m_gameWindow->setPlayersNameLabel();
 	m_gameWindow->updateNumberPylonsPlayersLabel();
 	if (m_game->getDebuilderBob()) m_game->moveBob();
+	if (m_game->getCards()) m_game->addCardsToDeck();
 	this->hide();
 	m_gameWindow->show();
 }
