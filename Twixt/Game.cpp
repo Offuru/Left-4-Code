@@ -617,7 +617,7 @@ void twixt::Game::saveGame(const std::string& path)
 		out << '\n';
 
 		out << m_player2.get()->getCards().size() << ' ';
-		for (const auto& card : m_player1.get()->getCards())
+		for (const auto& card : m_player2.get()->getCards())
 		{
 			out << static_cast<int>(card.getEffect()) << ' ';
 		}
