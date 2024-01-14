@@ -1015,7 +1015,29 @@ void twixt::Game::addCardsToDeck()
 
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::uniform_int_distribution<> distrib(0, m_cardEffects.size() - 1);
+
+	std::unordered_map<int, twixt::Card::Effect> activeEffects;
+
+	uint8_t cnt = 0;
+
+	activeEffects.insert({ cnt++, Card::Effect::Draw });
+	activeEffects.insert({ cnt++, Card::Effect::RemoveCards });
+	activeEffects.insert({ cnt++, Card::Effect::RemovePylon });
+	activeEffects.insert({ cnt++, Card::Effect::RemoveBridge });
+	activeEffects.insert({ cnt++, Card::Effect::Place2Pylons });
+
+	if(m_bigPylons)
+	{
+		activeEffects.insert({ cnt++, Card::Effect::PlaceSquare });
+		activeEffects.insert({ cnt++, Card::Effect::PlaceCross });
+	}
+	if(m_debuilderBob)
+		activeEffects.insert({ cnt++, Card::Effect::MoveBob });
+	if(m_minedFundations)
+		activeEffects.insert({ cnt++, Card::Effect::PlaceMine });
+
+
+	std::uniform_int_distribution<> distrib(0, cnt - 1);
 
 	for (int i = 0; i < m_deckSize; ++i)
 	{
