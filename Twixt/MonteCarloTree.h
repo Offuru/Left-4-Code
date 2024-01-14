@@ -4,7 +4,7 @@
 #include <ranges>
 #include <queue>
 #include "Node.h"
-#include "Board.h"
+#include "Game.h"
 #include <iostream>
 
 namespace twixt
@@ -17,7 +17,7 @@ namespace twixt
 	{
 	public:
 		//player == false = black
-		MonteCarloTree(Board& board, Pylon::Color color, uint8_t maxHeight = 10, uint8_t maxRollbackHeight = 30, uint8_t maxActions = 20);
+		MonteCarloTree(Game& game, Pylon::Color color, uint8_t maxHeight = 4, uint8_t maxRollbackHeight = 4, uint8_t maxActions = 5);
 		Position getBestMove() const;
 
 	private:
@@ -27,6 +27,7 @@ namespace twixt
 		void backPropagation(NodeObsPtr node, double val);
 
 		double getScore(BoardState state);
+		bool checkAround(const std::vector<std::vector<uint8_t>>& matrix, const Position& pos);
 
 		std::vector<Position> getPossibleActions(NodeObsPtr);
 
@@ -36,6 +37,8 @@ namespace twixt
 		uint8_t m_maxHeight;
 		uint8_t m_maxRollbackHeight;
 		uint8_t m_maxActions;
+		double m_aggressiveness;
+		double m_expansion;
 
 		std::function<bool(const NodePtr&, const NodePtr&)> m_maxUCBLambda;
 
