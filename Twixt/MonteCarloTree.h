@@ -16,8 +16,8 @@ namespace twixt
 	class MonteCarloTree
 	{
 	public:
-
-		MonteCarloTree(Board& board, bool player = false, uint8_t maxHeight = 3, uint8_t maxRollbackHeight = 2, uint8_t maxActions = 2);
+		//player == false = black
+		MonteCarloTree(Board& board, Pylon::Color color, uint8_t maxHeight = 10, uint8_t maxRollbackHeight = 30, uint8_t maxActions = 20);
 		Position getBestMove() const;
 
 	private:
@@ -30,7 +30,7 @@ namespace twixt
 
 		std::vector<Position> getPossibleActions(NodeObsPtr);
 
-		bool validPosition(int8_t i, int8_t j, uint8_t boardSize) const;
+		bool validPosition(int8_t posX, int8_t posY, uint8_t boardSize, bool black) const;
 
 		Node::NodePtr m_root;
 		uint8_t m_maxHeight;
