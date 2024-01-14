@@ -451,15 +451,15 @@ void Game::moveBob(const std::optional<Position>& position)
 	m_bob.moveToNext(position);
 }
 
-void twixt::Game::moveBobCard(const nonstd::observer_ptr<IPlayer>& currentPlayer, const std::optional<Position>& position)
+void twixt::Game::moveBobCard(const std::optional<Position>& position)
 {
 	m_bob.moveToNext(position);
 
-	for (int i = 0; i < currentPlayer->getCards().size(); ++i)
+	for (int i = 0; i < m_currentPlayer->getCards().size(); ++i)
 	{
-		if (currentPlayer->getCards()[i].getEffect() == Card::Effect::MoveBob)
+		if (m_currentPlayer->getCards()[i].getEffect() == Card::Effect::MoveBob)
 		{
-			currentPlayer->removeCard(i);
+			m_currentPlayer->removeCard(i);
 			break;
 		}
 	}
@@ -609,24 +609,46 @@ void twixt::Game::saveGame(const std::string& path)
 	//cards
 	if (m_cards)
 	{
+		std::unordered_map<twixt::Card::Effect, int> activeEffects;
+
+		uint8_t cnt = 0;
+
+		activeEffects.insert({ Card::Effect::Draw, cnt++ });
+		activeEffects.insert({ Card::Effect::RemoveCards, cnt++ });
+		activeEffects.insert({ Card::Effect::RemovePylon, cnt++ });
+		activeEffects.insert({ Card::Effect::RemoveBridge, cnt++ });
+		activeEffects.insert({ Card::Effect::Place2Pylons, cnt++ });
+
+		if (m_bigPylons)
+		{
+			activeEffects.insert({ Card::Effect::PlaceSquare, cnt++ });
+			activeEffects.insert({ Card::Effect::PlaceCross, cnt++ });
+		}
+		if (m_debuilderBob)
+			activeEffects.insert({ Card::Effect::MoveBob, cnt++ });
+		if (m_minedFundations)
+			activeEffects.insert({ Card::Effect::PlaceMine, cnt++ });
+
+
+
 		out << m_player1.get()->getCards().size() << ' ';
 		for (const auto& card : m_player1.get()->getCards())
 		{
-			out << static_cast<int>(card.getEffect()) << ' ';
+			out << activeEffects[card.getEffect()] << ' ';
 		}
 		out << '\n';
 
 		out << m_player2.get()->getCards().size() << ' ';
 		for (const auto& card : m_player2.get()->getCards())
 		{
-			out << static_cast<int>(card.getEffect()) << ' ';
+			out << activeEffects[card.getEffect()] << ' ';
 		}
 		out << '\n';
 
 		out << m_cardDeck.size() << ' ';
 		for (const auto& card : m_cardDeck)
 		{
-			out << static_cast<int>(card.getEffect()) << ' ';
+			out << activeEffects[card.getEffect()] << ' ';
 		}
 		out << '\n';
 	}
@@ -702,35 +724,49 @@ void twixt::Game::loadGame(const std::string& path)
 	m_player2.get()->setNoBridges(tmp);
 	if (m_cards)
 	{
+		std::unordered_map<int, twixt::Card::Effect> activeEffects;
+		uint8_t cnt = 0;
+		activeEffects.insert({ cnt++, Card::Effect::Draw });
+		activeEffects.insert({ cnt++, Card::Effect::RemoveCards });
+		activeEffects.insert({ cnt++, Card::Effect::RemovePylon });
+		activeEffects.insert({ cnt++, Card::Effect::RemoveBridge });
+		activeEffects.insert({ cnt++, Card::Effect::Place2Pylons });
+
+		if (m_bigPylons)
+		{
+			activeEffects.insert({ cnt++, Card::Effect::PlaceSquare });
+			activeEffects.insert({ cnt++, Card::Effect::PlaceCross });
+		}
+		if (m_debuilderBob)
+			activeEffects.insert({ cnt++, Card::Effect::MoveBob });
+		if (m_minedFundations)
+			activeEffects.insert({ cnt++, Card::Effect::PlaceMine });
+
 		Card tmpCard(twixt::Card::Effect::Draw);
 		std::vector<Card>cards;
+		m_player1->setCards(cards);
+		m_player2->setCards(cards);
 		int tmpEffect;
 		in >> tmp;
-		cards.resize(tmp);
 		for (int i = 0; i < tmp; ++i)
 		{
 			in >> tmpEffect;
-			tmpCard.setEffect(static_cast<Card::Effect>(tmpEffect));
 			cards.push_back(tmpCard);
 		}
 		m_player1.get()->setCards(cards);
 		cards.clear();
 		in >> tmp;
-		cards.resize(tmp);
 		for (int i = 0; i < tmp; ++i)
 		{
 			in >> tmpEffect;
-			tmpCard.setEffect(static_cast<Card::Effect>(tmpEffect));
 			cards.push_back(tmpCard);
 		}
 		m_player2.get()->setCards(cards);
 		cards.clear();
 		in >> tmp;
-		cards.resize(tmp);
 		for (int i = 0; i < tmp; ++i)
 		{
 			in >> tmpEffect;
-			tmpCard.setEffect(static_cast<Card::Effect>(tmpEffect));
 			cards.push_back(tmpCard);
 		}
 		m_cardDeck = cards;
@@ -744,7 +780,7 @@ void twixt::Game::loadGame(const std::string& path)
 		in >> x >> y;
 		m_bob.moveToNext(std::make_optional<Position>(x, y));
 	}
-	
+
 	if (m_minedFundations)
 	{
 		for (auto& line : m_board.getBoard())
@@ -787,7 +823,9 @@ void twixt::Game::loadGame(const std::string& path)
 	{
 		setCurrentPlayer(nonstd::make_observer(m_player2.get()));
 	}
-	in >> m_round;
+	int round;
+	in >> round;
+	m_round = round;
 	in.close();
 }
 
@@ -804,69 +842,73 @@ void twixt::Game::shuffleDeck()
 		m_cardStack.push(card);
 }
 
-bool twixt::Game::drawCard(const nonstd::observer_ptr<IPlayer>& player)
+bool twixt::Game::drawCard()
 {
 	if (m_cardStack.empty())
-		return false;
-	player->draw(m_cardStack);
+		shuffleDeck();
+	m_currentPlayer->draw(m_cardStack);
 	return true;
 }
 
-void twixt::Game::drawMultipleCards(const nonstd::observer_ptr<IPlayer>& player, uint8_t count)
+void twixt::Game::drawMultipleCards(uint8_t count)
 {
 	for (size_t i = 0; i < count; ++i)
-		drawCard(player);
+		drawCard();
 
-	for (int i = 0; i < player->getCards().size(); ++i)
+	for (int i = 0; i < m_currentPlayer->getCards().size(); ++i)
 	{
-		if (player->getCards()[i].getEffect() == Card::Effect::Draw)
+		if (m_currentPlayer->getCards()[i].getEffect() == Card::Effect::Draw)
 		{
-			player->removeCard(i);
+			m_currentPlayer->removeCard(i);
 			break;
 		}
 	}
 }
 
-void twixt::Game::enemyLoseCards(const nonstd::observer_ptr<IPlayer>& currentPlayer, uint8_t count)
+void twixt::Game::enemyLoseCards(uint8_t count)
 {
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	nonstd::observer_ptr<IPlayer> enemy = nonstd::make_observer<IPlayer>(m_player1.get());
 
-	if (currentPlayer == enemy)
+	if (m_currentPlayer == enemy)
 		enemy = nonstd::make_observer<IPlayer>(m_player2.get());
 
-	while (count > 0 && !enemy->getCards().empty())
+	while (count != 0 && !enemy->getCards().empty())
 	{
 		std::uniform_int_distribution<> distrib(0, enemy->getCards().size() - 1);
 		size_t index = distrib(gen);
 
-		enemy->removeCard(index);
+		if (m_currentPlayer->getColor() == m_player1->getColor())
+			m_player2->removeCard(index);
+		else
+			m_player1->removeCard(index);
+		--count;
 	}
 
-	for (int i = 0; i < currentPlayer->getCards().size(); ++i)
+	for (int i = 0; i < m_currentPlayer->getCards().size(); ++i)
 	{
-		if (currentPlayer->getCards()[i].getEffect() == Card::Effect::RemoveCards)
+		if (m_currentPlayer->getCards()[i].getEffect() == Card::Effect::RemoveCards)
 		{
-			currentPlayer->removeCard(i);
+			m_currentPlayer->removeCard(i);
 			break;
 		}
 	}
 }
 
-bool twixt::Game::removeEnemyPylon(const Position& pos, const nonstd::observer_ptr<IPlayer>& currentPlayer)
+bool twixt::Game::removeEnemyPylon(const Position& pos)
 {
 	Pylon::Color enemyColor;
-	if (currentPlayer->getColor() == Pylon::Color::Red)
+	if (m_currentPlayer->getColor() == Pylon::Color::Red)
 		enemyColor = Pylon::Color::Black;
 	else
 		enemyColor = Pylon::Color::Red;
 
-	for (int i = 0; i < currentPlayer->getCards().size(); ++i)
+	for (int i = 0; i < m_currentPlayer->getCards().size(); ++i)
 	{
-		if (currentPlayer->getCards()[i].getEffect() == Card::Effect::RemovePylon)
+		if (m_currentPlayer->getCards()[i].getEffect() == Card::Effect::RemovePylon)
 		{
-			currentPlayer->removeCard(i);
+			m_currentPlayer->removeCard(i);
 			break;
 		}
 	}
@@ -874,20 +916,20 @@ bool twixt::Game::removeEnemyPylon(const Position& pos, const nonstd::observer_p
 	return removePylon(pos, enemyColor);
 }
 
-bool twixt::Game::removeEnemyBridge(const Position& startPos, const Position& endPos, const nonstd::observer_ptr<IPlayer>& currentPlayer)
+bool twixt::Game::removeEnemyBridge(const Position& startPos, const Position& endPos)
 {
 	Pylon::Color enemyColor;
-	if (currentPlayer->getColor() == Pylon::Color::Red)
+	if (m_currentPlayer->getColor() == Pylon::Color::Red)
 		enemyColor = Pylon::Color::Black;
 	else
 		enemyColor = Pylon::Color::Red;
 
 
-	for (int i = 0; i < currentPlayer->getCards().size(); ++i)
+	for (int i = 0; i < m_currentPlayer->getCards().size(); ++i)
 	{
-		if (currentPlayer->getCards()[i].getEffect() == Card::Effect::RemoveBridge)
+		if (m_currentPlayer->getCards()[i].getEffect() == Card::Effect::RemoveBridge)
 		{
-			currentPlayer->removeCard(i);
+			m_currentPlayer->removeCard(i);
 			break;
 		}
 	}
@@ -895,62 +937,62 @@ bool twixt::Game::removeEnemyBridge(const Position& startPos, const Position& en
 	return removeBridge(startPos, endPos, enemyColor);
 }
 
-bool twixt::Game::placeBiggerPylon(const nonstd::observer_ptr<IPlayer>& currentPlayer, const Position& pos, Pylon::Type type, Pylon::Color color,
+bool twixt::Game::placeBiggerPylon(const Position& pos, Pylon::Type type, Pylon::Color color,
 	uint8_t pylonRotation, bool bigConfiguration)
 {
 
 	if (type == Pylon::Type::Cross)
 	{
-		currentPlayer->incrementPylonCross(); //if this player has 0 available pylons, they should be able to place one if they use a card
+		m_currentPlayer->incrementPylonCross(); //if this player has 0 available pylons, they should be able to place one if they use a card
 		if (!addPylon(pos, type, color, pylonRotation, bigConfiguration))
 		{
-			currentPlayer->decrementPylonCross();
+			m_currentPlayer->decrementPylonCross();
 			return false; //no cross pylon could be placed so repeat
 		}
-		for (int i = 0; i < currentPlayer->getCards().size(); ++i)
+		for (int i = 0; i < m_currentPlayer->getCards().size(); ++i)
 		{
-			if (currentPlayer->getCards()[i].getEffect() == Card::Effect::PlaceCross)
+			if (m_currentPlayer->getCards()[i].getEffect() == Card::Effect::PlaceCross)
 			{
-				currentPlayer->removeCard(i);
+				m_currentPlayer->removeCard(i);
 				break;
 			}
 		}
 		return true;
 	}
 
-	currentPlayer->incrementPylon2x2();
+	m_currentPlayer->incrementPylon2x2();
 	if (!addPylon(pos, type, color, pylonRotation, bigConfiguration))
 	{
-		currentPlayer->decrementPylon2x2();
+		m_currentPlayer->decrementPylon2x2();
 		return false; //no square pylon could be placed so repeat
 	}
 
 
-	for (int i = 0; i < currentPlayer->getCards().size(); ++i)
+	for (int i = 0; i < m_currentPlayer->getCards().size(); ++i)
 	{
-		if (currentPlayer->getCards()[i].getEffect() == Card::Effect::PlaceSquare)
+		if (m_currentPlayer->getCards()[i].getEffect() == Card::Effect::PlaceSquare)
 		{
-			currentPlayer->removeCard(i);
+			m_currentPlayer->removeCard(i);
 			break;
 		}
 	}
 	return true;
 }
 
-bool twixt::Game::placeMine(const Position& pos, const nonstd::observer_ptr<IPlayer>& currentPlayer, bool usedCard)
+bool twixt::Game::placeMine(const Position& pos, bool usedCard)
 {
 	if (m_board[pos].getPylon() == nullptr)
 	{
 		m_board[pos].setMined(true);
-		
 
-		if(usedCard == true)
+
+		if (usedCard == true)
 		{
-			for (int i = 0; i < currentPlayer->getCards().size(); ++i)
+			for (int i = 0; i < m_currentPlayer->getCards().size(); ++i)
 			{
-				if (currentPlayer->getCards()[i].getEffect() == Card::Effect::PlaceMine)
+				if (m_currentPlayer->getCards()[i].getEffect() == Card::Effect::PlaceMine)
 				{
-					currentPlayer->removeCard(i);
+					m_currentPlayer->removeCard(i);
 					break;
 				}
 			}
@@ -1111,14 +1153,14 @@ void twixt::Game::addCardsToDeck()
 	activeEffects.insert({ cnt++, Card::Effect::RemoveBridge });
 	activeEffects.insert({ cnt++, Card::Effect::Place2Pylons });
 
-	if(m_bigPylons)
+	if (m_bigPylons)
 	{
 		activeEffects.insert({ cnt++, Card::Effect::PlaceSquare });
 		activeEffects.insert({ cnt++, Card::Effect::PlaceCross });
 	}
-	if(m_debuilderBob)
+	if (m_debuilderBob)
 		activeEffects.insert({ cnt++, Card::Effect::MoveBob });
-	if(m_minedFundations)
+	if (m_minedFundations)
 		activeEffects.insert({ cnt++, Card::Effect::PlaceMine });
 
 

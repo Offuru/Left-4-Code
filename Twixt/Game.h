@@ -79,19 +79,19 @@ namespace twixt
 
 		//cards
 		void shuffleDeck();
-		bool drawCard(const nonstd::observer_ptr<IPlayer>&);
-		void drawMultipleCards(const nonstd::observer_ptr<IPlayer>&, uint8_t);
-		void enemyLoseCards(const nonstd::observer_ptr<IPlayer>&, uint8_t);
+		bool drawCard();
+		void drawMultipleCards(uint8_t);
+		void enemyLoseCards(uint8_t);
 
-		bool removeEnemyPylon(const Position&, const nonstd::observer_ptr<IPlayer>&);
-		bool removeEnemyBridge(const Position&, const Position&, const nonstd::observer_ptr<IPlayer>&);
+		bool removeEnemyPylon(const Position&);
+		bool removeEnemyBridge(const Position&, const Position&);
 
-		bool placeBiggerPylon(const nonstd::observer_ptr<IPlayer>&, const Position&, Pylon::Type, Pylon::Color, uint8_t pylonRotation, bool bigConfiguration = true);
-		bool placeMine(const Position&, const nonstd::observer_ptr<IPlayer>&, bool = false); //it shouldn't allow for placing mines under pylons
+		bool placeBiggerPylon(const Position&, Pylon::Type, Pylon::Color, uint8_t pylonRotation, bool bigConfiguration = true);
+		bool placeMine(const Position&, bool = false); //it shouldn't allow for placing mines under pylons
 
 		void moveBob(const std::optional<Position>& = std::nullopt);
 
-		void moveBobCard(const nonstd::observer_ptr<IPlayer>&, const std::optional<Position>&);
+		void moveBobCard(const std::optional<Position>&);
 
 		void printBoard();
 		void printDeck(nonstd::observer_ptr<IPlayer> player);
