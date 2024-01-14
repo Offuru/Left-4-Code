@@ -5,12 +5,10 @@ StartWindow::StartWindow(QWidget* parent)
 {
 	m_game = std::make_shared<twixt::Game>();
 	m_name2PlayersWindow = std::make_unique<Name2PlayersWindow>(this, m_game);
-	m_nameAIWindow = std::make_unique<NameAIWindow>(this, m_game);
 	setWindowState(Qt::WindowMaximized);
 	m_ui->setupUi(this);
 
-	QObject::connect(m_ui->twoPlayersButton, &QPushButton::clicked, this, &StartWindow::openTwoPlayersWindow);
-	QObject::connect(m_ui->aiPlayerButton, &QPushButton::clicked, this, &StartWindow::openAiPlayerWindow);
+	QObject::connect(m_ui->playButton, &QPushButton::clicked, this, &StartWindow::openTwoPlayersWindow);
 }
 
 StartWindow::~StartWindow()
@@ -21,11 +19,4 @@ void StartWindow::openTwoPlayersWindow()
 	this->hide();
 	m_game->setHumanPlayers(true);
 	m_name2PlayersWindow->show();
-}
-
-void StartWindow::openAiPlayerWindow()
-{
-	this->hide();
-	m_game->setHumanPlayers(false);
-	m_nameAIWindow->show();
 }

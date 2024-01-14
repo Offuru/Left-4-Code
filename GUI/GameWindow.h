@@ -11,8 +11,9 @@
 
 #include "EndDialog.h"
 #include "ui_GameWindow.h"
-#include "Game.h"
 #include "CardQListWidgetItem.h"
+#include "Game.h"
+#include "MonteCarloTree.h"
 
 class GameWindow : public QMainWindow
 {
@@ -54,6 +55,7 @@ private slots:
 	void saveGameAction();
 	void loadGameAction();
 	void drawCardAction();
+	void helpButtonAction();
 	void useCardAction(QListWidgetItem* item);
 
 private:
@@ -67,6 +69,7 @@ private:
 	twixt::Position m_currentBridgeStartPos;
 	twixt::Game::GameStatus m_currentStatus;
 	twixt::Card::Effect m_currentEffect;
+	twixt::Position m_aiHintPos;
 	int m_pylonRotation;
 	int m_countPylonsSpecialCard;
 	bool m_pylonPlaced;
