@@ -57,7 +57,7 @@
         <property name="minimumSize">
          <size>
           <width>150</width>
-          <height>30</height>
+          <height>40</height>
          </size>
         </property>
         <property name="text">
@@ -86,7 +86,7 @@
         <property name="minimumSize">
          <size>
           <width>150</width>
-          <height>30</height>
+          <height>40</height>
          </size>
         </property>
         <property name="text">
@@ -117,7 +117,7 @@
       <property name="font">
        <font>
         <family>Tw Cen MT</family>
-        <pointsize>26</pointsize>
+        <pointsize>30</pointsize>
        </font>
       </property>
       <property name="text">
@@ -148,6 +148,18 @@
       </item>
       <item>
        <widget class="QPushButton" name="bigPylonsGMButton">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>50</height>
+         </size>
+        </property>
         <property name="text">
          <string>Big pylons game mode</string>
         </property>
@@ -171,6 +183,18 @@
       </item>
       <item>
        <widget class="QPushButton" name="mineGMButton">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>40</height>
+         </size>
+        </property>
         <property name="text">
          <string>Mine game mode</string>
         </property>
@@ -194,6 +218,18 @@
       </item>
       <item>
        <widget class="QPushButton" name="debuilderGMButton">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>40</height>
+         </size>
+        </property>
         <property name="text">
          <string>Debuilder game mode</string>
         </property>
@@ -217,6 +253,18 @@
       </item>
       <item>
        <widget class="QPushButton" name="cardsGMButton">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>40</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>40</height>
+         </size>
+        </property>
         <property name="text">
          <string>Cards game mode</string>
         </property>
@@ -276,6 +324,12 @@
         <property name="minimumSize">
          <size>
           <width>300</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
           <height>40</height>
          </size>
         </property>
