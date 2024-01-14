@@ -87,9 +87,11 @@ namespace twixt
 		bool removeEnemyBridge(const Position&, const Position&, const nonstd::observer_ptr<IPlayer>&);
 
 		bool placeBiggerPylon(const nonstd::observer_ptr<IPlayer>&, const Position&, Pylon::Type, Pylon::Color, uint8_t pylonRotation, bool bigConfiguration = true);
-		bool placeMine(const Position&); //it shouldn't allow for placing mines under pylons
+		bool placeMine(const Position&, const nonstd::observer_ptr<IPlayer>&, bool = false); //it shouldn't allow for placing mines under pylons
 
 		void moveBob(const std::optional<Position>& = std::nullopt);
+
+		void moveBobCard(const nonstd::observer_ptr<IPlayer>&, const std::optional<Position>&);
 
 		void printBoard();
 		void printDeck(nonstd::observer_ptr<IPlayer> player);
@@ -100,6 +102,8 @@ namespace twixt
 
 		void saveGame(const std::string&);
 		void loadGame(const std::string&);
+
+		void addCardsToDeck();
 	private:
 
 		bool m_humanPlayers;
@@ -134,7 +138,6 @@ namespace twixt
 		void explodeCol(const Position&);
 		void explodeRow(const Position&);
 		void explodeArea(const Position&);
-		void addCardsToDeck();
 		//bool processTurn(const IPlayer::Move&, const nonstd::observer_ptr<IPlayer>&); //it returns true only if the player
 																//changed their bridges, so they can
 																//modify more of them in the same round,
