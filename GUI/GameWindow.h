@@ -77,6 +77,8 @@ private:
 	bool m_cardUsed;
 	bool m_gameEnded;
 	bool m_removeEnemyBridge;
+	bool m_crossPylonCardDrawn;
+	bool m_squarePylonCardDrawn;
 
 	nonstd::observer_ptr<twixt::IPlayer> m_currentPlayer;
 

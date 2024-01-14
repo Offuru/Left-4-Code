@@ -57,7 +57,7 @@ namespace twixt
 		__declspec(dllexport) uint8_t getNoPylons1x1() const;
 		__declspec(dllexport) uint8_t getNoPylons2x2() const;
 		__declspec(dllexport) uint8_t getNoPylonsCross() const;
-		__declspec(dllexport) std::vector<Card> getCards() const;
+		__declspec(dllexport) std::vector<Card>& getCards();
 		__declspec(dllexport) virtual std::string getTypeString() = 0;
 
 		__declspec(dllexport) void incrementPylon1x1();
