@@ -43,9 +43,6 @@
     <ClCompile Include="Name2PlayersWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="NameAIWindow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GameModeWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -63,12 +60,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="Name2PlayersWindow.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="NameAIWindow.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
     <QtMoc Include="GameModeWindow.h">
       <Filter>Header Files</Filter>
     </QtMoc>
@@ -81,12 +72,12 @@
     <QtMoc Include="EndDialog.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="Name2PlayersWindow.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="Name2PlayersWindow.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
-    <QtUic Include="NameAIWindow.ui">
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="GameModeWindow.ui">

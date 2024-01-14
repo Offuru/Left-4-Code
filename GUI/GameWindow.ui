@@ -274,6 +274,41 @@
          </spacer>
         </item>
         <item>
+         <widget class="QPushButton" name="helpButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+            <horstretch>1</horstretch>
+            <verstretch>1</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>200</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Help</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_11">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>10</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
          <widget class="QPushButton" name="swapPlayersButton">
           <property name="enabled">
            <bool>true</bool>
@@ -353,13 +388,13 @@
     <item>
      <layout class="QGridLayout" name="gridLayout_2">
       <property name="topMargin">
-       <number>200</number>
+       <number>180</number>
       </property>
       <property name="rightMargin">
        <number>20</number>
       </property>
       <property name="bottomMargin">
-       <number>200</number>
+       <number>180</number>
       </property>
       <item row="4" column="0">
        <spacer name="verticalSpacer_8">
@@ -443,10 +478,16 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>45</height>
+         </size>
+        </property>
         <property name="maximumSize">
          <size>
           <width>250</width>
-          <height>16777215</height>
+          <height>30</height>
          </size>
         </property>
         <property name="text">

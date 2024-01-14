@@ -59,6 +59,8 @@ GameWindow::GameWindow(QWidget* parent, std::shared_ptr<twixt::Game> game)
     QObject::connect(m_ui->cardsPlayer1ListWidget, &QListWidget::itemClicked, this, &GameWindow::useCardAction);
 
     QObject::connect(m_ui->cardsPlayer2ListWidget, &QListWidget::itemClicked, this, &GameWindow::useCardAction);
+
+    QObject::connect(m_ui->helpButton, &QPushButton::clicked, this, &GameWindow::helpButtonAction);
 }
 
 GameWindow::~GameWindow()
@@ -128,14 +130,17 @@ void GameWindow::saveGameAction()
 {
     QString fileName = QFileDialog::getSaveFileName(this, "Save File", "", "Text file (*.txt)");
 
-    //m_game->saveGame(fileName.toStdString());
+    if (fileName == nullptr) return;
+    m_game->saveGame(fileName.toStdString());
 }
 
 void GameWindow::loadGameAction()
 {
     QString fileName = QFileDialog::getOpenFileName(this, "Open File", "", "Text file (*.txt)");
 
-    //m_game->loadGame(fileName.toStdString());
+    if (fileName == nullptr) return;
+    m_game->loadGame(fileName.toStdString());
+    resetCardsList();
     update();
 }
 
@@ -156,6 +161,17 @@ void GameWindow::drawCardAction()
         QListWidgetItem* newItem = new CardQListWidgetItem(m_currentEffect);
         currentList->insertItem(cardsNumber, newItem);
         m_cardDrawn = true;
+        update();
+    }
+}
+
+void GameWindow::helpButtonAction()
+{
+    if (!m_pylonPlaced && !m_cardUsed && !m_cardDrawn)
+    {
+        twixt::MonteCarloTree tree(m_game->getBoard(), m_currentPlayer->getColor());
+        m_aiHintPos = tree.getBestMove();
+        update();
     }
 }
 
@@ -216,6 +232,7 @@ void GameWindow::useCardAction(QListWidgetItem* item)
 
     m_cardUsed = true;
     currentList->removeItemWidget(receivedItem);
+    update();
     delete item;
 }
 
@@ -444,10 +461,18 @@ void GameWindow::drawBoard(QPainter* painter)
             twixt::Position foundationPos = { i, j };
             nonstd::observer_ptr<twixt::Pylon> currentPylon{ currentBoard.get().getFoundation(foundationPos).getPylon() };
 
+
             if ((i != 0 || (j != 0 && j != boardSize - 1)) && (i != boardSize - 1 || (j != 0 && j != boardSize - 1)))
             {
                 QBrush brush{ Qt::blue };
                 painter->setBrush(brush);
+
+                if (m_aiHintPos == foundationPos)
+                {
+                    brush = QColor(123, 123, 0);
+                    m_aiHintPos = { 0, 0 };
+                }
+
                 if (currentPylon != nullptr)
                 {
                     if (currentPylon->getColor() == twixt::Pylon::Color::Black)
