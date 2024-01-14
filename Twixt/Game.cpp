@@ -710,7 +710,8 @@ void twixt::Game::loadGame(const std::string& path)
 		for (int i = 0; i < tmp; ++i)
 		{
 			in >> tmpEffect;
-			cards.push_back(static_cast<Card::Effect>(tmpEffect));
+			tmpCard.setEffect(static_cast<Card::Effect>(tmpEffect));
+			cards.push_back(tmpCard);
 		}
 		m_player1.get()->setCards(cards);
 		cards.clear();
@@ -719,7 +720,8 @@ void twixt::Game::loadGame(const std::string& path)
 		for (int i = 0; i < tmp; ++i)
 		{
 			in >> tmpEffect;
-			cards.push_back(static_cast<Card::Effect>(tmpEffect));
+			tmpCard.setEffect(static_cast<Card::Effect>(tmpEffect));
+			cards.push_back(tmpCard);
 		}
 		m_player2.get()->setCards(cards);
 		cards.clear();
@@ -728,7 +730,8 @@ void twixt::Game::loadGame(const std::string& path)
 		for (int i = 0; i < tmp; ++i)
 		{
 			in >> tmpEffect;
-			cards.push_back(static_cast<Card::Effect>(tmpEffect));
+			tmpCard.setEffect(static_cast<Card::Effect>(tmpEffect));
+			cards.push_back(tmpCard);
 		}
 		m_cardDeck = cards;
 		cards.clear();
