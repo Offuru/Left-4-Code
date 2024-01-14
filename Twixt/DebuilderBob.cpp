@@ -75,7 +75,7 @@ void DebuilderBob::moveToNext(const std::optional<Position>& nextPos)
 				position = { distrib(gen),  distrib(gen) };
 				if (!m_board.get()[position].getMined() && !(m_lastPosition.has_value() && m_lastPosition.value() == position) 
 					&& m_board.get()[position].getPylon() == nullptr
-					&& std::ranges::find(corners, position) == corners.end())
+					&& std::ranges::find(corners, position) != corners.end())
 					break;
 			}
 		}
