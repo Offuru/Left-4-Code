@@ -7,4 +7,4 @@ Membrii echipei:
 - Tankó Szilárd - TankoSzilard
 - Voicu Constantin - CostiVoicu
 
-Link video: https://clipchamp.com/watch/3XjjvjJZbgt
+Link video: https://drive.google.com/file/d/1amkU3TAjEvbBa47ALb0LRpkGBFPvJnEZ/view
